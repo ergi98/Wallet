@@ -1,0 +1,119 @@
+@import '../../styles/_colors.scss';
+
+.main-container {
+
+    .logo-row {
+        background-image: linear-gradient($metallic ,$mint);
+        height: 40vh;
+
+        img {
+            margin: 10vh auto;    
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+    .login-row {
+        margin: 0 auto;
+        width: 80%;
+
+        .login-container {
+            margin-top: -55px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+
+            .login-txt {
+                width: 100%;
+                margin: 0 auto;
+                text-align: center;
+                font-size: 23px;
+                font-weight: bold;
+                color: $metallic;
+                padding: 10px 10px 10px 10px;
+                border-radius: 10px 10px 0 0;
+            }
+    
+            .form-row {
+    
+                .form {
+                    width: 100%;
+            
+                    .form-label {
+                        color: $metallic;
+                        font-size: 14px;
+                        font-weight: bold;
+                    }
+            
+                    .input-field {
+                        padding: 20px;
+                        font-size: 16px;
+                        border-radius: 10px;
+                    }
+        
+        
+                }
+            }
+        
+            .btn-row {
+                width: 100%;
+                margin: auto;
+                text-align: center;
+                padding-bottom: 15px;
+                
+        
+                .login-btn {
+                    margin: auto;
+                    width: 85%;
+                    font-size: 12px;
+                    padding: 15px 0px 15px 0px;
+                    border-radius: 20px;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .forgot-row {
+        margin: auto;
+        width: fit-content;
+        color: $mint;
+        padding-bottom: 10px;
+    }
+
+    .seperator-row {
+        width: fit-content;
+        margin: auto;
+        font-weight: bold;
+        color: $text;
+        padding: 15px 0px 5px 0px;
+    }
+
+    .signup-row {
+        margin: auto;
+        
+        * {
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin: auto;
+            width: 80%;
+            font-size: 14px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .email-btn {
+            padding: 15px 0px 15px 0px;
+        }
+
+        .google-btn {
+            padding: 13px 0px 10px 13px;
+        }
+
+        .btn-icon {
+            margin: 0px 10px 0px 0px;
+        }
+    }
+}
