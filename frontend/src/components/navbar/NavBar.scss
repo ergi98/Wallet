@@ -1,4 +1,28 @@
 .my_nav {
     display: inline;
     justify-content: space-between;
+
+    .link {
+        color: white;
+        display: block;
+        margin: 5px;
+
+        .link-desc {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &:active, &:focus {
+            text-decoration: none;
+        }
+
+        .icon {
+            margin-right: 10px;
+        }
+    }
+
+    .selected {
+        transform: scale(1.2);
+    }
 }
