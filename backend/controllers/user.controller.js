@@ -93,7 +93,7 @@ class UsersController {
             let session = await UsersDAO.getUserSession(username)
 
             if(!session) {
-                res.status(401).json({error: "Session not found for this user." })
+                res.status(401).json({ error: "Session not found for this user." })
                 return
             }
             res.json({ session })

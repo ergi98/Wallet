@@ -51,7 +51,6 @@
                         border-radius: 10px;
                     }
         
-        
                 }
             }
         
@@ -69,6 +68,12 @@
                     padding: 15px 0px 15px 0px;
                     border-radius: 20px;
                     font-weight: bold;
+                }
+
+                .icon {
+                    margin-left:10px;
+                    transform: scale(1.5);
+
                 }
             }
         }
@@ -105,15 +110,27 @@
         }
 
         .email-btn {
-            padding: 15px 0px 15px 0px;
+            padding: 10px 0px 10px 0px;
         }
 
         .google-btn {
-            padding: 13px 0px 10px 13px;
+            padding: 10px 0px 10px 0px;
         }
 
         .btn-icon {
             margin: 0px 10px 0px 0px;
+        }
+    }
+    
+    .alert {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: block;
+        
+        .heading {
+            font-size: 16px;
         }
     }
 }
