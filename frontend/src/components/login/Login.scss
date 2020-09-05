@@ -3,7 +3,7 @@
 .main-container {
 
     .logo-row {
-        background-image: linear-gradient($metallic ,$mint);
+        background-image: linear-gradient($black, $charcoal);
         height: 40vh;
 
         img {
@@ -29,7 +29,7 @@
                 text-align: center;
                 font-size: 23px;
                 font-weight: bold;
-                color: $metallic;
+                color: $theme-blue;
                 padding: 10px 10px 10px 10px;
                 border-radius: 10px 10px 0 0;
             }
@@ -40,7 +40,7 @@
                     width: 100%;
             
                     .form-label {
-                        color: $metallic;
+                        color: $theme-blue;
                         font-size: 14px;
                         font-weight: bold;
                     }
@@ -82,7 +82,7 @@
     .forgot-row {
         margin: auto;
         width: fit-content;
-        color: $mint;
+        color: $light-blue;
         padding-bottom: 10px;
     }
 

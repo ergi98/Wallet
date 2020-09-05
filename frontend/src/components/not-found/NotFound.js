@@ -1,8 +1,15 @@
 import React from 'react';
 
+// Components
+import Layout from '../layout/Layout'
+
 class NotFound extends React.Component {
-    render () {
-        return <h1> I am the NotFound </h1>
+    render() {
+        return (
+            <Layout>
+                <h1>Hi i am Not Found</h1>
+            </Layout>
+        )
     }
 }
 

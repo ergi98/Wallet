@@ -1,8 +1,14 @@
 import React from 'react';
+import './Home.scss'
+import Layout from '../layout/Layout';
 
 class Home extends React.Component {
     render () {
-        return <h1> I am the home </h1>
+        return (
+            <Layout>
+                <h1>Hi im Home</h1>
+            </Layout>
+        )
     }
 }
 

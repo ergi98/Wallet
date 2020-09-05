@@ -16,21 +16,21 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom"
 let isAuthenticated;
 
 // Function which determines the status of the user (either authenticated or not)
-( 
+(
   function getAuthStatus() {
     let myJWT = localStorage.getItem('jwt')
     let username = localStorage.getItem('username')
     let decodedJWT
 
     const decoder = require('jwt-decode')
-    
-    if(myJWT) {
+
+    if (myJWT) {
       decodedJWT = decoder(myJWT)
       isAuthenticated = (decodedJWT.username === username)
     }
     else
       isAuthenticated = false
-    
+
     localStorage.setItem("isAuthenticated", isAuthenticated)
   }
 )();
@@ -38,25 +38,25 @@ let isAuthenticated;
 
 function App() {
   return (
-    <BrowserRouter>
-      <main>
-        {isAuthenticated ? <NavBar /> : null}
-        <Switch>
-          <Route path="/" exact component={Login} />
-          {
-            isAuthenticated ?
-              <>
-                <Route path="/home" component={Home} />
-                <Route path="/portfolios" component={Portfolios} />
-                <Route path="/statistics" component={Statistics} />
-                <Route path="/transaction" component={Transaction} />
-              </> :
-              <Redirect to="/" />
-          }
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </main>
-    </BrowserRouter>
+      <BrowserRouter>
+        <main>
+          {isAuthenticated ? <NavBar /> : null}
+          <Switch>
+            <Route path="/" exact component={Login} />
+            {
+              isAuthenticated ?
+                <>
+                  <Route path="/home" exact component={Home} />
+                  <Route path="/portfolios" exact component={Portfolios} />
+                  <Route path="/statistics" exact component={Statistics} />
+                  <Route path="/transaction" exact component={Transaction} />
+                </> :
+                <Redirect to="/" />
+            }
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </main>
+      </BrowserRouter>
   );
 }
 

@@ -1,8 +1,13 @@
 import React from 'react';
+import Layout from '../layout/Layout';
 
 class Statistics extends React.Component {
     render () {
-        return <h1> I am the Statistics </h1>
+        return (
+            <Layout>
+                <h1> I am the Statistics </h1>
+            </Layout>
+        )
     }
 }
 

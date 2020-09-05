@@ -1,6 +1,9 @@
+@import '../../styles/colors.scss';
+
 .my_nav {
     display: inline;
     justify-content: space-between;
+    background-color: $black !important;
 
     .link {
         color: white;
@@ -23,6 +26,8 @@
     }
 
     .selected {
-        transform: scale(1.2);
+        transform: scale(1.4);
+        color: $blue !important;
+        font-weight: bold;
     }
 }

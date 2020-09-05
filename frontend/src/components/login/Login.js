@@ -36,6 +36,27 @@ class Login extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
+    componentDidMount() {
+        let myJWT = localStorage.getItem('jwt')
+        let username = localStorage.getItem('username')
+        let decodedJWT
+    
+        const decoder = require('jwt-decode')
+        
+        // If there is no token on localstorage stay on login
+        if (!myJWT) {
+            return  
+        }
+        else {
+            // If there is a valid token in localstorage redirect user
+            decodedJWT = decoder(myJWT)
+            if(decodedJWT.username === username)
+                window.location.href = '/home'
+            else
+                return
+        }
+    }
+
     async handleSubmit(event) {
         // Disable the submit button
         this.setState({
@@ -45,7 +66,7 @@ class Login extends React.Component {
         // Validate if the user exists, save user info in localhost and login
         try {
 
-            let res = await axios.post(`http://localhost:5000/users/login`, {
+            let res = await axios.post(`/users/login`, {
                 username: event.username,
                 password: event.password
             })
@@ -176,7 +197,7 @@ class Login extends React.Component {
 
 
                 <Row className="signup-row">
-                    <Button variant="info" className="email-btn">
+                    <Button variant="dark" className="email-btn">
                         <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginRight: '15px' } }}>
                             <FcBusinessman />
                         </IconContext.Provider>
