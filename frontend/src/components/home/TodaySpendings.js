@@ -21,9 +21,7 @@ class TodaySpendings extends React.Component {
     }
 
     componentDidMount() {
-        console.log("hey")
         let comp = (this.state.today_amount - this.state.yesterday_amount) / this.state.yesterday_amount * 100
-        console.log(comp)
         this.setState({
             compare: comp
         })

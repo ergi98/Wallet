@@ -103,6 +103,30 @@ class UsersController {
             return
         }
     }
+
+    static async logout(req, res) {
+        try {
+            const { username } = req.body
+
+            if(!username || typeof username !== "string") {
+                res.status(400).json({ error: "Bad username format, expected string." })
+                return
+            }
+            
+            let result = await UsersDAO.logoutUser(username)
+
+            if(!result.success) {
+                res.status(401).json({ error: "Session not found for this user." })
+                return
+            }
+            
+            res.json({ result })
+        }
+        catch (e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
 }
 
 module.exports = { UsersController, User }

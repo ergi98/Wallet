@@ -16,31 +16,37 @@ class TransactionList extends React.Component {
         this.state = {
             transactions : [
                 {
+                    trans_id: "12313",
                     name: "Trans 1",
                     amount: 1234,
                     currency: "ALL"
                 },
                 {
+                    trans_id: "12314",
                     name: "Trans 2",
                     amount: 1234,
                     currency: "ALL"
                 },
                 {
+                    trans_id: "12315",
                     name: "Trans 3",
                     amount: 1234,
                     currency: "ALL"
                 },
                 {
+                    trans_id: "12316",
                     name: "Trans 1",
                     amount: 1234,
                     currency: "ALL"
                 },
                 {
+                    trans_id: "12317",
                     name: "Trans 2",
                     amount: 1234,
                     currency: "ALL"
                 },
                 {
+                    trans_id: "12318",
                     name: "Trans 3",
                     amount: 1234,
                     currency: "ALL"
@@ -62,7 +68,7 @@ class TransactionList extends React.Component {
                         <tbody>
                             {
                                 this.state.transactions.map(transaction => 
-                                    <tr>
+                                    <tr key={transaction.trans_id}> 
                                         <td>{transaction.name}</td>
                                         <td>{transaction.amount} {transaction.currency}</td>
                                     </tr>
