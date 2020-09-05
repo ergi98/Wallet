@@ -1,0 +1,25 @@
+@import '../../styles/colors.scss';
+
+.amount-container {
+    display: inline;
+    text-align: center;
+
+    .amount {
+        font-weight: bold;
+        font-size: 26px;
+        color: $black;
+    }
+
+    .cmp {
+        font-size: 20px;
+    }
+
+    .overspend {
+        color: red;
+    }
+    
+
+    .underspend {
+        color: green;
+    }
+}

@@ -1,0 +1,15 @@
+.list-container {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    text-align: center;
+    padding: 0px;
+    overflow: auto;
+    max-height: 320px !important;
+}
+
+@media only screen and (max-height: 700px) {
+    .list-container {
+        max-height: 250px !important;
+    }
+}

@@ -20,6 +20,11 @@
             text-decoration: none;
         }
 
+        &:hover {
+            text-decoration: none;
+            color: $light-blue;
+        }
+
         .icon {
             margin-right: 10px;
         }
