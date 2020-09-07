@@ -1,6 +1,5 @@
 import React from 'react'
 import './Login.scss'
-import axios from "axios"
 import * as yup from "yup"
 import { Formik } from 'formik'
 
@@ -9,13 +8,18 @@ import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
-import Spinner from 'react-bootstrap/Spinner'
 import Alert from 'react-bootstrap/Alert'
+import Spinner from 'react-bootstrap/Spinner'
 
 // Icons
 import { IconContext } from "react-icons"
 import { RiLoginCircleLine } from 'react-icons/ri'
 import { FcGoogle, FcBusinessman } from 'react-icons/fc'
+
+// Redux 
+import { connect } from 'react-redux'
+import { logIn } from '../../redux/actions/userActions'
+import PropTypes from 'prop-types'
 
 // Establish the validation schema
 const schema = yup.object({
@@ -23,83 +27,49 @@ const schema = yup.object({
     password: yup.string().required()
 });
 
+
+
 class Login extends React.Component {
 
     constructor() {
         super()
 
         this.state = {
-            isSubmitting: false,
-            showAlert: false
+            showAlert: false,
+            isSubmitting: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
+    /** TODO: 1 - Login Component shows up before redirecting */
     componentDidMount() {
-        let myJWT = localStorage.getItem('jwt')
-        let username = localStorage.getItem('username')
-        let decodedJWT
-    
-        const decoder = require('jwt-decode')
-        
-        // If there is no token on localstorage stay on login
-        if (!myJWT) {
-            return  
-        }
-        else {
-            // If there is a valid token in localstorage redirect user
-            decodedJWT = decoder(myJWT)
-            if(decodedJWT.username === username)
-                window.location.href = '/home'
-            else
-                return
-        }
+        // If the user is already authenticated redirect
+        if (this.props.isAuthenticated)
+            window.location.href = '/home'
     }
 
+    /** TODO: 2 - Better way to handle the error? (through dispatch?)**/
     async handleSubmit(event) {
-        // Disable the submit button
+        // Used for the spinner login button
         this.setState({
             isSubmitting: true
         })
-
-        // Validate if the user exists, save user info in localhost and login
-        try {
-
-            let res = await axios.post(`/users/login`, {
-                username: event.username,
-                password: event.password
+        // Call the login function in userActions.js
+        this.props.logIn(event)
+            // If successful redirect
+            .then(() => {
+                window.location.href = '/home'
             })
-
-            if (res.status === 200) {
-                localStorage.setItem("jwt", res.data.auth_token)
-                localStorage.setItem("username", res.data.info.username)
-
-                window.location.href = "/home"
-            }
-
-        }
-        catch (err) {
-
-            // Display Alert
-            this.setState({
-                showAlert: true
-            })
-
-            // Hide alert after 2,5sec
-            setTimeout(() => {
+            // If not display error alert
+            .catch(() => {
                 this.setState({
-                    showAlert: false
+                    showAlert: true,
+                    isSubmitting: false
                 })
-            }, 2500)
-        }
-
-        // Enable the submit button
-        this.setState({
-            isSubmitting: false
-        })
+                setTimeout(() => { this.setState({ showAlert: false }) }, 2500)
+            })
     }
-
 
     render() {
         return (
@@ -169,7 +139,7 @@ class Login extends React.Component {
                                                         disabled={this.state.isSubmitting}
                                                     >
                                                         LOGIN
-                                                    <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px' } }}>
+                                                        <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px' } }}>
                                                             <RiLoginCircleLine />
                                                         </IconContext.Provider>
                                                     </Button> :
@@ -222,4 +192,12 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+    isAuthenticated: state.user.isAuthenticated
+})
+
+Login.propTypes = {
+    logIn: PropTypes.func.isRequired
+}
+
+export default connect(mapStateToProps, { logIn })(Login);

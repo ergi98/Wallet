@@ -1,5 +1,7 @@
 import React from 'react'
 import './TransactionList.scss'
+import axios from 'axios'
+import Helpers from '../../helpers/Helpers'
 
 // Components
 import Card from '../card/Card'
@@ -13,47 +15,28 @@ class TransactionList extends React.Component {
     constructor() {
         super()
 
+        this._isMounted = false
+
         this.state = {
-            transactions : [
-                {
-                    trans_id: "12313",
-                    name: "Trans 1",
-                    amount: 1234,
-                    currency: "ALL"
-                },
-                {
-                    trans_id: "12314",
-                    name: "Trans 2",
-                    amount: 1234,
-                    currency: "ALL"
-                },
-                {
-                    trans_id: "12315",
-                    name: "Trans 3",
-                    amount: 1234,
-                    currency: "ALL"
-                },
-                {
-                    trans_id: "12316",
-                    name: "Trans 1",
-                    amount: 1234,
-                    currency: "ALL"
-                },
-                {
-                    trans_id: "12317",
-                    name: "Trans 2",
-                    amount: 1234,
-                    currency: "ALL"
-                },
-                {
-                    trans_id: "12318",
-                    name: "Trans 3",
-                    amount: 1234,
-                    currency: "ALL"
-                }
-            ]
+            transactions : []
         }
     }
+
+    componentDidMount() {
+        // Get todays transactions
+        this.getTransactions(new Date())
+    }
+
+    async getTransactions(date) {
+        let parsed_date = await Helpers.parseDate(date)
+
+        let res = await axios.post('/transactions/list', {
+            date: parsed_date
+        })
+
+        console.log(res)
+    }
+
     render() {
         return (
             <Card title="Latest Transactions">

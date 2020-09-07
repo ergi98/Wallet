@@ -5,16 +5,11 @@ const UsersDAO = require("../dao/usersDAO")
 const hashPassword = async password => await bcrypt.hash("password", 10)
 
 class User {
-    constructor({ username, password, name, surname, age, gender, birthday, profession, portfolios = {} } = {}) {
+    constructor({ username, password, name, surname = {} } = {}) {
         this.username = username
         this.password = password
         this.name = name
         this.surname = surname
-        this.age = age
-        this.gender = gender
-        this.birthday = birthday
-        this.profession = profession
-        this.portfolios = portfolios
     }
 
     async comparePassword(plainText) {
