@@ -27,8 +27,6 @@ const schema = yup.object({
     password: yup.string().required()
 });
 
-
-
 class Login extends React.Component {
 
     constructor() {

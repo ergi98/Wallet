@@ -1,4 +1,4 @@
-import { LOG_IN } from '../actions/types'
+import { LOG_IN, LOG_OUT } from '../actions/types'
 
 const initialState = {
     isAuthenticated: false,
@@ -20,6 +20,16 @@ export default function(state = initialState, action) {
                 surname: action.payload.data.info.personal.surname,
                 jwt: action.payload.data.auth_token,
                 pref_currency: action.payload.data.info.personal.pref_curr
+            }
+        case LOG_OUT:
+            return {
+                ...state,
+                isAuthenticated: false,
+                username: '',
+                name: '',
+                surname: '',
+                jwt: '',
+                pref_currency: ''
             }
         default: 
             return state
