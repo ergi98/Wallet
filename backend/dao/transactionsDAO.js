@@ -13,7 +13,7 @@ class TransactionsDAO {
   }
 
   // Gets the daily spendings or earnings of the user
-  static async getSpendings(date) {
+  static async getDayRecap(date) {
     try {
       let pipeline = [
         {
@@ -23,7 +23,8 @@ class TransactionsDAO {
         },
         {
           $project: {
-            spendings: 1
+            spendings: 1,
+            earnings: 1
           }
         }
       ]

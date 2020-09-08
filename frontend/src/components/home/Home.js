@@ -1,14 +1,14 @@
-import React from 'react';
+import React from 'react'
 import './Home.scss'
-import Layout from '../layout/Layout';
 
 // Components
-import TodaySpendings from './TodaySpendings'
+import Layout from '../layout/Layout'
+import TodayRecap from './TodayRecap'
 import TransactionList from './TransactionList'
 
 // Bootstrap
 import Button from 'react-bootstrap/Button'
-import Container from 'react-bootstrap/esm/Container';
+import Container from 'react-bootstrap/esm/Container'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -19,10 +19,10 @@ class Home extends React.Component {
         return (
             <Layout>
                 <Container className="home-container">
-                    <TodaySpendings></TodaySpendings>
+                    <TodayRecap></TodayRecap>
                     <Container className="btn-container">
                         <Button variant="primary" className="transaction-btn">
-                            <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px' } }}>
+                            <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
                                 <RiAddCircleLine/>
                             </IconContext.Provider>
                             New Transaction

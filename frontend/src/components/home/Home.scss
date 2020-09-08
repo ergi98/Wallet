@@ -1,16 +1,19 @@
 .home-container {
     margin: 15px auto;
     width: 95%;
+    overflow-y: auto;
 
     .btn-container {
         width: 100%;
         margin: 15px auto;
         padding: 0px;
+        height: 44px;
 
         .transaction-btn {
             width: 100%;
             border-radius: 10px;
             font-size: 20px;
+            height: 44px;
         }
     }
 }

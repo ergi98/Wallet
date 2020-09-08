@@ -1,7 +1,6 @@
 import React from 'react'
 import './TransactionList.scss'
 import axios from 'axios'
-import Helpers from '../../helpers/Helpers'
 
 // Components
 import Card from '../card/Card'
@@ -24,17 +23,19 @@ class TransactionList extends React.Component {
 
     componentDidMount() {
         // Get todays transactions
-        this.getTransactions(new Date())
+        this.getTransactions(new Date().toLocaleDateString('en-GB'))
     }
 
     async getTransactions(date) {
-        let parsed_date = await Helpers.parseDate(date)
+        let res = await axios.post('/transactions/list', { date })
 
-        let res = await axios.post('/transactions/list', {
-            date: parsed_date
-        })
-
-        console.log(res)
+        if(res.status === 200) {
+            let { transactions } = res.data.result[0]
+            console.log(transactions)
+            this.setState({
+                transactions
+            })
+        }
     }
 
     render() {
@@ -43,7 +44,8 @@ class TransactionList extends React.Component {
                 <Container className="list-container">
                     <Table responsive striped className="list-table">
                         <thead>
-                            <tr>
+                            <tr className="headers-row">
+                                <th>Time</th>
                                 <th>Description</th>
                                 <th>Amount</th>
                             </tr>
@@ -52,8 +54,14 @@ class TransactionList extends React.Component {
                             {
                                 this.state.transactions.map(transaction => 
                                     <tr key={transaction.trans_id}> 
-                                        <td>{transaction.name}</td>
-                                        <td>{transaction.amount} {transaction.currency}</td>
+                                        <td>{transaction.time}</td>
+                                        <td>{transaction.short_desc}</td>
+                                        { 
+                                            transaction.amount.$numberDecimal > 0?
+                                                <td className="earning">+{transaction.amount.$numberDecimal} {transaction.currency}</td>
+                                                :
+                                                <td className="spending">{transaction.amount.$numberDecimal} {transaction.currency}</td>
+                                        }
                                     </tr>
                                 )
                             }

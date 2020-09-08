@@ -1,0 +1,69 @@
+@import '../../styles/colors.scss';
+
+.amount-container {
+    text-align: center;
+
+    .amount {
+        font-weight: bold;
+        font-size: 26px;
+        color: $black;
+    }
+
+    .earnings-col, .spendings-col {
+        border: 1px solid $border-light;
+        border-radius: 15px;
+        padding: 10px;
+        margin: 10px;
+        height: fit-content;
+        * {
+            font-size: 20px;
+            display: block;
+        }
+
+        .s-tot, .e-tot {
+            font-weight: bold;
+        }
+
+        .comp {
+            color: $text-gray;
+        }
+
+        .s-tot {
+            color: $red;
+        }
+
+        .e-tot {
+            color: $green
+        }
+    }
+
+    .total-row {
+        border: 1px solid $border-light;
+        border-radius: 20px;
+        padding: 10px 20px 10px 20px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        justify-content: space-evenly;
+        * {
+            font-size: 20px;
+        }
+
+        .tot-sum {
+            font-weight: bold;
+        }
+        
+    }
+
+    .cmp {
+        font-size: 20px;
+    }
+
+    .overspend {
+        color: red;
+    }
+    
+
+    .underspend {
+        color: green;
+    }
+}

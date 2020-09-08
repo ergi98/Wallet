@@ -3,15 +3,18 @@
 .card-container {
     border-radius: 10px;
     background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 $box-shadow;
     text-align: center;
     padding: 0px;
+    border: 1px solid #ECECEC;
 
     .title {
-        background-color: $black;
-        padding: 5px;
+        padding: 10px 10px 0px 10px;
+        text-align: left;
         border-radius: 10px 10px 0px 0px;
-        color: white;
+        h5 { 
+            font-weight: normal;
+        }
     }
     
 }

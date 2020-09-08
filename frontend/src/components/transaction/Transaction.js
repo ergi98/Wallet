@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import './Transaction.scss'
 
 class Transaction extends React.Component {
     render () {

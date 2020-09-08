@@ -1,17 +1,49 @@
+@import '../../styles/colors';
+
 .list-container {
     border-radius: 10px;
     background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     text-align: center;
-    padding: 0px;
+    padding: 0px 0px 5px 0px;
     overflow: auto;
-    max-height: 320px !important;
-    min-height: 320px !important;
+    max-height: 250px !important;
+    min-height: 250px !important;
+
+    .list-table {
+        .headers-row {
+            th { 
+                padding: 6px 12px 6px 12px !important;
+            }
+           
+        }
+    }
+
+    .earning {
+        color: $green;
+    }
+
+    .spending {
+        color: $red;
+    }
 }
 
 @media only screen and (max-height: 700px) {
     .list-container {
-        max-height: 250px !important;
-        min-height: 250px !important;
+        max-height: 150px !important;
+        min-height: 150px !important;
+    }
+}
+
+@media only screen and (min-height: 800px) {
+    .list-container {
+        max-height: 300px !important;
+        min-height: 300px !important;
+    }
+}
+
+@media only screen and (min-height: 900px) {
+    .list-container {
+        max-height: 480px !important;
+        min-height: 480px !important;
     }
 }
