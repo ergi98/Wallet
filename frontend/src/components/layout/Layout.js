@@ -1,6 +1,9 @@
 import React from 'react'
 import './Layout.scss'
 
+// Components
+import NavBar from '../navbar/NavBar'
+
 // Bootstrap
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -17,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 function Layout(props) {
 
     const username = useSelector((state) => state.user.username)
+    const isAuthenticated  = useSelector((state) => state.user.isAuthenticated)
     const dispatch = useDispatch()
 
     return (
@@ -44,6 +48,7 @@ function Layout(props) {
             <Row>
                 {props.children}
             </Row>
+            {isAuthenticated ? <NavBar /> : null}
         </Container>
     )
 }

@@ -13,11 +13,12 @@ class TransactionsDAO {
   }
 
   // Gets the daily spendings or earnings of the user
-  static async getDayRecap(date) {
+  static async getDayRecap(username, date) {
     try {
       let pipeline = [
         {
           $match: {
+            username: username,
             date: date
           }
         },
@@ -42,10 +43,11 @@ class TransactionsDAO {
   }
 
   // Gets the transactions of a user in a given date
-  static async getTransactions(date) {
+  static async getTransactions(username, date) {
     let pipeline = [
       {
         $match: {
+          username: username,
           date: date
         }
       },

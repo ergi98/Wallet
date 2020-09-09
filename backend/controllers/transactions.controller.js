@@ -3,9 +3,9 @@ const TransactionsDAO = require("../dao/transactionsDAO")
 class TransactionsController {
     static async getDayRecap(req, res) {
         try {
-            let { date } = req.body
+            let { username, date } = req.body
 
-            let result = await TransactionsDAO.getDayRecap(date) 
+            let result = await TransactionsDAO.getDayRecap(username, date) 
 
             if(!result) {
                 res.status(401).json({ error: "Spendings not found for this user." })
@@ -22,9 +22,9 @@ class TransactionsController {
 
     static async getTransactions(req, res) {
         try {
-            let { date } = req.body
+            let { username, date } = req.body
 
-            let result = await TransactionsDAO.getTransactions(date)
+            let result = await TransactionsDAO.getTransactions(username, date)
 
             if(!result) {
                 res.status(401).json({ error: "Transactions not found for this user." })

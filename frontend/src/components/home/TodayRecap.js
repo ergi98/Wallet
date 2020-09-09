@@ -11,7 +11,6 @@ import Container from 'react-bootstrap/esm/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
-// Redux
 // Redux 
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -51,12 +50,12 @@ class TodayRecap extends React.Component {
 
     async getSpendings(date) {
         // Parse the dates in the correct database format
-        let today = date
+        let today = date.toLocaleDateString('en-GB')
         let yesterday = new Date(date.setDate(date.getDate() - 1)).toLocaleDateString('en-GB')
 
         // Get the yesterday and today spendings amounts
-        let t_res = await axios.post("/transactions/daily-recap", { date: today })
-        let y_res = await axios.post("/transactions/daily-recap", { date: yesterday })
+        let t_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: today })
+        let y_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: yesterday })
 
         if (t_res.status === 200 && y_res.status === 200) {
             let t_spendings = 0, y_spendings = 0, t_earnings = 0, y_earnings = 0
@@ -115,11 +114,13 @@ class TodayRecap extends React.Component {
 }
 
 const mapPropsToState = state => ({
-    currency: state.user.pref_currency
+    currency: state.user.pref_currency,
+    username: state.user.username
 })
 
 TodayRecap.propTypes = {
-    currency: PropTypes.string.isRequired
+    currency: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired
 }
 
 export default connect(mapPropsToState, null)(TodayRecap)

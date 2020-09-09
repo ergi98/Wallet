@@ -8,12 +8,25 @@
         margin: 15px auto;
         padding: 0px;
         height: 44px;
+        justify-content: space-around;
+        display: flex;
 
         .transaction-btn {
-            width: 100%;
-            border-radius: 10px;
+            width: 45%;
+            border-radius: 20px;
             font-size: 20px;
             height: 44px;
         }
     }
 }
+
+@media only screen and (max-width: 800px) {
+
+    .home-container {
+        .btn-container {
+            .transaction-btn {
+                font-size: 15px;
+            }
+        }
+    }
+  }

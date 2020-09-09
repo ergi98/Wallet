@@ -1,5 +1,7 @@
 import React from 'react'
 import './TransactionList.scss'
+
+// Axios
 import axios from 'axios'
 
 // Components
@@ -8,6 +10,10 @@ import Card from '../card/Card'
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
 import Table from 'react-bootstrap/Table'
+
+// Redux 
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 class TransactionList extends React.Component {
 
@@ -27,11 +33,11 @@ class TransactionList extends React.Component {
     }
 
     async getTransactions(date) {
-        let res = await axios.post('/transactions/list', { date })
+        let res = await axios.post('/transactions/list', { username: this.props.username, date })
 
-        if(res.status === 200) {
+        if(res.status === 200 && res.data.result.length > 0) {
             let { transactions } = res.data.result[0]
-            console.log(transactions)
+
             this.setState({
                 transactions
             })
@@ -74,4 +80,13 @@ class TransactionList extends React.Component {
     }
 }
 
-export default TransactionList
+
+const mapPropsToState = state => ({
+    username: state.user.username
+})
+
+TransactionList.propTypes = {
+    username: PropTypes.string.isRequired
+}
+
+export default connect(mapPropsToState, null)(TransactionList)

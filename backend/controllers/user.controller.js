@@ -122,6 +122,30 @@ class UsersController {
             return
         }
     }
+
+    static async populateTransactionForm(req, res) {
+        try {
+            const { username } = req.body
+
+            if(!username || typeof username !== "string") {
+                res.status(400).json({ error: "Bad username format, expected string." })
+                return
+            }
+
+            let result = await UsersDAO.populateTransactionForm(username)
+            
+            if(!result) {
+                res.status(401).json({ error: "Could not populate transaction form." })
+                return
+            }
+            
+            res.json({ result })
+        }
+        catch (e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
 }
 
 module.exports = { UsersController, User }

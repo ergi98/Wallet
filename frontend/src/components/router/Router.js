@@ -8,9 +8,9 @@ import Login from '../login/Login'
 import Home from '../home/Home'
 import Portfolios from '../portfolios/Portfolios'
 import Statistics from '../statistics/Statistics'
-import Transaction from '../transaction/Transaction'
+import SpendingTransaction from '../transaction/SpendingTransaction'
+import ProfitTransaction from '../transaction/ProfitTransaction'
 import NotFound from '../not-found/NotFound'
-import NavBar from '../navbar/NavBar'
 
 // Redux
 import { connect } from 'react-redux'
@@ -21,7 +21,6 @@ class Router extends React.Component {
         return (
             <BrowserRouter>
                 <main>
-                    {this.props.isAuthenticated ? <NavBar /> : null}
                     <Switch>
                         <Route path="/" exact component={Login} />
                         {
@@ -30,7 +29,8 @@ class Router extends React.Component {
                                     <Route path="/home" exact component={Home} />
                                     <Route path="/portfolios" exact component={Portfolios} />
                                     <Route path="/statistics" exact component={Statistics} />
-                                    <Route path="/transaction" exact component={Transaction} />
+                                    <Route path="/expense-transaction" exact component={SpendingTransaction} />
+                                    <Route path="/profit-transaction" exact component={ProfitTransaction} />
                                 </> :
                                 <Redirect to="/" />
                         }

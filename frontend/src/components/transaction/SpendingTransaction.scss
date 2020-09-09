@@ -1,0 +1,25 @@
+.transaction-container {
+    width: fit-content;
+    overflow: hidden;
+    margin: 10px auto;
+
+    .pad-container {
+        padding:  5px 10px;
+
+        .title {
+            padding-bottom: 10px;
+        }
+
+        .form-row {
+
+            .form-group {
+                padding-bottom: 5px;
+            }
+
+            .btn-row {
+                width: fit-content;
+                margin: auto;
+            }
+        }
+    }
+}
