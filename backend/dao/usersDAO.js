@@ -125,6 +125,65 @@ class UsersDAO {
       return { error: e }
     }
   }
+
+  static async getAvailableAmount(username) {
+    try {
+      let pipeline = [
+        {
+          $match: {
+            username
+          }
+        },
+        {
+          $project: {
+            "amount": {
+              $reduce: {
+                input: "$portfolios",
+                initialValue: 0,
+                in: { $add: [ "$$value", "$$this.amount"]}
+              }
+            }
+          }
+        }
+      ]
+
+      let res = await users.aggregate(pipeline)
+
+      return await res.toArray()
+    }
+    catch(e) {
+      console.error(`Error occurred while popoulating transaction form, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async getPortolioAmount(username, portfolio) {
+    try {
+      let pipeline = [
+        {
+          $match: { 
+            username 
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            portfolio: {
+              $filter: {
+                input: '$portfolios',
+                as: 'portfolios',
+                cond: {$eq: ['$$portfolios.p_id', portfolio]}
+              }
+            },
+        }}
+      ]
+      return await users.aggregate(pipeline).toArray();
+    }
+    catch (e) {
+      console.error(`Error occurred while retrieving portfolio, ${e}`)
+      return { error: e }
+    }
+  }
 }
 
 module.exports = UsersDAO;   

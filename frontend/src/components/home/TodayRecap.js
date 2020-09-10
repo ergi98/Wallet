@@ -56,31 +56,33 @@ class TodayRecap extends React.Component {
         // Get the yesterday and today spendings amounts
         let t_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: today })
         let y_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: yesterday })
+        let amnt_res = await axios.post("users/available-amount", { username: this.props.username })
 
-        if (t_res.status === 200 && y_res.status === 200) {
-            let t_spendings = 0, y_spendings = 0, t_earnings = 0, y_earnings = 0
+        let t_spendings = 0, y_spendings = 0, t_earnings = 0, y_earnings = 0, amount = 0
 
-            // Save the amounts into local variables
-            if (t_res.data.result.length > 0) {
-                t_spendings = t_res.data.result[0].spendings.$numberDecimal
-                t_earnings = t_res.data.result[0].earnings.$numberDecimal
-            }
-            if (y_res.data.result.length > 0) {
-                y_spendings = y_res.data.result[0].spendings.$numberDecimal
-                y_earnings = y_res.data.result[0].earnings.$numberDecimal
-            }
-
-            // Update the state
-            this._isMounted && this.setState({
-                today_spendings: t_spendings,
-                yesterday_spendings: y_spendings,
-                today_earnings: t_earnings,
-                yesterday_earnings: y_earnings,
-            })
-
-            y_spendings === 0 ? this.s_comp = 0 : this.s_comp = (t_spendings - y_spendings) / y_spendings * 100
-            y_earnings === 0 ? this.e_comp = 0 : this.e_comp = (t_earnings - y_earnings) / y_earnings * 100
+        // Save the amounts into local variables
+        if (t_res.data.result.length > 0) {
+            t_spendings = t_res.data.result[0].spendings.$numberDecimal
+            t_earnings = t_res.data.result[0].earnings.$numberDecimal
         }
+        if (y_res.data.result.length > 0) {
+            y_spendings = y_res.data.result[0].spendings.$numberDecimal
+            y_earnings = y_res.data.result[0].earnings.$numberDecimal
+        }
+        if(amnt_res.data.result.length > 0)
+            amount = amnt_res.data.result[0].amount.$numberDecimal
+
+        // Update the state
+        this._isMounted && this.setState({
+            today_spendings: t_spendings,
+            yesterday_spendings: y_spendings,
+            today_earnings: t_earnings,
+            yesterday_earnings: y_earnings,
+            amount: amount
+        })
+
+        y_spendings === 0 ? this.s_comp = 0 : this.s_comp = (t_spendings - y_spendings) / y_spendings * 100
+        y_earnings === 0 ? this.e_comp = 0 : this.e_comp = (t_earnings - y_earnings) / y_earnings * 100
     }
 
     render() {
@@ -105,7 +107,7 @@ class TodayRecap extends React.Component {
                     </Row>
                     <Row className="total-row">
                         <span>Available Amount: </span>
-                        <span className="tot-sum">{this.props.currency} 202,323</span>
+                        <span className="tot-sum">{this.props.currency} {this.state.amount}</span>
                     </Row>
                 </Container>
             </Card>

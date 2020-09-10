@@ -146,6 +146,26 @@ class UsersController {
             return
         }
     }
+
+    static async getAvailableAmount(req, res) {
+        try {
+            let { username } = req.body
+
+            if(!username || typeof username !== "string") {
+                res.status(400).json({ error: "Bad username format, expected string." })
+                return
+            }
+
+            let result = await UsersDAO.getAvailableAmount(username)
+
+            res.json({ result })
+        }
+        catch (e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
 }
 
 module.exports = { UsersController, User }

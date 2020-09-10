@@ -10,8 +10,6 @@ require('dotenv').config()
 
 const app = express();
 
-console.log(transactionsDAO)
-
 app.use(cors())
 app.use(express.json());
 

@@ -4,6 +4,9 @@ import './SpendingTransaction.scss'
 // Axios
 import axios from 'axios'
 
+// NanoID
+import { nanoid } from 'nanoid'
+
 // Components
 import Layout from '../layout/Layout'
 
@@ -38,10 +41,10 @@ const transaction_schema = yup.object({
     minutes: yup.string().required().max(2),
     long: yup.string(),
     lat: yup.string(),
-    amount: yup.string().required().matches(/^[0-9]+[.]?[0-9]+$/),
+    amount: yup.string().required().matches(/^[0-9]+[.]?[0-9]+$/).notOneOf(["0"]),
     currency: yup.string().required(),
-    portfolio: yup.string().required(),
-    category: yup.string().required(),
+    portfolio: yup.string().required().notOneOf(["Choose portfolio to withdraw ..."]),
+    category: yup.string().required().notOneOf(["Choose category of expense ..."]),
     description: yup.string().required().max(30).matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/),
     long_desc: yup.string().notRequired().max(100).matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/)
 });
@@ -66,8 +69,11 @@ class SpendingTransaction extends React.Component {
             isTimeChecked: false,
             isLocationChecked: false,
             categories: [],
-            portfolios: []
+            portfolios: [],
+
         }
+
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     componentDidMount() {
@@ -89,15 +95,42 @@ class SpendingTransaction extends React.Component {
         }
     }
 
-    async handleSubmit(event) {
-        console.log(event)
+    async handleSubmit(event,{ setErrors, setStatus, resetForm }) {
         if (event.hours < 10)
             event.hours = `0${event.hours}`
         if (event.minutes < 10)
             event.minutes = `0${event.minutes}`
 
-        event.time = `${event.hours}:${event.minutes}`
+        let transaction = {
+            trans_id: nanoid(10),
+            time: `${event.hours}:${event.minutes}`,
+            trans_type: 'expense',
+            amount: event.amount,
+            currency: event.currency,
+            portfolio: event.portfolio,
+            type: event.category,
+            short_desc: event.description,
+            location: {
+                longitude: event.long,
+                latitude: event.lat
+            }
+        }
 
+        event.long_desc === ''? transaction = transaction : transaction.desc = event.long_desc
+
+        try {
+            await axios.post('/transactions/new-transaction', {
+                username: this.props.username,
+                date: event.date,
+                transaction
+            })
+            resetForm({})
+            setStatus({success: true})
+        }
+        catch(error) {
+            setStatus({success: false})
+            setErrors({submit: error.message})
+        }
     }
 
     render() {
@@ -119,9 +152,9 @@ class SpendingTransaction extends React.Component {
                                     long: '',
                                     lat: '',
                                     amount: '',
-                                    currency: '',
-                                    portfolio: '',
-                                    category: '',
+                                    currency: 'ALL',
+                                    portfolio: 'Choose portfolio to withdraw ...',
+                                    category: 'Choose category of expense ...',
                                     description: '',
                                     long_desc: ''
                                 }}
@@ -307,6 +340,7 @@ class SpendingTransaction extends React.Component {
                                                         onChange={handleChange}
                                                         isInvalid={touched.portfolio && errors.portfolio}
                                                     >
+                                                        <option disabled>Choose portfolio to withdraw ...</option>
                                                         {
                                                             this.state.portfolios.map(portfolio =>
                                                                 <option
@@ -332,10 +366,11 @@ class SpendingTransaction extends React.Component {
                                                         onChange={handleChange}
                                                         isInvalid={touched.category && errors.category}
                                                     >
+                                                        <option disabled>Choose category of expense ...</option>
                                                         {
                                                             this.state.categories.map(category =>
                                                                 <option
-                                                                    value={category.cat_id}
+                                                                    value={category.cat_name}
                                                                     key={category.cat_id}
                                                                 >
                                                                     {category.cat_name}

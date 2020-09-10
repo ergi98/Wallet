@@ -1,4 +1,5 @@
 const TransactionsDAO = require("../dao/transactionsDAO")
+const UserDAO = require("../dao/usersDAO")
 
 class TransactionsController {
     static async getDayRecap(req, res) {
@@ -33,6 +34,27 @@ class TransactionsController {
             
             res.json({ result })
         } 
+        catch(err) {
+            res.status(400).json({ error: err })
+            return
+        }
+    }
+
+    static async newTransaction(req, res) {
+        try {
+            let { username, date, transaction } = req.body
+
+            let valid = await UserDAO.getPortolioAmount(username, transaction.portfolio)
+
+            let portfolio_amount = valid[0].portfolio[0].amount.toString()
+
+            if(portfolio_amount - transaction.amount >= 0) {
+                let result = await TransactionsDAO.newTransaction(username, date, transaction)
+                res.json({ result })
+            }
+            else
+                res.status(401).json({ error: "Not enough balance in this portfolio to complete transaction." })
+        }
         catch(err) {
             res.status(400).json({ error: err })
             return
