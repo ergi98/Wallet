@@ -1,8 +1,11 @@
 import React from 'react'
-import './ProfitTransaction.scss'
+import './SpendingTransaction.scss'
 
 // Axios
 import axios from 'axios'
+
+// NanoID
+import { nanoid } from 'nanoid'
 
 // Components
 import Layout from '../layout/Layout'
@@ -13,6 +16,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/esm/Button'
+import Spinner from 'react-bootstrap/Spinner'
+import Alert from 'react-bootstrap/Alert'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -36,12 +41,10 @@ const transaction_schema = yup.object({
     date: yup.string().required().transform(parseDate),
     hours: yup.string().required().max(2),
     minutes: yup.string().required().max(2),
-    long: yup.string(),
-    lat: yup.string(),
-    amount: yup.string().required().matches(/^[0-9]+[.]?[0-9]+$/),
+    amount: yup.string().required().matches(/^[0-9]+[.]?[0-9]+$/).notOneOf(["0"]),
     currency: yup.string().required(),
-    portfolio: yup.string().required(),
-    category: yup.string().required(),
+    portfolio: yup.string().required().notOneOf(["Choose portfolio to deposit ..."]),
+    source: yup.string().required().notOneOf(["Choose source of income ..."]),
     description: yup.string().required().max(30).matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/),
     long_desc: yup.string().notRequired().max(100).matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/)
 });
@@ -65,9 +68,14 @@ class ProfitTransaction extends React.Component {
             isDateChecked: false,
             isTimeChecked: false,
             isLocationChecked: false,
-            categories: [],
-            portfolios: []
+            sources: [],
+            portfolios: [],
+            displayError: false,
+            displaySuccess: false
+
         }
+
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     componentDidMount() {
@@ -75,38 +83,86 @@ class ProfitTransaction extends React.Component {
     }
 
     async getValues() {
-        let res = await axios.post('/users/populate-transactions', { username: this.props.username })
+        try {
+            let res = await axios.post('/users/populate-transactions', { username: this.props.username, type: "profit" }) 
 
-        if (res.status === 200) {
             if (res.data.result.length > 0) {
-                let { categories, portfolios } = res.data.result[0]
+                let { sources, portfolios } = res.data.result[0]
 
                 this.setState({
-                    categories,
+                    sources,
                     portfolios
                 })
             }
         }
+        catch(err) {
+            console.log(err)
+        }
     }
 
-    async handleSubmit(event) {
-        console.log(event)
+    async handleSubmit(event,{ resetForm }) {
         if (event.hours < 10)
             event.hours = `0${event.hours}`
         if (event.minutes < 10)
             event.minutes = `0${event.minutes}`
 
-        event.time = `${event.hours}:${event.minutes}`
+        let transaction = {
+            trans_id: nanoid(10),
+            time: `${event.hours}:${event.minutes}`,
+            trans_type: 'profit',
+            amount: event.amount,
+            currency: event.currency,
+            portfolio: event.portfolio,
+            source: event.source,
+            short_desc: event.description
+        }
 
+        if(event.long_desc !== '') 
+            transaction.desc = event.long_desc
+
+        try {
+            await axios.post('/transactions/new-transaction', {
+                username: this.props.username,
+                date: event.date,
+                transaction
+            })
+            this.setState({
+                displaySuccess: true
+            })
+            setTimeout(() => {
+                this.setState({
+                    displaySuccess: false
+                })
+            }, 2500);
+            resetForm({})
+        }
+        catch(error) {
+            this.setState({
+                displayError: true
+            })
+            setTimeout(() => {
+                this.setState({
+                    displayError: false
+                })
+            }, 2500);
+        }
     }
 
     render() {
         return (
             <Layout>
                 <Container className="transaction-container">
+                    <Alert show={this.state.displaySuccess} variant="success" className="alert" as="Row">
+                        <Alert.Heading className="heading">Transaction Succeeded</Alert.Heading>
+                        Successfully register transaction!
+                    </Alert>
+                    <Alert show={this.state.displayError} variant="danger" className="alert" as="Row">
+                        <Alert.Heading className="heading">Transaction Failed</Alert.Heading>
+                        The transaction you are trying to register did not go through!
+                    </Alert>
                     <Container className="pad-container">
                         <Row className="title">
-                            <h4>Register Income</h4>
+                            <h4>Register Profit</h4>
                         </Row>
                         <Row className="form-row">
                             <Formik
@@ -116,12 +172,10 @@ class ProfitTransaction extends React.Component {
                                     date: '',
                                     hours: '',
                                     minutes: '',
-                                    long: '',
-                                    lat: '',
                                     amount: '',
-                                    currency: '',
-                                    portfolio: '',
-                                    category: '',
+                                    currency: 'ALL',
+                                    portfolio: 'Choose portfolio to deposit ...',
+                                    source: 'Choose source of income ...',
                                     description: '',
                                     long_desc: ''
                                 }}
@@ -213,61 +267,6 @@ class ProfitTransaction extends React.Component {
                                             </Form.Group>
 
                                             <Form.Group as={Row} className="align-items-center">
-                                                <Form.Label column md={3} sm={3} xs={3}> Location </Form.Label>
-                                                <Col md={4} sm={4} xs={4} style={{ padding: "0" }}>
-                                                    <Form.Control
-                                                        id="long"
-                                                        value={values.long}
-                                                        onChange={handleChange}
-                                                        type="string"
-                                                        placeholder="Longitude"
-                                                        isInvalid={touched.long && errors.long}
-                                                        style={{ display: "none" }}
-                                                    />
-                                                    <Form.Control
-                                                        id="lat"
-                                                        value={values.lat}
-                                                        onChange={handleChange}
-                                                        type="string"
-                                                        placeholder="Latitude"
-                                                        isInvalid={touched.lat && errors.lat}
-                                                        readOnly={this.state.isTimeChecked}
-                                                        style={{ display: "none" }}
-                                                    />
-                                                    <Button
-                                                        variant="primary"
-                                                        style={{ width: "100%" }}
-                                                        disabled={this.state.isLocationChecked}
-                                                    >
-                                                        Choose
-                                                    <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-7px' } }}>
-                                                            <FaMapMarkedAlt />
-                                                        </IconContext.Provider>
-                                                    </Button>
-                                                </Col>
-                                                <Col md={5} sm={5} xs={5}>
-                                                    <Form.Check type="checkbox" id="location" label="Current Location" onChange={(event) => {
-                                                        if (event.target.checked) {
-                                                            navigator.geolocation.getCurrentPosition(pos => {
-                                                                setFieldValue("long", pos.coords.latitude)
-                                                                setFieldValue("lat", pos.coords.longitude)
-                                                            })
-                                                            this.setState({
-                                                                isLocationChecked: event.target.checked
-                                                            })
-                                                        }
-                                                        else {
-                                                            setFieldValue("long", '')
-                                                            setFieldValue("lat", '')
-                                                            this.setState({
-                                                                isLocationChecked: event.target.checked
-                                                            })
-                                                        }
-                                                    }} />
-                                                </Col>
-                                            </Form.Group>
-
-                                            <Form.Group as={Row} className="align-items-center">
                                                 <Form.Label column md={3} sm={3} xs={3}> Amount </Form.Label>
                                                 <Col md={6} sm={6} xs={6} style={{ padding: "0" }}>
                                                     <Form.Control
@@ -307,6 +306,7 @@ class ProfitTransaction extends React.Component {
                                                         onChange={handleChange}
                                                         isInvalid={touched.portfolio && errors.portfolio}
                                                     >
+                                                        <option disabled>Choose portfolio to deposit ...</option>
                                                         {
                                                             this.state.portfolios.map(portfolio =>
                                                                 <option
@@ -321,24 +321,25 @@ class ProfitTransaction extends React.Component {
                                                 </Col>
                                             </Form.Group>
 
-                                            <Form.Group as={Row} controlId="category" className="align-items-center">
-                                                <Form.Label column md={3} sm={3} xs={3}> Category </Form.Label>
+                                            <Form.Group as={Row} controlId="source" className="align-items-center">
+                                                <Form.Label column md={3} sm={3} xs={3}> Source </Form.Label>
                                                 <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
                                                     <Form.Control
                                                         as="select"
                                                         className="mr-sm-2"
                                                         custom
-                                                        value={values.category}
+                                                        value={values.source}
                                                         onChange={handleChange}
-                                                        isInvalid={touched.category && errors.category}
+                                                        isInvalid={touched.source && errors.source}
                                                     >
+                                                        <option disabled>Choose source of income ...</option>
                                                         {
-                                                            this.state.categories.map(category =>
+                                                            this.state.sources.map(source =>
                                                                 <option
-                                                                    value={category.cat_id}
-                                                                    key={category.cat_id}
+                                                                    value={source.source_name}
+                                                                    key={source.source_id}
                                                                 >
-                                                                    {category.cat_name}
+                                                                    {source.source_name}
                                                                 </option>
                                                             )
                                                         }
@@ -364,7 +365,7 @@ class ProfitTransaction extends React.Component {
                                                 <Col style={{ padding: "0px 0px 0px 0px" }}>
                                                     <Form.Control
                                                         as="textarea"
-                                                        rows="2"
+                                                        rows="4"
                                                         name="long_desc"
                                                         laceholder="Detailed Description"
                                                         style={{ resize: "none" }}
@@ -377,10 +378,16 @@ class ProfitTransaction extends React.Component {
 
                                             <Form.Row className="btn-row">
                                                 <Button variant="primary" type="submit" form="transaction-form" disabled={isSubmitting}>
-                                                    Finalize
-                                                <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
-                                                        <AiOutlineFileDone />
-                                                    </IconContext.Provider>
+                                                    {   isSubmitting?
+                                                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true"/>
+                                                        : 
+                                                        <span>
+                                                            Finalize
+                                                            <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
+                                                                <AiOutlineFileDone />
+                                                            </IconContext.Provider> 
+                                                        </span>
+                                                    }
                                                 </Button>
                                             </Form.Row>
                                         </Form>

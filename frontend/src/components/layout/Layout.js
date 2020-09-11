@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 function Layout(props) {
 
     const username = useSelector((state) => state.user.username)
+    const name = useSelector((state) => state.user.name)
     const isAuthenticated  = useSelector((state) => state.user.isAuthenticated)
     const dispatch = useDispatch()
 
@@ -28,6 +29,7 @@ function Layout(props) {
             <Row className="user-row">
                 <Dropdown>
                     <Dropdown.Toggle className="user-btn">
+                        <label className="user-name">{ name }</label>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Dropdown.Item href="#/action-1">
@@ -45,7 +47,7 @@ function Layout(props) {
                     </Dropdown.Menu>
                 </Dropdown>
             </Row>
-            <Row>
+            <Row className="scrollable">
                 {props.children}
             </Row>
             {isAuthenticated ? <NavBar /> : null}

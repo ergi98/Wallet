@@ -16,6 +16,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/esm/Button'
+import Spinner from 'react-bootstrap/Spinner'
+import Alert from 'react-bootstrap/Alert'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -70,6 +72,8 @@ class SpendingTransaction extends React.Component {
             isLocationChecked: false,
             categories: [],
             portfolios: [],
+            displayError: false,
+            displaySuccess: false
 
         }
 
@@ -81,9 +85,9 @@ class SpendingTransaction extends React.Component {
     }
 
     async getValues() {
-        let res = await axios.post('/users/populate-transactions', { username: this.props.username })
+        try {
+            let res = await axios.post('/users/populate-transactions', { username: this.props.username, type: "expense" }) 
 
-        if (res.status === 200) {
             if (res.data.result.length > 0) {
                 let { categories, portfolios } = res.data.result[0]
 
@@ -93,9 +97,12 @@ class SpendingTransaction extends React.Component {
                 })
             }
         }
+        catch(err) {
+            console.log(err)
+        }
     }
 
-    async handleSubmit(event,{ setErrors, setStatus, resetForm }) {
+    async handleSubmit(event,{ resetForm }) {
         if (event.hours < 10)
             event.hours = `0${event.hours}`
         if (event.minutes < 10)
@@ -116,7 +123,8 @@ class SpendingTransaction extends React.Component {
             }
         }
 
-        event.long_desc === ''? transaction = transaction : transaction.desc = event.long_desc
+        if(event.long_desc !== '') 
+            transaction.desc = event.long_desc
 
         try {
             await axios.post('/transactions/new-transaction', {
@@ -124,12 +132,25 @@ class SpendingTransaction extends React.Component {
                 date: event.date,
                 transaction
             })
+            this.setState({
+                displaySuccess: true
+            })
+            setTimeout(() => {
+                this.setState({
+                    displaySuccess: false
+                })
+            }, 2500);
             resetForm({})
-            setStatus({success: true})
         }
         catch(error) {
-            setStatus({success: false})
-            setErrors({submit: error.message})
+            this.setState({
+                displayError: true
+            })
+            setTimeout(() => {
+                this.setState({
+                    displayError: false
+                })
+            }, 2500);
         }
     }
 
@@ -137,6 +158,14 @@ class SpendingTransaction extends React.Component {
         return (
             <Layout>
                 <Container className="transaction-container">
+                    <Alert show={this.state.displaySuccess} variant="success" className="alert" as="Row">
+                        <Alert.Heading className="heading">Transaction Succeeded</Alert.Heading>
+                        Successfully register transaction!
+                    </Alert>
+                    <Alert show={this.state.displayError} variant="danger" className="alert" as="Row">
+                        <Alert.Heading className="heading">Transaction Failed</Alert.Heading>
+                        The transaction you are trying to register did not go through!
+                    </Alert>
                     <Container className="pad-container">
                         <Row className="title">
                             <h4>Register Expense</h4>
@@ -412,10 +441,16 @@ class SpendingTransaction extends React.Component {
 
                                             <Form.Row className="btn-row">
                                                 <Button variant="primary" type="submit" form="transaction-form" disabled={isSubmitting}>
-                                                    Finalize
-                                                <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
-                                                        <AiOutlineFileDone />
-                                                    </IconContext.Provider>
+                                                    {   isSubmitting?
+                                                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true"/>
+                                                        : 
+                                                        <span>
+                                                            Finalize
+                                                            <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
+                                                                <AiOutlineFileDone />
+                                                            </IconContext.Provider> 
+                                                        </span>
+                                                    }
                                                 </Button>
                                             </Form.Row>
                                         </Form>

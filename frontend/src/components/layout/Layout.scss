@@ -1,7 +1,6 @@
 @import '../../styles/colors.scss';
 
 .layout-container {
-    height: 100vh;
 
     .user-row {
         position: relative;
@@ -9,6 +8,15 @@
 
         .user-btn {
             margin: 10px;
+
+            .user-name {
+                margin-bottom: 0;
+                padding-right: 5px;
+            }
         }
+    }
+    
+    .scrollable {
+        overflow: auto;
     }
 }

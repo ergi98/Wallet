@@ -125,14 +125,14 @@ class UsersController {
 
     static async populateTransactionForm(req, res) {
         try {
-            const { username } = req.body
+            const { type, username } = req.body
 
             if(!username || typeof username !== "string") {
                 res.status(400).json({ error: "Bad username format, expected string." })
                 return
             }
 
-            let result = await UsersDAO.populateTransactionForm(username)
+            let result = await UsersDAO.populateTransactionForm(username, type)
             
             if(!result) {
                 res.status(401).json({ error: "Could not populate transaction form." })

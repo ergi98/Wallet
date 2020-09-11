@@ -48,7 +48,11 @@ class TransactionsController {
 
             let portfolio_amount = valid[0].portfolio[0].amount.toString()
 
-            if(portfolio_amount - transaction.amount >= 0) {
+            if(transaction.trans_type === "profit") {
+                let result = await TransactionsDAO.newTransaction(username, date, transaction)
+                res.json({ result })
+            }
+            else if(transation.trans_type === "expense" && portfolio_amount - transaction.amount >= 0) {
                 let result = await TransactionsDAO.newTransaction(username, date, transaction)
                 res.json({ result })
             }

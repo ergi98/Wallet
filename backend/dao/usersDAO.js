@@ -99,22 +99,41 @@ class UsersDAO {
     }
   }
 
-  static async populateTransactionForm(username) {
+  static async populateTransactionForm(username, type) {
     try {
-      let pipeline = [
-        {
-          $match: {
-            username: username
+      let pipeline
+      if(type === "expense") {
+        pipeline = [
+          {
+            $match: {
+              username: username
+            }
+          },
+          {
+            $project: {
+              _id: 0,
+              portfolios: 1,
+              categories: 1  
+            }
           }
-        },
-        {
-          $project: {
-            _id: 0,
-            portfolios: 1,
-            categories: 1  
+        ]
+      }
+      else if(type === "profit") {
+        pipeline = [
+          {
+            $match: {
+              username: username
+            }
+          },
+          {
+            $project: {
+              _id: 0,
+              portfolios: 1,
+              sources: 1  
+            }
           }
-        }
-      ]
+        ]
+      }
 
       let res = await users.aggregate(pipeline)
 

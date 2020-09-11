@@ -84,7 +84,9 @@ class TransactionsDAO {
       writeConcern: { w: "majority" }
     }
 
-    transaction.trans_type === "expense"? transaction.amount *= -1 : transaction
+    if(transaction.trans_type === "expense")
+      transaction.amount *= -1
+
     transaction.amount = mongodb.Decimal128.fromString(transaction.amount.toString())
 
     try {
@@ -129,7 +131,7 @@ class TransactionsDAO {
           await users.updateOne({ username }, { $inc: { "categories.$[cat].count": 1, "categories.$[cat].amnt_spent": transaction.amount }, $set: { "categories.$[cat].last_spent": date }}, { arrayFilters: [ { "cat.cat_name": transaction.type } ]}, { session })
         }
         else {
-          await users.updateOne({ username }, { $inc: { "income_sources.$[src].count": 1, "income_sources.$[src].amount_earned": transaction.amount }, $set: { "income_sources.$[src].last_spent": date }}, { arrayFilters: [{ "src.source_name": transaction.source }]}, { session })
+          await users.updateOne({ username }, { $inc: { "sources.$[src].count": 1, "sources.$[src].amount_earned": transaction.amount }, $set: { "sources.$[src].last_spent": date }}, { arrayFilters: [{ "src.source_name": transaction.source }]}, { session })
         }
       
       }, transactionOptions)
