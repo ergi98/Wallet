@@ -21,7 +21,6 @@ import Alert from 'react-bootstrap/Alert'
 
 // Icons
 import { IconContext } from "react-icons"
-import { FaMapMarkedAlt } from 'react-icons/fa'
 import { AiOutlineFileDone } from 'react-icons/ai'
 
 // Form Validation
@@ -64,6 +63,8 @@ class ProfitTransaction extends React.Component {
     constructor() {
         super()
 
+        this._isMounted = false
+
         this.state = {
             isDateChecked: false,
             isTimeChecked: false,
@@ -79,7 +80,12 @@ class ProfitTransaction extends React.Component {
     }
 
     componentDidMount() {
-        this.getValues()
+        this._isMounted = true
+        this._isMounted && this.getValues()
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
     }
 
     async getValues() {
@@ -89,7 +95,7 @@ class ProfitTransaction extends React.Component {
             if (res.data.result.length > 0) {
                 let { sources, portfolios } = res.data.result[0]
 
-                this.setState({
+                this._isMounted && this.setState({
                     sources,
                     portfolios
                 })
@@ -126,22 +132,22 @@ class ProfitTransaction extends React.Component {
                 date: event.date,
                 transaction
             })
-            this.setState({
+            this._isMounted && this.setState({
                 displaySuccess: true
             })
             setTimeout(() => {
-                this.setState({
+                this._isMounted && this.setState({
                     displaySuccess: false
                 })
             }, 2500);
             resetForm({})
         }
         catch(error) {
-            this.setState({
+            this._isMounted && this.setState({
                 displayError: true
             })
             setTimeout(() => {
-                this.setState({
+                this._isMounted && this.setState({
                     displayError: false
                 })
             }, 2500);

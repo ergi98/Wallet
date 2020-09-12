@@ -85,10 +85,10 @@ class TransactionsDAO {
     }
 
     if(transaction.trans_type === "expense")
-      transaction.amount *= -1
+      transaction.amount = transaction.amount * -1
 
     transaction.amount = mongodb.Decimal128.fromString(transaction.amount.toString())
-
+    
     try {
       await session.withTransaction(async () => {
 
@@ -141,7 +141,7 @@ class TransactionsDAO {
       return { error: e }
     }
     finally {
-      await session.endSession();
+      await session.endSession()
       return { success: true}
     }
   }

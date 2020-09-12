@@ -44,22 +44,28 @@ class TransactionsController {
         try {
             let { username, date, transaction } = req.body
 
-            let valid = await UserDAO.getPortolioAmount(username, transaction.portfolio)
-
-            let portfolio_amount = valid[0].portfolio[0].amount.toString()
-
             if(transaction.trans_type === "profit") {
                 let result = await TransactionsDAO.newTransaction(username, date, transaction)
                 res.json({ result })
             }
-            else if(transation.trans_type === "expense" && portfolio_amount - transaction.amount >= 0) {
-                let result = await TransactionsDAO.newTransaction(username, date, transaction)
-                res.json({ result })
+            else if(transaction.trans_type === "expense") {
+
+                let valid = await UserDAO.getPortolioAmount(username, transaction.portfolio)
+
+                let portfolio_amount = valid[0].portfolio[0].amount.toString()
+
+                if(portfolio_amount - transaction.amount >= 0) {
+                    let result = await TransactionsDAO.newTransaction(username, date, transaction)
+                    res.json({ result })
+                }
+                else
+                res.status(401).json({ error: "Not enough balance in this portfolio to complete transaction." })
             }
             else
-                res.status(401).json({ error: "Not enough balance in this portfolio to complete transaction." })
+                res.status(404).json({ error: "Transaction type not supported." })
         }
         catch(err) {
+            console.log(err)
             res.status(400).json({ error: err })
             return
         }

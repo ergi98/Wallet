@@ -199,7 +199,31 @@ class UsersDAO {
       return await users.aggregate(pipeline).toArray();
     }
     catch (e) {
-      console.error(`Error occurred while retrieving portfolio, ${e}`)
+      console.error(`Error occurred while retrieving portfolio amount, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async getPortfolios(username) {
+    try {
+      let pipeline = [
+        {
+          $match: {
+            username
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            portfolios: 1
+          }
+        }
+      ]
+
+      return await users.aggregate(pipeline).toArray()
+    } 
+    catch (e) {
+      console.error(`Error occurred while retrieving portfolios, ${e}`)
       return { error: e }
     }
   }

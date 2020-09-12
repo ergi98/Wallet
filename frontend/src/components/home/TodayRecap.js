@@ -15,6 +15,9 @@ import Col from 'react-bootstrap/Col'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
+// Number Format
+import NumberFormat from 'react-number-format'
+
 class TodayRecap extends React.Component {
 
     constructor() {
@@ -32,10 +35,10 @@ class TodayRecap extends React.Component {
             yesterday_spendings: 0,
             today_earnings: 0,
             yesterday_earnings: 0,
+            s_comp: 0,
+            e_comp: 0
         }
 
-        this.s_comp = 0
-        this.e_comp = 0
     }
 
     componentDidMount() {
@@ -58,7 +61,7 @@ class TodayRecap extends React.Component {
         let y_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: yesterday })
         let amnt_res = await axios.post("users/available-amount", { username: this.props.username })
 
-        let t_spendings = 0, y_spendings = 0, t_earnings = 0, y_earnings = 0, amount = 0
+        let t_spendings = 0, y_spendings = 0, t_earnings = 0, y_earnings = 0, amount = 0, s_comp = 0, e_comp = 0
 
         // Save the amounts into local variables
         if (t_res.data.result.length > 0) {
@@ -72,17 +75,20 @@ class TodayRecap extends React.Component {
         if(amnt_res.data.result.length > 0)
             amount = amnt_res.data.result[0].amount.$numberDecimal
 
-        // Update the state
-        this._isMounted && this.setState({
+        y_spendings === "0" ? s_comp = 0 : s_comp = (((-1*t_spendings) - (-1*y_spendings)) / y_spendings * -100).toFixed(0)
+        y_earnings === "0" ? e_comp = 0 : e_comp = ((t_earnings - y_earnings) / y_earnings * 100).toFixed(0)
+
+            // Update the state
+            this._isMounted && this.setState({
             today_spendings: t_spendings,
             yesterday_spendings: y_spendings,
             today_earnings: t_earnings,
             yesterday_earnings: y_earnings,
-            amount: amount
+            amount: amount,
+            e_comp,
+            s_comp
         })
 
-        y_spendings === 0 ? this.s_comp = 0 : this.s_comp = (t_spendings - y_spendings) / y_spendings * 100
-        y_earnings === 0 ? this.e_comp = 0 : this.e_comp = (t_earnings - y_earnings) / y_earnings * 100
     }
 
     render() {
@@ -92,22 +98,43 @@ class TodayRecap extends React.Component {
                     <Row>
                         <Col className="spendings-col">
                             <span>Spendings</span>
-                            <span className="s-tot">{this.props.currency} {this.state.today_spendings}</span>
+                            <span className="s-tot">
+                                <NumberFormat 
+                                    value={this.state.today_spendings} 
+                                    displayType={'text'} 
+                                    thousandSeparator={true} 
+                                    prefix={' ' + this.props.currency + ' ' } 
+                                />    
+                            </span>
                             <span className="comp">
-                                {this.s_comp >= 0 ? '+' : '-'}{this.s_comp}%
+                                {this.state.s_comp}%
                             </span>
                         </Col>
                         <Col className="earnings-col">
                             <span>Earnings</span>
-                            <span className="e-tot">{this.props.currency} {this.state.today_earnings}</span>
+                            <span className="e-tot">
+                                <NumberFormat 
+                                    value={this.state.today_earnings}
+                                    displayType={'text'} 
+                                    thousandSeparator={true} 
+                                    prefix={this.props.currency + ' ' } 
+                                />
+                            </span>
                             <span className="comp">
-                                {this.e_comp >= 0 ? '+' : '-'}{this.e_comp}%
+                                {this.state.e_comp}%
                             </span>
                         </Col>
                     </Row>
                     <Row className="total-row">
                         <span>Available Amount: </span>
-                        <span className="tot-sum">{this.props.currency} {this.state.amount}</span>
+                        <span className="tot-sum">
+                            <NumberFormat 
+                                value={this.state.amount}
+                                displayType={'text'} 
+                                thousandSeparator={true} 
+                                prefix={this.props.currency + ' ' } 
+                            />
+                        </span>
                     </Row>
                 </Container>
             </Card>

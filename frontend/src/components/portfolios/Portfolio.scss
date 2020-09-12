@@ -1,0 +1,78 @@
+@import "../../styles/colors";
+
+.portfolio {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 $box-shadow;
+    text-align: center;
+    padding: 10px;
+    margin: 10px 0px 10px 0px;
+    border: 1px solid #ECECEC;
+    position: relative;
+
+    .main-row {
+        margin: 0;
+
+        .portfolio-name {
+            * {display: block };
+
+            .name {
+                font-weight: bold;
+                font-size: 20px;
+            }
+
+            .type {
+                position: relative;
+                text-align: left;
+                margin-top: -13px;
+                color: $text-gray;
+                text-transform: capitalize;
+            }
+        }
+
+        .star {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+        }
+    }
+
+    .row-item {
+        margin: 0px;
+
+        .title {
+            font-weight: 600;
+            padding-right: 2px;
+        }
+
+        .btn-col {
+            
+            padding: 0px 5px 5px 5px;
+
+            .edit-btn, .list-btn {
+                width: 100%;
+                border-radius: 20px;
+            }   
+        }
+
+        label {
+            font-size: 15px;
+        }
+
+        .amount {
+            margin-left: 10px;
+            color: $green;
+            font-weight: bold;
+            padding-bottom: 10px;
+        }
+
+        .col1 {
+            padding: 0px;
+            text-align: left !important;
+        }  
+        
+        .col2 {
+            text-align: right !important;
+        }
+    }
+}

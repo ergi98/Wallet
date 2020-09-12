@@ -166,6 +166,19 @@ class UsersController {
         }
     }
 
+    static async getPortfolios(req, res) {
+        try {
+            let { username } = req.body
+
+            let result = await UsersDAO.getPortfolios(username)
+
+            res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
 }
 
 module.exports = { UsersController, User }

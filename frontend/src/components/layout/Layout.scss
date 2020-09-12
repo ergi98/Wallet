@@ -1,7 +1,7 @@
 @import '../../styles/colors.scss';
 
 .layout-container {
-
+    height: 100vh;
     .user-row {
         position: relative;
         background-color: $gainsboro;
@@ -17,6 +17,7 @@
     }
     
     .scrollable {
+        height: 92vh;
         overflow: auto;
     }
 }

@@ -66,6 +66,8 @@ class SpendingTransaction extends React.Component {
     constructor() {
         super()
 
+        this._isMounted = false
+
         this.state = {
             isDateChecked: false,
             isTimeChecked: false,
@@ -74,14 +76,18 @@ class SpendingTransaction extends React.Component {
             portfolios: [],
             displayError: false,
             displaySuccess: false
-
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     componentDidMount() {
-        this.getValues()
+        this._isMounted = true
+        this._isMounted  && this.getValues()
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
     }
 
     async getValues() {
@@ -91,7 +97,7 @@ class SpendingTransaction extends React.Component {
             if (res.data.result.length > 0) {
                 let { categories, portfolios } = res.data.result[0]
 
-                this.setState({
+                this._isMounted  && this.setState({
                     categories,
                     portfolios
                 })
@@ -132,22 +138,22 @@ class SpendingTransaction extends React.Component {
                 date: event.date,
                 transaction
             })
-            this.setState({
+            this._isMounted  && this.setState({
                 displaySuccess: true
             })
             setTimeout(() => {
-                this.setState({
+                this._isMounted  && this.setState({
                     displaySuccess: false
                 })
             }, 2500);
             resetForm({})
         }
         catch(error) {
-            this.setState({
+            this._isMounted  && this.setState({
                 displayError: true
             })
             setTimeout(() => {
-                this.setState({
+                this._isMounted  && this.setState({
                     displayError: false
                 })
             }, 2500);

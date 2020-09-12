@@ -1,13 +1,13 @@
 @import '../../styles/colors';
 
 .list-container {
-    border-radius: 10px;
+    border-radius: 0px 0px 10px 10px;
     background-color: white;
     text-align: center;
     padding: 0px 0px 5px 0px;
     overflow: auto;
-    max-height: 250px !important;
-    min-height: 250px !important;
+    max-height: 220px !important;
+    min-height: 220px !important;
 
     .list-table {
         .headers-row {
@@ -29,8 +29,8 @@
 
 @media only screen and (max-height: 700px) {
     .list-container {
-        max-height: 150px !important;
-        min-height: 150px !important;
+        max-height: 120px !important;
+        min-height: 120px !important;
     }
 }
 

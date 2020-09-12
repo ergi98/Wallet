@@ -50,7 +50,7 @@ function Layout(props) {
             <Row className="scrollable">
                 {props.children}
             </Row>
-            {isAuthenticated ? <NavBar /> : null}
+            {isAuthenticated ? <Row><NavBar /></Row> : null}
         </Container>
     )
 }

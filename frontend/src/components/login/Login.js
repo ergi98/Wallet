@@ -34,6 +34,8 @@ class Login extends React.Component {
     constructor() {
         super()
 
+        this._isMounted = false
+
         this.state = {
             showAlert: false,
             isSubmitting: false
@@ -44,30 +46,35 @@ class Login extends React.Component {
 
     /** TODO: 1 - Login Component shows up before redirecting */
     componentDidMount() {
+        this._isMounted = true
         // If the user is already authenticated redirect
         if (this.props.isAuthenticated)
             window.location.href = '/home'
     }
 
+    componentWillUnmount() {
+        this._isMounted = false
+    }
+
     /** TODO: 2 - Better way to handle the error? (through dispatch?)**/
     async handleSubmit(event) {
         // Used for the spinner login button
-        this.setState({
+        this._isMounted && this.setState({
             isSubmitting: true
         })
         // Call the login function in userActions.js
-        this.props.logIn(event)
+        this._isMounted && this.props.logIn(event)
             // If successful redirect
             .then(() => {
                 window.location.href = '/home'
             })
             // If not display error alert
             .catch(() => {
-                this.setState({
+                this._isMounted && this.setState({
                     showAlert: true,
                     isSubmitting: false
                 })
-                setTimeout(() => { this.setState({ showAlert: false }) }, 2500)
+                setTimeout(() => { this._isMounted && this.setState({ showAlert: false }) }, 2500)
             })
     }
 

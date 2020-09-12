@@ -15,6 +15,9 @@ import Table from 'react-bootstrap/Table'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
+// Number Format
+import NumberFormat from 'react-number-format'
+
 class TransactionList extends React.Component {
 
     constructor() {
@@ -28,8 +31,13 @@ class TransactionList extends React.Component {
     }
 
     componentDidMount() {
+        this._isMounted = true
         // Get todays transactions
-        this.getTransactions(new Date().toLocaleDateString('en-GB'))
+        this._isMounted && this.getTransactions(new Date().toLocaleDateString('en-GB'))
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     async getTransactions(date) {
@@ -38,7 +46,7 @@ class TransactionList extends React.Component {
         if(res.status === 200 && res.data.result.length > 0) {
             let { transactions } = res.data.result[0]
 
-            this.setState({
+            this._isMounted && this.setState({
                 transactions
             })
         }
@@ -64,9 +72,23 @@ class TransactionList extends React.Component {
                                         <td>{transaction.short_desc}</td>
                                         { 
                                             transaction.amount.$numberDecimal > 0?
-                                                <td className="earning">+{transaction.amount.$numberDecimal} {transaction.currency}</td>
+                                                <td className="earning">
+                                                    <NumberFormat 
+                                                        value={transaction.amount.$numberDecimal}
+                                                        displayType={'text'} 
+                                                        thousandSeparator={true} 
+                                                        prefix={'+ ' + transaction.currency + ' ' } 
+                                                    />
+                                                </td>
                                                 :
-                                                <td className="spending">{transaction.amount.$numberDecimal} {transaction.currency}</td>
+                                                <td className="spending">
+                                                    <NumberFormat 
+                                                        value={transaction.amount.$numberDecimal}
+                                                        displayType={'text'} 
+                                                        thousandSeparator={true} 
+                                                        prefix={' ' + transaction.currency + ' ' } 
+                                                    />
+                                                </td>
                                         }
                                     </tr>
                                 )
