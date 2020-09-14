@@ -22,7 +22,7 @@ class Home extends React.Component {
                 <Container className="home-container">
                     <TodayRecap></TodayRecap>
                     <Container className="btn-container">
-                        <Button variant="secondary" className="transaction-btn" onClick={() => { window.location = '/expense-transaction'}}>
+                        <Button variant="secondary" className="transaction-btn" onClick={() => { window.location = '/expense-transaction' }}>
                             <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
                                 <RiAddCircleLine/>
                             </IconContext.Provider>

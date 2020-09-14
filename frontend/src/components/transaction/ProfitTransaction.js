@@ -342,7 +342,7 @@ class ProfitTransaction extends React.Component {
                                                         {
                                                             this.state.sources.map(source =>
                                                                 <option
-                                                                    value={source.source_name}
+                                                                    value={source.source_id}
                                                                     key={source.source_id}
                                                                 >
                                                                     {source.source_name}

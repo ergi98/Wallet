@@ -87,7 +87,7 @@ class Login extends React.Component {
                         <Alert.Heading className="heading">Invalid credentials</Alert.Heading>
                         The user you are trying to login does not exist or the password is not correct!
                     </Alert>
-                    <img src={require('../../assets/money.svg')} alt="Wallet Logo" />
+                    <img src={require('../../assets/logo.svg')} alt="Wallet Logo" />
                 </Row>
 
                 <Row className="login-row">

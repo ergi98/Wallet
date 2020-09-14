@@ -40,7 +40,7 @@ function Portfolios() {
 
                 setTimeout(() => {
                     _isMounted && setError(false)
-                }, 1500);
+                }, 2500);
             }
         }
         _isMounted && getPortfolios()

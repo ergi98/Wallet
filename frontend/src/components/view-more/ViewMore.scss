@@ -1,0 +1,126 @@
+@import '../../styles/colors';
+
+.view-more_container {
+    position: relative;
+    overflow: auto;
+    min-height: 500px;
+    .alert {
+        width: 100%;
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: 9999;
+    }
+
+    .date-row {
+        margin: 15px 0px 0px 0px;
+
+        .left-btn, .date-picker, .right-btn {
+            padding: 10px 5px 0px 5px;
+        }
+
+        .date-picker {
+            font-size: 18px;
+            width: fit-content;
+            *{
+                text-align: center;
+            }
+        }
+
+        .left-btn {
+            text-align: right;
+        }
+    }
+
+    .more-transactions {
+        padding-top: 10px;
+
+        .transaction {
+            position: relative;
+            max-width: 500px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px 0 $box-shadow;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ECECEC;
+            
+            .row {
+                margin: 0;
+            }
+
+            .col {
+                padding: 0;
+            }
+
+            .location {
+                vertical-align: middle;
+                .map-btn {
+                    padding: 0px 0px 0px 5px;
+                    margin-top: -8px;
+                }
+            }
+
+            .field-desc {
+                color: $text-gray;
+                padding-right: 10px;
+            }
+
+            .type {
+                .field-value {
+                    text-transform: capitalize;
+                }
+            }
+
+            .amount {
+                .field-value {
+                    font-weight: 600;
+                }
+
+                .expense {
+                    color: $red;
+                }
+
+                .profit {
+                    color: $green;
+                }
+            }
+
+            .banner {
+                position: absolute;
+                width: 10px;
+                top: 0px;
+                right: 0px;
+                border-radius: 0px 10px 10px 0px;
+                height: 100%;
+
+                &.green {
+                    background-color: $green;
+                }
+
+                &.red {
+                    background-color: $red;
+                }
+            }
+        }
+    }
+
+    .no-transactions {
+        padding: 15px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: fit-content;
+        position: absolute;
+        text-align: center;
+        bottom: 50%;
+
+        .title-label {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .sub-label {
+            color: $text-gray;
+        }
+    }
+}

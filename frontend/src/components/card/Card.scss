@@ -10,11 +10,19 @@
     border: 1px solid #ECECEC;
 
     .title {
+        position: relative;
+        display: inline-flex;
         padding: 10px 10px 0px 10px;
         text-align: left;
         border-radius: 10px 10px 0px 0px;
         h5 { 
             font-weight: normal;
+        }
+
+        .action-btn {
+            position: absolute;
+            right: 5px;
+            top: 2px;
         }
     }
     

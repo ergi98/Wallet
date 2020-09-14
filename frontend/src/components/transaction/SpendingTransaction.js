@@ -405,7 +405,7 @@ class SpendingTransaction extends React.Component {
                                                         {
                                                             this.state.categories.map(category =>
                                                                 <option
-                                                                    value={category.cat_name}
+                                                                    value={category.cat_id}
                                                                     key={category.cat_id}
                                                                 >
                                                                     {category.cat_name}

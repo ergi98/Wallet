@@ -52,9 +52,13 @@ class TransactionList extends React.Component {
         }
     }
 
+    async goToViewMore() {
+        window.location = '/view-more'
+    }
+
     render() {
         return (
-            <Card title="Latest Transactions">
+            <Card title="Latest Transactions" hasButton={true} buttonTxt="View More ..." btnAction={this.goToViewMore}>
                 <Container className="list-container">
                     <Table responsive striped className="list-table">
                         <thead>
