@@ -92,7 +92,7 @@ class SpendingTransaction extends React.Component {
 
     async getValues() {
         try {
-            let res = await axios.post('/users/populate-transactions', { username: this.props.username, type: "expense" }) 
+            let res = await axios.post('/users/populate-transactions', { username: this.props.username }) 
 
             if (res.data.result.length > 0) {
                 let { categories, portfolios } = res.data.result[0]

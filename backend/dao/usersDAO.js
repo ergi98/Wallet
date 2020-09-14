@@ -101,45 +101,27 @@ class UsersDAO {
 
   static async populateTransactionForm(username, type) {
     try {
-      let pipeline
-      if(type === "expense") {
-        pipeline = [
-          {
-            $match: {
-              username: username
-            }
-          },
-          {
-            $project: {
-              _id: 0,
-              portfolios: 1,
-              categories: 1  
-            }
+      let pipeline = [
+        {
+          $match: {
+            username: username
           }
-        ]
-      }
-      else if(type === "profit") {
-        pipeline = [
-          {
-            $match: {
-              username: username
-            }
-          },
-          {
-            $project: {
-              _id: 0,
-              portfolios: 1,
-              sources: 1  
-            }
+        },
+        {
+          $project: {
+            _id: 0,
+            portfolios: 1,
+            categories: 1,
+            sources: 1
           }
-        ]
-      }
+        }
+      ]
 
       let res = await users.aggregate(pipeline)
 
       return await res.toArray()
     }
-    catch(e) {
+    catch (e) {
       console.error(`Error occurred while popoulating transaction form, ${e}`)
       return { error: e }
     }
@@ -159,7 +141,7 @@ class UsersDAO {
               $reduce: {
                 input: "$portfolios",
                 initialValue: 0,
-                in: { $add: [ "$$value", "$$this.amount"]}
+                in: { $add: ["$$value", "$$this.amount"] }
               }
             }
           }
@@ -170,7 +152,7 @@ class UsersDAO {
 
       return await res.toArray()
     }
-    catch(e) {
+    catch (e) {
       console.error(`Error occurred while popoulating transaction form, ${e}`)
       return { error: e }
     }
@@ -180,8 +162,8 @@ class UsersDAO {
     try {
       let pipeline = [
         {
-          $match: { 
-            username 
+          $match: {
+            username
           }
         },
         {
@@ -191,10 +173,11 @@ class UsersDAO {
               $filter: {
                 input: '$portfolios',
                 as: 'portfolios',
-                cond: {$eq: ['$$portfolios.p_id', portfolio]}
+                cond: { $eq: ['$$portfolios.p_id', portfolio] }
               }
             },
-        }}
+          }
+        }
       ]
       return await users.aggregate(pipeline).toArray();
     }
@@ -221,7 +204,7 @@ class UsersDAO {
       ]
 
       return await users.aggregate(pipeline).toArray()
-    } 
+    }
     catch (e) {
       console.error(`Error occurred while retrieving portfolios, ${e}`)
       return { error: e }

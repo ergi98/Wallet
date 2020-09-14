@@ -14,15 +14,14 @@
 
     .date-row {
         margin: 15px 0px 0px 0px;
-
         .left-btn, .date-picker, .right-btn {
             padding: 10px 5px 0px 5px;
         }
 
-        .date-picker {
-            font-size: 18px;
-            width: fit-content;
+        .date-picker {          
             *{
+                font-size: 20px;
+                font-weight: 600;  
                 text-align: center;
             }
         }
@@ -32,12 +31,15 @@
         }
     }
 
+    // TODO: MAKE IT RESPONSIVE //
     .more-transactions {
         padding-top: 10px;
+        overflow: auto;
+        height: 75vh;
 
         .transaction {
             position: relative;
-            max-width: 500px;
+            max-width: 600px;
             border-radius: 10px;
             background-color: white;
             box-shadow: 0 4px 8px 0 $box-shadow;
@@ -51,6 +53,12 @@
 
             .col {
                 padding: 0;
+            }
+
+            .desc {
+                .field-value {
+                    text-transform: capitalize;
+                };
             }
 
             .location {
@@ -72,6 +80,13 @@
                 }
             }
 
+            .long-desc {
+                .field-value {
+                    width: 60%;
+                    word-wrap: normal;
+                }
+            }
+
             .amount {
                 .field-value {
                     font-weight: 600;
@@ -86,21 +101,17 @@
                 }
             }
 
-            .banner {
+            .edit-btn, .delete-btn {
                 position: absolute;
-                width: 10px;
-                top: 0px;
-                right: 0px;
-                border-radius: 0px 10px 10px 0px;
-                height: 100%;
+            }
 
-                &.green {
-                    background-color: $green;
-                }
-
-                &.red {
-                    background-color: $red;
-                }
+            .edit-btn {
+                top: 60px;
+                right: 10px;
+            }
+            .delete-btn {
+                top: 120px;
+                right: 10px;
             }
         }
     }

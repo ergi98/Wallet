@@ -90,7 +90,7 @@ class ProfitTransaction extends React.Component {
 
     async getValues() {
         try {
-            let res = await axios.post('/users/populate-transactions', { username: this.props.username, type: "profit" }) 
+            let res = await axios.post('/users/populate-transactions', { username: this.props.username }) 
 
             if (res.data.result.length > 0) {
                 let { sources, portfolios } = res.data.result[0]
