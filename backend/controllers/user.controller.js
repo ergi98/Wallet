@@ -179,6 +179,20 @@ class UsersController {
             return
         }
     }
+
+    static async getUserData(req, res) {
+        try {
+            let { username } = req.body
+
+            let result = await UsersDAO.getUserData(username)
+
+            res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
 }
 
 module.exports = { UsersController, User }

@@ -44,7 +44,6 @@ class Login extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    /** TODO: 1 - Login Component shows up before redirecting */
     componentDidMount() {
         this._isMounted = true
         // If the user is already authenticated redirect
@@ -80,7 +79,7 @@ class Login extends React.Component {
 
     render() {
         return (
-            <Container className="main-container" fluid="md">
+            <Container className="main-container">
 
                 <Row className="logo-row">
                     <Alert show={this.state.showAlert} variant="danger" className="alert" as="Row">

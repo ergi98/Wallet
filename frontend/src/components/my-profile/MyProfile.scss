@@ -1,0 +1,69 @@
+@import '../../styles/colors';
+
+.profile-container {
+    margin: 15px auto;
+
+    .image-row {
+        .row {
+            margin: 0 auto;  
+            width: fit-content;
+        }
+
+        .profile-img {
+            width: 80px;
+            border: 5px solid $gainsboro;
+        }
+
+        .name {
+            margin-top: -7px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .occupation {
+            margin-top: -12px;
+            font-size: 15px;
+            color: $text-gray;
+        }
+    }
+
+    .personal-row, .general-container {
+        border: 2px solid $border-light;
+        margin: 15px auto;
+        border-radius: 20px;
+        padding: 20px;
+        position: relative;
+
+        .section-title {
+            position: absolute;
+            background-color: white;
+            top: -13px;
+            color: $text-gray;
+            padding: 0px 5px 0px 5px;
+        }
+
+        .desc {
+            font-weight: 600;
+            padding-right: 2px;
+        }
+        
+        .value {
+            padding-left: 5px;
+        }
+
+        .profession {
+            padding: 0px;
+        }
+
+        .action-btn {
+            width: 100%;
+            border-radius: 20px;
+        }
+    }
+
+    .general-container {
+        .row {
+            padding-left: 20px;
+        }
+    }
+}

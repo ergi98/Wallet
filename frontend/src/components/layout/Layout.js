@@ -32,7 +32,7 @@ function Layout(props) {
                         <label className="user-name">{ name }</label>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item href="#/action-1">
+                        <Dropdown.Item href="/my-profile">
                             <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px' } }}>
                                 <RiAccountCircleFill />
                             </IconContext.Provider>

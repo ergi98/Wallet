@@ -12,6 +12,7 @@ import SpendingTransaction from '../transaction/SpendingTransaction'
 import ProfitTransaction from '../transaction/ProfitTransaction'
 import NotFound from '../not-found/NotFound'
 import ViewMore from '../view-more/ViewMore'
+import MyProfile from '../my-profile/MyProfile'
 
 // Redux
 import { connect } from 'react-redux'
@@ -31,6 +32,7 @@ class Router extends React.Component {
                                     <Route path="/home" exact component={Home} />
                                     <Route path="/portfolios" exact component={Portfolios} />
                                     <Route path="/statistics" exact component={Statistics} />
+                                    <Route path="/my-profile" exact component={MyProfile} />
                                     <Route path="/view-more" exact component={ViewMore} />
                                     <Route path="/expense-transaction" exact component={SpendingTransaction} />
                                     <Route path="/profit-transaction" exact component={ProfitTransaction} />

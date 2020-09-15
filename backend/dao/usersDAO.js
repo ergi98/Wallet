@@ -210,6 +210,32 @@ class UsersDAO {
       return { error: e }
     }
   }
+
+  static async getUserData(username) {
+    try {
+      let pipeline = [
+        {
+          $match: {
+            username
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            username: 1,
+            createdAt: 1,
+            personal: 1
+          }
+        }
+      ]
+
+      return await users.aggregate(pipeline).toArray()
+    }
+    catch(e) {
+      console.error(`Error occurred while retrieving user data, ${e}`)
+      return { error: e }
+    }
+  }
 }
 
 module.exports = UsersDAO;   

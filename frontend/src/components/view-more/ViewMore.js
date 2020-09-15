@@ -6,6 +6,7 @@ import axios from 'axios'
 
 // Components 
 import Layout from '../layout/Layout'
+import EditModal from './EditModal'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
@@ -41,6 +42,9 @@ function ViewMore()  {
     const [displayError, setError] = useState(false)
     const [disabled, setDisabled] = useState(false)
     const [isInvalid, setInvalid] = useState(false)
+
+    const [showEdit, setEdit] = useState(false)
+    const [showDelete, setDelete] = useState(false)
 
     useEffect(() => {
         let _isMounted = true
@@ -197,12 +201,12 @@ function ViewMore()  {
                                                     /> 
                                                 </label>
                                             </Row>
-                                            <Button className="edit-btn" variant="link" onClick={() => openEditModal(transaction)}>
+                                            <Button className="edit-btn" variant="link" onClick={() => setEdit(true)}>
                                                 <IconContext.Provider value={{ size: "25", style: { color: "gray", verticalAlign: 'middle' } }}>
                                                     <AiFillEdit />
                                                 </IconContext.Provider> 
                                             </Button>
-                                            <Button className="delete-btn" variant="link" onClick={() => openDeleteModal(transaction.trans_id)}>
+                                            <Button className="delete-btn" variant="link" onClick={() => setDelete(true)}>
                                                 <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
                                                     <AiFillDelete />
                                                 </IconContext.Provider> 
@@ -220,17 +224,9 @@ function ViewMore()  {
                         </div>
                 }
             </Container>
+            <EditModal show={showEdit} />
         </Layout>
     )
-}
-
-// TODO: IMPLEMENT THESE FUNCTIONALITIES
-function openEditModal(transaction) {
-    console.log(transaction)
-}
-
-function openDeleteModal(transaction_id) {
-    console.log(transaction_id)
 }
 
 export default ViewMore
