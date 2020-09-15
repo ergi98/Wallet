@@ -6,6 +6,8 @@ const MongoClient = require('mongodb')
 const UsersDAO = require('./dao/usersDAO')
 const transactionsDAO = require('./dao/transactionsDAO')
 
+// const path = require('path')
+
 require('dotenv').config()
 
 const app = express();
@@ -41,3 +43,10 @@ MongoClient.connect(
 app.use('/users', userRouter)
 app.use('/transactions', transactionRouter)
 app.use("*", (req, res) => res.status(404).json({ error: "not found" }))
+
+// if(process.env.NODE_ENV === "production") {
+//     app.use(express.static('../frontend/build'))
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.resolve(__dirname, '../frontend/', 'build', 'index.html'))
+//     })
+// }
