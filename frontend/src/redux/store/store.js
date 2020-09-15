@@ -26,11 +26,12 @@ const store = createStore(
     pReducer,
     initialState,
     compose(
-       applyMiddleware(...middleware),
-       window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+       applyMiddleware(...middleware)
     )    
 )
 
 const persistor = persistStore(store)
 
 export { store, persistor }
+
+// window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
