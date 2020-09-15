@@ -42,7 +42,6 @@ MongoClient.connect(
 // Register API routes
 app.use('/users', userRouter)
 app.use('/transactions', transactionRouter)
-app.use("*", (req, res) => res.status(404).json({ error: "not found" }))
 
 // Serve our static assets if in production
 if(process.env.NODE_ENV === "production") {
