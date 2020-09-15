@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import './EditModal.scss'
 
 // Components
-import ProfitTransaction from '../transaction/ProfitTransaction'
+// import ProfitTransaction from '../transaction/ProfitTransaction'
 
 // Bootstrap
 import Modal from 'react-bootstrap/Modal'

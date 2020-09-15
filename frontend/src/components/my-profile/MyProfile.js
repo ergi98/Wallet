@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 
 // Icons
-import { IconContext } from "react-icons"
+// import { IconContext } from "react-icons"
 
 // Axios
 import axios from 'axios'

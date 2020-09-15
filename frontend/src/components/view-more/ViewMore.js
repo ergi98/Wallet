@@ -44,7 +44,7 @@ function ViewMore()  {
     const [isInvalid, setInvalid] = useState(false)
 
     const [showEdit, setEdit] = useState(false)
-    const [showDelete, setDelete] = useState(false)
+    // const [showDelete, setDelete] = useState(false)
 
     useEffect(() => {
         let _isMounted = true
@@ -206,7 +206,7 @@ function ViewMore()  {
                                                     <AiFillEdit />
                                                 </IconContext.Provider> 
                                             </Button>
-                                            <Button className="delete-btn" variant="link" onClick={() => setDelete(true)}>
+                                            <Button className="delete-btn" variant="link">
                                                 <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
                                                     <AiFillDelete />
                                                 </IconContext.Provider> 
