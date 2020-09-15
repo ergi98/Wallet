@@ -4,7 +4,6 @@
   "description": "A money managing application",
   "main": "server.js",
   "scripts": {
-    "run": "concurrently \"cd backend && npm run start\" \"cd frontend && npm start\" ",
     "start": "concurrently \"cd backend && npm run start\" \"cd frontend && npm start\" ",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm install --prefix frontend && npm run build --prefix frontend && npm install --prefix backend"
   },

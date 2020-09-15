@@ -17,6 +17,20 @@ app.use(express.json());
 
 const port = process.env.PORT || 8000
 
+// Register API routes
+app.use('/users', userRouter)
+app.use('/transactions', transactionRouter)
+
+// Serve our static assets if in production
+if(process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, '/../frontend/build')))
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '/../frontend/build/index.html'))
+    })
+}
+
+
 // Connection to MongoDB
 MongoClient.connect(
     process.env.MONGO_URI,
@@ -38,16 +52,3 @@ MongoClient.connect(
             console.log(`listening on port ${port}`)
         })
     })
-
-// Register API routes
-app.use('/users', userRouter)
-app.use('/transactions', transactionRouter)
-
-// Serve our static assets if in production
-if(process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, '/../frontend/build')))
-
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '/../frontend/build/index.html'))
-    })
-}
