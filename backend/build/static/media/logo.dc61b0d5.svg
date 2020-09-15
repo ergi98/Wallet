@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="187.254" height="200" viewBox="0 0 187.254 200">
-  <g id="Group_40" data-name="Group 40" transform="translate(-304 -155)">
-    <g id="Icon_ionic-ios-wallet" data-name="Icon ionic-ios-wallet" transform="translate(300.625 155.501)">
-      <path id="Path_10" data-name="Path 10" d="M163.621,11.25H30.383A27.029,27.029,0,0,0,3.375,38.258v75.622a27.029,27.029,0,0,0,27.008,27.008H163.621a27.029,27.029,0,0,0,27.008-27.008V38.258A27.029,27.029,0,0,0,163.621,11.25Z" transform="translate(0 36.467)" fill="#fff"/>
-      <path id="Path_11" data-name="Path 11" d="M130.041,4.954,24.306,25.615C16.2,27.416,4.5,35.563,4.5,45.466c0,0,6.752-8.552,22.056-8.552H155.743V27.686c0-5.672-2.251-12.919-6.257-16.925h0A21.288,21.288,0,0,0,130.041,4.954Z" transform="translate(6.077 0)" fill="#fff"/>
-    </g>
-    <text id="w" transform="translate(343 155)" font-size="150" font-family="ScriptMTBold, Script MT"><tspan x="0" y="143">w</tspan></text>
-  </g>
-</svg>
