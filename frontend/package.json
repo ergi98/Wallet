@@ -50,8 +50,5 @@
       "last 1 safari version"
     ]
   },
-  "engines": {
-    "node": "12.x"
-  },
   "devDependencies": {}
 }
