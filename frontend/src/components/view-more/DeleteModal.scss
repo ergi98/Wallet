@@ -1,0 +1,35 @@
+@import '../../styles/colors';
+
+.delete-modal {
+
+    .warning {
+        font-size: 18px;
+        text-align: center;
+        font-weight: 600;
+    }
+    .delete-container {
+        padding: 15px;
+        border: 2px solid $border-light;
+        border-radius: 20px;
+    }
+
+    .row {
+        margin: 0px;
+    }
+
+    .col {
+        padding-left: 0px;
+    }
+
+    .title {
+        font-weight: 600;
+    }
+    
+    .value {
+        padding-left: 5px;
+    }
+
+    .center-btns {
+        justify-content: space-evenly;
+    }
+}

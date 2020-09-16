@@ -3,33 +3,11 @@
     overflow: hidden;
     margin: 10px auto;
 
-    .alert {
-        width: 100%;
-        position: fixed;
-        left: 50%;
-        transform: translate(-50%, 0);
-        z-index: 9999;
-    }
-
     .pad-container {
         padding:  5px 10px;
 
         .title {
             padding-bottom: 10px;
-        }
-
-   
-
-        .form-row {
-
-            .form-group {
-                padding-bottom: 5px;
-            }
-
-            .btn-row {
-                width: fit-content;
-                margin: auto;
-            }
         }
     }
 }

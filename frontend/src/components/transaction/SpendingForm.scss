@@ -1,0 +1,19 @@
+.form-row {
+
+    .alert {
+        width: 100%;
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: 9999;
+    }
+    
+    .form-group {
+        padding-bottom: 5px;
+    }
+
+    .btn-row {
+        width: fit-content;
+        margin: auto;
+    }
+}

@@ -70,6 +70,20 @@ class TransactionsController {
             return
         }
     }
+
+    static async deleteTransaction(req, res) {
+        try{
+            let { username, date, transaction} = req.body
+
+            let result = await TransactionsDAO.deleteTransaction(username, date, transaction)
+            res.json({ result })
+        }
+        catch(err) {
+            console.log(err)
+            res.status(400).json({error: err})
+            return
+        }
+    }
 }
 
 module.exports = { TransactionsController }

@@ -7,6 +7,7 @@ import axios from 'axios'
 // Components 
 import Layout from '../layout/Layout'
 import EditModal from './EditModal'
+import DeleteModal from './DeleteModal'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
@@ -39,12 +40,20 @@ function ViewMore()  {
     
     const [transactions, setTransactions] = useState([])
 
+    const [editTransaction, setEditTransaction] = useState([])
+
     const [displayError, setError] = useState(false)
     const [disabled, setDisabled] = useState(false)
     const [isInvalid, setInvalid] = useState(false)
 
-    const [showEdit, setEdit] = useState(false)
-    // const [showDelete, setDelete] = useState(false)
+    const [showEditModal, setEdit] = useState(false)
+    const [showDeleteModal, setDelete] = useState(false)
+
+    const [showEditError, setEditError] = useState(false)
+    const [showEditSuccess, setEditSuccess] = useState(false)
+
+    const [showDeleteError, setDeleteError] = useState(false)
+    const [showDeleteSuccess, setDeleteSuccess] = useState(false)
 
     useEffect(() => {
         let _isMounted = true
@@ -122,12 +131,66 @@ function ViewMore()  {
         setDate(newDate)
     }
 
+    function closeEdit() {
+        setEdit(false)
+    }
+
+    function closeDelete() {
+        setDelete(false)
+    }
+
+    function editStatus(status) {
+        if(status === "success") {
+            // To invoke a refetch from the database without refreshing
+            setDate(parse(displayedDate, 'dd/MM/yyyy', new Date()))
+            setEditSuccess(true)
+            setTimeout(() => { setEditSuccess(false)}, 2500);
+        }
+        else {
+            setEditError(true)
+            setTimeout(() => { setEditError(false)}, 2500);
+        }
+    }
+
+    function deleteStatus(status) {
+        console.log(status)
+        if(status === "success") {
+            // To invoke a refetch from the database without refreshing
+            setDate(parse(displayedDate, 'dd/MM/yyyy', new Date()))
+            setDeleteSuccess(true)
+            setTimeout(() => { setDeleteSuccess(false)}, 2500);
+        }
+        else {
+            setDeleteError(true)
+            setTimeout(() => { setDeleteError(false)}, 2500);
+        }
+    }
+
     return (
         <Layout>
             <Container className="view-more_container">
+                {/** Transaction List Errors */}
                 <Alert show={displayError} variant="danger" className="alert" as="Row">
                     <Alert.Heading className="heading">Display Transactions</Alert.Heading>
                     An error occured while trying to get this user transactions.
+                </Alert>
+                {/** Edit Transaction Errors */}
+                <Alert show={showEditError} variant="danger" className="alert" as="Row">
+                    <Alert.Heading className="heading">Edit Transaction</Alert.Heading>
+                    An error occured while trying to edit this transaction.
+                </Alert>
+                <Alert show={showEditSuccess} variant="success" className="alert" as="Row">
+                    <Alert.Heading className="heading">Edit Transaction</Alert.Heading>
+                    Successfuly edited the transaction.
+                </Alert>
+                {/** Delete Transaction Errors */}
+                <Alert show={showDeleteError} variant="danger" className="alert" as="Row">
+                    <Alert.Heading className="heading">Delete Transaction</Alert.Heading>
+                    An error occured while trying to delete this transaction.
+                </Alert>
+                <Alert show={showDeleteSuccess} variant="success" className="alert" as="Row">
+                    <Alert.Heading className="heading">Delete Transaction</Alert.Heading>
+                    Successfuly deleted the transaction.
                 </Alert>
                 <Row className="date-row">
                     <Col className="left-btn" xs={3}>
@@ -201,12 +264,12 @@ function ViewMore()  {
                                                     /> 
                                                 </label>
                                             </Row>
-                                            <Button className="edit-btn" variant="link" onClick={() => setEdit(true)}>
+                                            <Button className="edit-btn" variant="link" onClick={() => { setEdit(true); setEditTransaction(transaction) }}>
                                                 <IconContext.Provider value={{ size: "25", style: { color: "gray", verticalAlign: 'middle' } }}>
                                                     <AiFillEdit />
                                                 </IconContext.Provider> 
                                             </Button>
-                                            <Button className="delete-btn" variant="link">
+                                            <Button className="delete-btn" variant="link" onClick={() => { setDelete(true); setEditTransaction(transaction) }}>
                                                 <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
                                                     <AiFillDelete />
                                                 </IconContext.Provider> 
@@ -224,7 +287,22 @@ function ViewMore()  {
                         </div>
                 }
             </Container>
-            <EditModal show={showEdit} />
+            <EditModal 
+                show={showEditModal} 
+                transaction={editTransaction} 
+                date={date} 
+                username={username} 
+                onClose={closeEdit} 
+                editStatus={editStatus}
+            />
+            <DeleteModal 
+                show={showDeleteModal} 
+                transaction={editTransaction}
+                date={date}
+                username={username}
+                onClose={closeDelete}
+                deleteStatus={deleteStatus}
+            />
         </Layout>
     )
 }
