@@ -1,7 +1,7 @@
 let transactions
 let connection
 
-const mongodb = require('mongodb');
+const mongodb = require('mongodb')
 
 class TransactionsDAO {
   static async injectDB(conn) {
@@ -170,8 +170,7 @@ class TransactionsDAO {
           await transactions.updateOne({ username, date }, { $pull: { transactions: { trans_id: transaction.trans_id } }, $inc: { "earnings": transaction.amount }},{ session })
 
         // Update the amount of the selected portfolio (users)
-        await users.updateOne(
-          { username }, { $inc: { "portfolios.$[port].amount": transaction.amount } }, { arrayFilters: [{ "port.p_id": transaction.portfolio }] }, { session })
+        await users.updateOne({ username }, { $inc: { "portfolios.$[port].amount": transaction.amount } }, { arrayFilters: [{ "port.p_id": transaction.portfolio }] }, { session })
 
         // Update the amount on the specified category / income_source (users)
         if (transaction.trans_type === "expense")

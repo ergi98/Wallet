@@ -193,6 +193,34 @@ class UsersController {
             return
         }
     }
+
+    static async addPortfolio(req, res) {
+        try {
+            let { username, portfolio } = req.body
+
+            let result = await UsersDAO.addPortfolio(username, portfolio)
+
+            res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
+    static async changeFavourite(req, res) {
+        try {
+            let { username, portfolio } = req.body
+
+            let result = await UsersDAO.changeFavourite(username, portfolio)
+
+            res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
 }
 
 module.exports = { UsersController, User }

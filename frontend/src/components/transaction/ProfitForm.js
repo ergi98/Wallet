@@ -60,18 +60,6 @@ class ProfitForm extends Component {
 
         this._isMounted = false
 
-        this.initialValues = {
-            date: '',
-            hours: '',
-            minutes: '',
-            amount: '',
-            currency: 'ALL',
-            portfolio: 'Choose portfolio to deposit ...',
-            source: 'Choose source of income ...',
-            description: '',
-            long_desc: ''
-        }
-
         this.state = {
             isDateChecked: false,
             isTimeChecked: false,
@@ -87,20 +75,6 @@ class ProfitForm extends Component {
     }
 
     componentDidMount() {
-        if(!!this.props.transaction) {
-            this.initialValues = {
-                date: this.props.date.toLocaleDateString('en-GB'),
-                hours: this.props.transaction.time.slice(0, 2),
-                minutes: this.props.transaction.time.slice(3, 5),
-                amount: this.props.transaction.amount.$numberDecimal,
-                currency: this.props.transaction.currency,
-                portfolio: this.props.transaction.portfolio,
-                source: this.props.transaction.source,
-                description: this.props.transaction.short_desc ,
-                long_desc: this.props.transaction.desc? this.props.transaction.desc: ''
-            } 
-        }
-
         this._isMounted = true
         this._isMounted && this.getValues()
     }
@@ -187,10 +161,19 @@ class ProfitForm extends Component {
                     The transaction you are trying to register did not go through!
                 </Alert>
                 <Formik
-                    enableReinitialize={true}
                     validationSchema={transaction_schema}
                     onSubmit={this.handleSubmit}
-                    initialValues={ this.initialValues }
+                    initialValues={ {
+                        date: '',
+                        hours: '',
+                        minutes: '',
+                        amount: '',
+                        currency: 'ALL',
+                        portfolio: 'Choose portfolio to deposit ...',
+                        source: 'Choose source of income ...',
+                        description: '',
+                        long_desc: ''
+                    }}
                 >
                     {({
                         handleSubmit,

@@ -8,6 +8,8 @@ router.route("/portfolios").post(users.UsersController.getPortfolios)
 router.route("/user-data").post(users.UsersController.getUserData)
 router.route("/available-amount").post(users.UsersController.getAvailableAmount)
 router.route("/populate-transactions").post(users.UsersController.populateTransactionForm)
+router.route("/add-portfolio").post(users.UsersController.addPortfolio)
+router.route("/change-portfolio-fav").post(users.UsersController.changeFavourite)
 
 
 module.exports = router;

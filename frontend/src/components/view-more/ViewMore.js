@@ -6,7 +6,6 @@ import axios from 'axios'
 
 // Components 
 import Layout from '../layout/Layout'
-import EditModal from './EditModal'
 import DeleteModal from './DeleteModal'
 
 // Bootstrap
@@ -23,7 +22,7 @@ import { useSelector } from 'react-redux'
 
 // Icons
 import { IconContext } from "react-icons"
-import { AiFillCaretLeft, AiFillCaretRight, AiFillDelete, AiFillEdit } from 'react-icons/ai'
+import { AiFillCaretLeft, AiFillCaretRight, AiFillDelete } from 'react-icons/ai'
 
 // Number Format
 import NumberFormat from 'react-number-format'
@@ -40,18 +39,12 @@ function ViewMore()  {
     
     const [transactions, setTransactions] = useState([])
 
-    const [editTransaction, setEditTransaction] = useState([])
-
     const [displayError, setError] = useState(false)
     const [disabled, setDisabled] = useState(false)
     const [isInvalid, setInvalid] = useState(false)
 
-    const [showEditModal, setEdit] = useState(false)
+    const [editTransaction, setDeleteTransaction] = useState([])
     const [showDeleteModal, setDelete] = useState(false)
-
-    const [showEditError, setEditError] = useState(false)
-    const [showEditSuccess, setEditSuccess] = useState(false)
-
     const [showDeleteError, setDeleteError] = useState(false)
     const [showDeleteSuccess, setDeleteSuccess] = useState(false)
 
@@ -131,29 +124,11 @@ function ViewMore()  {
         setDate(newDate)
     }
 
-    function closeEdit() {
-        setEdit(false)
-    }
-
     function closeDelete() {
         setDelete(false)
     }
 
-    function editStatus(status) {
-        if(status === "success") {
-            // To invoke a refetch from the database without refreshing
-            setDate(parse(displayedDate, 'dd/MM/yyyy', new Date()))
-            setEditSuccess(true)
-            setTimeout(() => { setEditSuccess(false)}, 2500);
-        }
-        else {
-            setEditError(true)
-            setTimeout(() => { setEditError(false)}, 2500);
-        }
-    }
-
     function deleteStatus(status) {
-        console.log(status)
         if(status === "success") {
             // To invoke a refetch from the database without refreshing
             setDate(parse(displayedDate, 'dd/MM/yyyy', new Date()))
@@ -173,15 +148,6 @@ function ViewMore()  {
                 <Alert show={displayError} variant="danger" className="alert" as="Row">
                     <Alert.Heading className="heading">Display Transactions</Alert.Heading>
                     An error occured while trying to get this user transactions.
-                </Alert>
-                {/** Edit Transaction Errors */}
-                <Alert show={showEditError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Edit Transaction</Alert.Heading>
-                    An error occured while trying to edit this transaction.
-                </Alert>
-                <Alert show={showEditSuccess} variant="success" className="alert" as="Row">
-                    <Alert.Heading className="heading">Edit Transaction</Alert.Heading>
-                    Successfuly edited the transaction.
                 </Alert>
                 {/** Delete Transaction Errors */}
                 <Alert show={showDeleteError} variant="danger" className="alert" as="Row">
@@ -267,7 +233,7 @@ function ViewMore()  {
                                         </Col>
                                         <Col className="btn-col" xs={1} lg={1}>
                                             <Row className="btn-row">
-                                                <Button className="btn" variant="link" onClick={() => { setDelete(true); setEditTransaction(transaction) }}>
+                                                <Button className="btn" variant="link" onClick={() => { setDelete(true); setDeleteTransaction(transaction) }}>
                                                     <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
                                                         <AiFillDelete />
                                                     </IconContext.Provider> 
@@ -285,14 +251,6 @@ function ViewMore()  {
                         </div>
                 }
             </Container>
-            <EditModal 
-                show={showEditModal} 
-                transaction={editTransaction} 
-                date={date} 
-                username={username} 
-                onClose={closeEdit} 
-                editStatus={editStatus}
-            />
             <DeleteModal 
                 show={showDeleteModal} 
                 transaction={editTransaction}

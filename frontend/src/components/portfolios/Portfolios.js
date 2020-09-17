@@ -4,6 +4,7 @@ import './Portfolios.scss'
 // Components
 import Layout from '../layout/Layout'
 import Portfolio from './Portfolio'
+import PortfolioModal from './modals/PortfolioModal'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
@@ -25,6 +26,13 @@ function Portfolios() {
     const username = useSelector((state) => state.user.username)
     const [portfolios, setPortfolios] = useState([])
     const [displayError, setError] = useState(false)
+
+    const [showPortfolioModal, setPortfolioModal] = useState(false)
+    const [showPortfolioError, setPortfolioError] = useState(false)
+    const [showPortfolioSuccess, setPortfolioSuccess] = useState(false)
+
+    const [favSuccess, setFavSuccess] = useState(false)
+    const [favError, setFavError] = useState(false)
 
     useEffect(() => {
         let _isMounted = true;
@@ -52,6 +60,33 @@ function Portfolios() {
         
     }, [username])
 
+    function closePortfolioModal() {
+        setPortfolioModal(false)
+    }
+
+    function addPortfolioStatus(status) {
+        if(status === "success") {
+            // To invoke a refetch from the database without refreshing
+            setPortfolioSuccess(true)
+            setTimeout(() => { setPortfolioSuccess(false)}, 2500);
+        }
+        else {
+            setPortfolioError(true)
+            setTimeout(() => { setPortfolioError(false)}, 2500);
+        }
+    }
+
+    function setFavStatus(status) {
+        if(status === "success") {
+            // To invoke a refetch from the database without refreshing
+            setFavSuccess(true)
+            setTimeout(() => { setFavSuccess(false)}, 2500);
+        }
+        else {
+            setFavError(true)
+            setTimeout(() => { setFavError(false)}, 2500);
+        }
+    }
 
     return (
         <Layout>
@@ -60,15 +95,38 @@ function Portfolios() {
                     <Alert.Heading className="heading">Display Porftolios</Alert.Heading>
                     An error occured while trying to get this users portfolios.
                 </Alert>
-                <Button variant="primary" className="portfolio-btn">
+                <Alert show={showPortfolioSuccess} variant="success" className="alert" as="Row">
+                    <Alert.Heading className="heading">Add Porftolio</Alert.Heading>
+                    Portfolio successfully added.
+                </Alert>
+                <Alert show={showPortfolioError} variant="danger" className="alert" as="Row">
+                    <Alert.Heading className="heading">Add Porftolios</Alert.Heading>
+                    An error occured while trying to add this portfolio.
+                </Alert>
+                { /* Favourite status change */ }
+                <Alert show={favSuccess} variant="success" className="alert" as="Row">
+                    <Alert.Heading className="heading">Change Porftolio Status</Alert.Heading>
+                    Portfolio status successfully changed.
+                </Alert>
+                <Alert show={favError} variant="danger" className="alert" as="Row">
+                    <Alert.Heading className="heading">Change Porftolio Status</Alert.Heading>
+                    An error occured while trying to change porftolio status.
+                </Alert>
+                <Button variant="primary" className="portfolio-btn" onClick={() => setPortfolioModal(true)}>
                     Add new portfolio
                     <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
                         <BiWallet />
                     </IconContext.Provider> 
                 </Button>
 
-                { portfolios.map(portfolio => <Portfolio key={portfolio.p_id} portfolio = { portfolio } />) }
+                { portfolios.map(portfolio => <Portfolio key={portfolio.p_id} portfolio = { portfolio } setFavStatus={setFavStatus}/>) }
             </Container>
+            <PortfolioModal 
+                show={showPortfolioModal}
+                username={username}
+                closeModal={closePortfolioModal}
+                setPortfolioStatus={addPortfolioStatus}
+            />
         </Layout>
     )
 }

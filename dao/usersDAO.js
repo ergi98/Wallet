@@ -1,6 +1,8 @@
 let users
 let sessions
 
+const mongodb = require('mongodb')
+
 class UsersDAO {
 
   ObjectID = require('mongodb').ObjectID
@@ -231,8 +233,83 @@ class UsersDAO {
 
       return await users.aggregate(pipeline).toArray()
     }
-    catch(e) {
+    catch (e) {
       console.error(`Error occurred while retrieving user data, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async addPortfolio(username, portfolio) {
+    try {
+
+      portfolio.amount = mongodb.Decimal128.fromString(portfolio.amount.toString())
+
+      return await users.updateOne({ username }, { $push: { portfolios: portfolio } }, { w: "majority" })
+    }
+    catch (e) {
+      console.error(`Error occurred while adding user portfolio, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async changeFavourite(username, portfolio) {
+    try {
+      // If the portfolio being changed was the favourite just change its status
+      if (!portfolio.favourite) {
+        await users.updateOne(
+          { username },
+          {
+            $set: { "portfolios.$[port].favourite": portfolio.favourite }
+          },
+          {
+            arrayFilters: [{ "port.p_id": portfolio.p_id }]
+          }, { w: "majority" }
+        )
+      }
+      // Else remove the previous favourite wallet
+      else {
+        // Check if any other portfolio holds the favourite status
+        let res = users.findOne({ username, "portfolios.favourite": true })
+
+        // If no other portfolio was marked as favourite
+        if (!res) {
+          // Change the new portfolio status to true
+          await users.updateOne(
+            { username },
+            {
+              $set: { "portfolios.$[port].favourite": portfolio.favourite }
+            },
+            {
+              arrayFilters: [{ "port.p_id": portfolio.p_id }]
+            }, { w: "majority" }
+          )
+        }
+
+        // Change that portfolios status to false
+        await users.updateOne(
+          { username },
+          {
+            $set: { "portfolios.$[port].favourite": false }
+          },
+          {
+            arrayFilters: [{ "port.favourite": true }]
+          }, { w: "majority" }
+        )
+
+        // Change the new portfolio status to true
+        await users.updateOne(
+          { username },
+          {
+            $set: { "portfolios.$[port].favourite": portfolio.favourite }
+          },
+          {
+            arrayFilters: [{ "port.p_id": portfolio.p_id }]
+          }, { w: "majority" }
+        )
+      }
+    }
+    catch (e) {
+      console.error(`Error occurred while changing portfolio favourite status, ${e}`)
       return { error: e }
     }
   }

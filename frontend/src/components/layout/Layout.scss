@@ -2,13 +2,15 @@
 
 .layout-container {
     height: 100vh;
+
     .user-row {
+        height: 6vh;
         position: relative;
+        align-items: center;
         background-color: $gainsboro;
 
         .user-btn {
-            margin: 10px;
-
+            margin-left: 10px;
             .user-name {
                 margin-bottom: 0;
                 padding-right: 5px;

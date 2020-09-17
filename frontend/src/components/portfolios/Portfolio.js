@@ -14,7 +14,31 @@ import { AiOutlineStar, AiFillStar, AiOutlineUnorderedList, AiFillEdit } from 'r
 // Number Format
 import NumberFormat from 'react-number-format'
 
+// Redux
+import { useSelector } from 'react-redux'
+
+// Axios
+import axios from 'axios'
+
 function Portfolio(props) {
+
+    
+    const username = useSelector((state) => state.user.username)
+
+    async function changeFavourite(portfolio) {
+        if(portfolio.favourite) 
+            portfolio.favourite = false
+        else 
+            portfolio.favourite = true
+
+        try {
+            await axios.post('/users/change-portfolio-fav', { username, portfolio })
+            props.setFavStatus("success")
+        }
+        catch(err) {
+            props.setFavError("error")
+        }
+    }
 
     return (
         <Container className="portfolio">
@@ -26,7 +50,7 @@ function Portfolio(props) {
                             <label className="name">{ props.portfolio.p_name }</label>
                             <label className="type">{ props.portfolio.type }</label>
                         </div>
-                        <Button variant="link" className="star">
+                        <Button variant="link" className="star" onClick={() => changeFavourite(props.portfolio)}>
                             {
                                 props.portfolio.favourite?
                                 <IconContext.Provider value={{ size: "30", color: "#e8e40e", style: { verticalAlign: 'middle' } }}>
@@ -90,7 +114,7 @@ function Portfolio(props) {
                             <label className="name">{ props.portfolio.p_name }</label>
                             <label className="type">{ props.portfolio.type }</label>
                         </div>
-                        <Button variant="link" className="star">
+                        <Button variant="link" className="star" onClick={() => changeFavourite(props.portfolio)}>
                             {
                                 props.portfolio.favourite?
                                 <IconContext.Provider value={{ size: "30", color: "#e8e40e", style: { verticalAlign: 'middle' } }}>
