@@ -224,8 +224,8 @@ function ViewMore()  {
                         <Container className="more-transactions">
                             {   
                                 transactions.map(transaction => 
-                                    <Row key={transaction.trans_id}>
-                                        <Container className="transaction">
+                                    <Row key={transaction.trans_id} className="transaction">
+                                        <Col className="field-col" xs={11} lg={11}>
                                             <Row className="desc">
                                                 <label className="field-desc">Description:</label>
                                                 <label className="field-value">{transaction.short_desc}</label>
@@ -263,19 +263,17 @@ function ViewMore()  {
                                                         prefix={ transaction.currency + ' ' } 
                                                     /> 
                                                 </label>
+                                            </Row>       
+                                        </Col>
+                                        <Col className="btn-col" xs={1} lg={1}>
+                                            <Row className="btn-row">
+                                                <Button className="btn" variant="link" onClick={() => { setDelete(true); setEditTransaction(transaction) }}>
+                                                    <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
+                                                        <AiFillDelete />
+                                                    </IconContext.Provider> 
+                                                </Button>
                                             </Row>
-                                            <Button className="edit-btn" variant="link" onClick={() => { setEdit(true); setEditTransaction(transaction) }}>
-                                                <IconContext.Provider value={{ size: "25", style: { color: "gray", verticalAlign: 'middle' } }}>
-                                                    <AiFillEdit />
-                                                </IconContext.Provider> 
-                                            </Button>
-                                            <Button className="delete-btn" variant="link" onClick={() => { setDelete(true); setEditTransaction(transaction) }}>
-                                                <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
-                                                    <AiFillDelete />
-                                                </IconContext.Provider> 
-                                            </Button>
-                                            
-                                        </Container>
+                                        </Col>
                                     </Row>
                                 )
                             }

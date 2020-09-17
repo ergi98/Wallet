@@ -36,6 +36,7 @@
         padding-top: 10px;
         overflow: auto;
         height: 75vh;
+        padding: 5px 5px 0px 5px;
 
         .transaction {
             position: relative;
@@ -44,74 +45,73 @@
             background-color: white;
             box-shadow: 0 4px 8px 0 $box-shadow;
             padding: 10px;
-            margin-bottom: 10px;
+            margin: 0px auto 10px auto;
             border: 1px solid #ECECEC;
-            
-            .row {
-                margin: 0;
-            }
 
-            .col {
-                padding: 0;
-            }
+            .field-col {
+                padding: 0px;
 
-            .desc {
-                .field-value {
-                    text-transform: capitalize;
-                };
-            }
-
-            .location {
-                vertical-align: middle;
-                .map-btn {
-                    padding: 0px 0px 0px 5px;
-                    margin-top: -8px;
+                .row {
+                    margin: 0;
+                }
+    
+                .col {
+                    padding: 0;
+                }
+    
+                .desc {
+                    .field-value {
+                        text-transform: capitalize;
+                    };
+                }
+    
+                .location {
+                    vertical-align: middle;
+                    .map-btn {
+                        padding: 0px 0px 0px 5px;
+                        margin-top: -8px;
+                    }
+                }
+    
+                .field-desc {
+                    color: $text-gray;
+                    padding-right: 10px;
+                }
+    
+                .type {
+                    .field-value {
+                        text-transform: capitalize;
+                    }
+                }
+    
+                .long-desc {
+                    .field-value {
+                        width: 60%;
+                        word-wrap: normal;
+                    }
+                }
+    
+                .amount {
+                    .field-value {
+                        font-weight: 600;
+                    }
+    
+                    .expense {
+                        color: $red;
+                    }
+    
+                    .profit {
+                        color: $green;
+                    }
                 }
             }
 
-            .field-desc {
-                color: $text-gray;
-                padding-right: 10px;
-            }
+            .btn-col {
+                padding: 0px;
 
-            .type {
-                .field-value {
-                    text-transform: capitalize;
+                .btn-row {
+                    height: 100%;
                 }
-            }
-
-            .long-desc {
-                .field-value {
-                    width: 60%;
-                    word-wrap: normal;
-                }
-            }
-
-            .amount {
-                .field-value {
-                    font-weight: 600;
-                }
-
-                .expense {
-                    color: $red;
-                }
-
-                .profit {
-                    color: $green;
-                }
-            }
-
-            .edit-btn, .delete-btn {
-                position: absolute;
-            }
-
-            .edit-btn {
-                top: 60px;
-                right: 10px;
-            }
-            .delete-btn {
-                top: 120px;
-                right: 10px;
             }
         }
     }
