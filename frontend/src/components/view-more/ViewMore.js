@@ -30,7 +30,7 @@ import NumberFormat from 'react-number-format'
 // Date validation
 import { parse, compareAsc } from 'date-fns'
 
-function ViewMore()  {
+function ViewMore({ match })  {
 
     const username = useSelector((state) => state.user.username)
 
@@ -52,10 +52,10 @@ function ViewMore()  {
         let _isMounted = true
         
         _isMounted && setDisabled(true)
-
+        
         async function getTransactions(username, date) {
-            try {
-                let res = await axios.post('/transactions/list', { username, date })
+            try {    
+                let res = await axios.post('/transactions/list', { username, date, portfolio: match.params.pid})
 
                 if(res.status === 200 && res.data.result.length > 0) {
                     let { transactions } = res.data.result[0]
@@ -83,7 +83,7 @@ function ViewMore()  {
         return () => {
             _isMounted = false
         }
-    }, [username, date])
+    }, [username, date, match])
 
     function validateDate(event) {
         let regex = new RegExp("[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}")

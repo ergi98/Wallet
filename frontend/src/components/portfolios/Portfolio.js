@@ -20,10 +20,14 @@ import { useSelector } from 'react-redux'
 // Axios
 import axios from 'axios'
 
+// Redirect
+import { useHistory } from 'react-router-dom'
+
 function Portfolio(props) {
 
     
     const username = useSelector((state) => state.user.username)
+    const history = useHistory();
 
     async function changeFavourite(portfolio) {
         if(portfolio.favourite) 
@@ -36,8 +40,13 @@ function Portfolio(props) {
             props.setFavStatus("success")
         }
         catch(err) {
-            props.setFavError("error")
+            console.log(err)
+            props.setFavStatus("error")
         }
+    }
+
+    function navigateToTransactions(p_id) {
+        history.push(`/portfolios/transactions/${p_id}`)
     }
 
     return (
@@ -98,7 +107,7 @@ function Portfolio(props) {
                             </Button>
                         </Col>
                         <Col className="btn-col">
-                            <Button variant="secondary" className="list-btn">
+                            <Button variant="secondary" className="list-btn" onClick={() => navigateToTransactions(props.portfolio.p_id)}>
                                 <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
                                     <AiOutlineUnorderedList/>
                                 </IconContext.Provider>
@@ -148,7 +157,7 @@ function Portfolio(props) {
                             </Button>
                         </Col>
                         <Col className="btn-col">
-                            <Button variant="secondary" className="list-btn">
+                            <Button variant="secondary" className="list-btn" onClick={() => navigateToTransactions(props.portfolio.p_id)}>
                                 <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
                                     <AiOutlineUnorderedList/>
                                 </IconContext.Provider>

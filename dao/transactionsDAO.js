@@ -47,20 +47,21 @@ class TransactionsDAO {
   }
 
   // Gets the transactions of a user in a given date
-  static async getTransactions(username, date) {
-    let pipeline = [
-      {
-        $match: {
-          username: username,
-          date: date
-        }
-      },
-      {
-        $project: {
-          transactions: 1
-        }
-      }
-    ]
+  static async getTransactions(username, date, portfolio) {
+
+    let pipeline
+    
+    portfolio === undefined?
+      pipeline = [
+        { $match: { username: username, date: date } },
+        { $project: { _id: 0, transactions: 1 } }
+      ]
+      :
+      pipeline = [
+        { $match: { username: username, date: date } },
+        { $project: { _id: 0, transactions: { $filter: { input: "$transactions", as: "transaction", cond: { "$eq" : [ "$$transaction.portfolio", portfolio ] } } } } } 
+      ]
+
     try {
       const res = await transactions.aggregate(pipeline, {
         level: "majority"

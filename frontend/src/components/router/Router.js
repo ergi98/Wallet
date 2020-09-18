@@ -31,6 +31,7 @@ class Router extends React.Component {
                                 <>
                                     <Route path="/home" exact component={Home} />
                                     <Route path="/portfolios" exact component={Portfolios} />
+                                    <Route path="/portfolios/transactions/:pid" exact component={ViewMore} />
                                     <Route path="/statistics" exact component={Statistics} />
                                     <Route path="/my-profile" exact component={MyProfile} />
                                     <Route path="/view-more" exact component={ViewMore} />

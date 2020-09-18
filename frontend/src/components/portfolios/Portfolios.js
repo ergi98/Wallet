@@ -58,7 +58,7 @@ function Portfolios() {
             _isMounted = false
         };
         
-    }, [username])
+    })
 
     function closePortfolioModal() {
         setPortfolioModal(false)
@@ -66,7 +66,6 @@ function Portfolios() {
 
     function addPortfolioStatus(status) {
         if(status === "success") {
-            // To invoke a refetch from the database without refreshing
             setPortfolioSuccess(true)
             setTimeout(() => { setPortfolioSuccess(false)}, 2500);
         }
@@ -78,7 +77,6 @@ function Portfolios() {
 
     function setFavStatus(status) {
         if(status === "success") {
-            // To invoke a refetch from the database without refreshing
             setFavSuccess(true)
             setTimeout(() => { setFavSuccess(false)}, 2500);
         }
