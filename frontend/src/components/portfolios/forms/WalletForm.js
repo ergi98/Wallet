@@ -33,8 +33,7 @@ function WalletForm(props) {
     async function addPortfolio(event) {
         event.p_id = nanoid(10)
         event.type = "wallet"
-
-        console.log(event)
+        
         try {
             await axios.post('users/add-portfolio', { username: props.username, portfolio: event})
             props.setStatus("success")

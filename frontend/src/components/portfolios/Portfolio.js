@@ -46,7 +46,6 @@ function Portfolio(props) {
             props.setFavStatus("success")
         }
         catch(err) {
-            console.log(err)
             props.setFavStatus("error")
         }
     }

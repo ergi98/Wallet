@@ -3,6 +3,9 @@ import './MyProfile.scss'
 
 // Components
 import Layout from '../layout/Layout'
+import DeleteModal from './modals/DeleteModal'
+// import EditModal from './modals/EditModal'
+import PasswordModal from './modals/PasswordModal'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
@@ -12,7 +15,8 @@ import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 
 // Icons
-// import { IconContext } from "react-icons"
+import { IconContext } from 'react-icons'
+import { AiFillDelete } from 'react-icons/ai'
 
 // Axios
 import axios from 'axios'
@@ -25,6 +29,10 @@ function MyProfile () {
     
     const username = useSelector((state) => state.user.username)
     const [user, setUser] = useState([])
+
+    const [deleteModal, setDeleteModal] = useState(false)
+    // const [editModal, setEditModal] = useState(false)
+    const [passwordModal, setPasswordModal] = useState(false)
 
     useEffect(() => {
         let _isMounted = true
@@ -49,7 +57,13 @@ function MyProfile () {
     return (
         <Layout>
             <Container className="profile-container">
+
                 <Container className="image-row">
+                    <Button variant="link" className="delete-acc-btn" onClick={() => setDeleteModal(true)}>
+                        <IconContext.Provider value={{ size: "30", style: { verticalAlign: 'middle', marginTop: '-6px' } }}>
+                            <AiFillDelete/>
+                        </IconContext.Provider>
+                    </Button>
                     <Row>
                         <Button variant="link">
                             <Image src={require("../../assets/no-avatar.png")} roundedCircle className="profile-img"/>
@@ -112,13 +126,27 @@ function MyProfile () {
                         <label className="desc">Joined:</label>
                         <label className="value">{user?.createdAt}</label>
                     </Row>
-                    <Button variant="primary" className="action-btn">
+                    <Button variant="primary" className="action-btn" onClick={() => setPasswordModal(true)}>
                         Change Password
                     </Button>
                 </Container>
             </Container>
+            <DeleteModal
+                show={deleteModal}
+                onClose={() => setDeleteModal(false)}  
+            />
+            {/* <EditModal
+                show={editModal} 
+                onClose={closeEdit}
+            /> */}
+            <PasswordModal
+                show={passwordModal} 
+                onClose={() => setPasswordModal(false)}
+            />
         </Layout>
     )
 }
 
 export default MyProfile
+
+// onClick={() => setEditModal(true)}

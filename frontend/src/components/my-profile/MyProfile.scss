@@ -4,6 +4,14 @@
     margin: 15px auto;
 
     .image-row {
+        position: relative;
+
+        .delete-acc-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: $red;
+        }
         .row {
             margin: 0 auto;  
             width: fit-content;

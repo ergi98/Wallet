@@ -32,7 +32,6 @@ export default function(state = initialState, action) {
                 pref_currency: ''
             }
         case GET_PORTFOLIOS:
-            console.log(action.payload)
             return {
                 ...state,
                 portfolios: action.payload

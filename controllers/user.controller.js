@@ -233,12 +233,7 @@ class UsersController {
             let { username, delete_id, transfer_id, transfer_amnt } = req.body
 
             let result = await UsersDAO.deletePortfolio(username, delete_id, transfer_id, transfer_amnt)
-
-            console.log(`Username ${username}`)
-            console.log(`Delete: ${delete_id}`)
-            console.log(`Transfer: ${transfer_id}`)
-            console.log(`Amount: ${transfer_amnt}`)
-
+            
             res.json({ result })
         }
         catch(e) {

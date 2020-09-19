@@ -101,7 +101,7 @@ function DeletePortfolio(props) {
                             <Form.Check
                                 className="checkbox"
                                 type="checkbox"
-                                id="location"
+                                id="transfer"
                                 checked={transferSelected}
                                 onChange={(event) => setTransferSelected(event.target.checked)}
                                 label="Transfer my amount to a different portfolio"
