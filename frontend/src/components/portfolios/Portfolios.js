@@ -11,21 +11,22 @@ import Container from 'react-bootstrap/Container'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 
-// Axios
-import axios from 'axios'
-
 // Redux
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 // Icons
 import { IconContext } from "react-icons"
 import { BiWallet } from 'react-icons/bi'
 
+// Actions
+import { getPortfolios } from '../../redux/actions/userActions'
+
 function Portfolios() {
 
     const username = useSelector((state) => state.user.username)
+    const dispatch = useDispatch()
+
     const [portfolios, setPortfolios] = useState([])
-    const [displayError, setError] = useState(false)
 
     const [showPortfolioModal, setPortfolioModal] = useState(false)
     const [showPortfolioError, setPortfolioError] = useState(false)
@@ -34,31 +35,20 @@ function Portfolios() {
     const [favSuccess, setFavSuccess] = useState(false)
     const [favError, setFavError] = useState(false)
 
+    const [deleteSuccess, setDeleteSuccess] = useState(false)
+    const [deleteError, setDeleteError] = useState(false)
+
     useEffect(() => {
-        let _isMounted = true;
-        async function getPortfolios() {
-            try {
-                let res = await axios.post('/users/portfolios', { username })
+        let _isMounted = true
 
-                if(res.data.result.length > 0)
-                    _isMounted && setPortfolios(res.data.result[0].portfolios)
-            }
-            catch(err) {
-                _isMounted && setError(true)
-
-                setTimeout(() => {
-                    _isMounted && setError(false)
-                }, 2500);
-            }
-        }
-        _isMounted && getPortfolios()
+        _isMounted && dispatch(getPortfolios({ username })).then(res => setPortfolios(res))
 
         return () => {
             // Clean up the subscription
             _isMounted = false
         };
         
-    })
+    }, [username, dispatch])
 
     function closePortfolioModal() {
         setPortfolioModal(false)
@@ -66,6 +56,7 @@ function Portfolios() {
 
     function addPortfolioStatus(status) {
         if(status === "success") {
+            dispatch(getPortfolios({ username })).then(res => setPortfolios(res))
             setPortfolioSuccess(true)
             setTimeout(() => { setPortfolioSuccess(false)}, 2500);
         }
@@ -77,6 +68,7 @@ function Portfolios() {
 
     function setFavStatus(status) {
         if(status === "success") {
+            dispatch(getPortfolios({ username })).then(res => setPortfolios(res))
             setFavSuccess(true)
             setTimeout(() => { setFavSuccess(false)}, 2500);
         }
@@ -86,13 +78,22 @@ function Portfolios() {
         }
     }
 
+    function setDeleteStatus(status) {
+        if(status === "success") {
+            dispatch(getPortfolios({ username })).then(res => setPortfolios(res))
+            setDeleteSuccess(true)
+            setTimeout(() => { setDeleteSuccess(false) }, 2500)
+        }
+        else {
+            setDeleteError(true)
+            setTimeout(() => { setDeleteError(false) }, 2500)
+        }
+    }
+
     return (
         <Layout>
             <Container className="portfolio_container">
-                <Alert show={displayError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Display Porftolios</Alert.Heading>
-                    An error occured while trying to get this users portfolios.
-                </Alert>
+                { /* Add portfolio */ }
                 <Alert show={showPortfolioSuccess} variant="success" className="alert" as="Row">
                     <Alert.Heading className="heading">Add Porftolio</Alert.Heading>
                     Portfolio successfully added.
@@ -110,6 +111,15 @@ function Portfolios() {
                     <Alert.Heading className="heading">Change Porftolio Status</Alert.Heading>
                     An error occured while trying to change porftolio status.
                 </Alert>
+                { /* Delete portfolio */ }
+                <Alert show={deleteSuccess} variant="success" className="alert" as="Row">
+                    <Alert.Heading className="heading">Delete Porftolio</Alert.Heading>
+                    Portfolio deleted successfully.
+                </Alert>
+                <Alert show={deleteError} variant="danger" className="alert" as="Row">
+                    <Alert.Heading className="heading">Delete Porftolio</Alert.Heading>
+                    An error occured while trying to delete porftolio.
+                </Alert>
                 <Button variant="primary" className="portfolio-btn" onClick={() => setPortfolioModal(true)}>
                     Add new portfolio
                     <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
@@ -117,7 +127,17 @@ function Portfolios() {
                     </IconContext.Provider> 
                 </Button>
 
-                { portfolios.map(portfolio => <Portfolio key={portfolio.p_id} portfolio = { portfolio } setFavStatus={setFavStatus}/>) }
+                {
+                    portfolios === undefined? null :
+                    portfolios.map(portfolio => 
+                        <Portfolio 
+                            key={portfolio.p_id} 
+                            portfolio = { portfolio } 
+                            setFavStatus={setFavStatus} 
+                            setDeleteStatus={setDeleteStatus}   
+                        />
+                    ) 
+                }
             </Container>
             <PortfolioModal 
                 show={showPortfolioModal}

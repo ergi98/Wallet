@@ -28,7 +28,7 @@ function Layout(props) {
         <Container fluid className="layout-container">
             <Row className="user-row">
                 <Dropdown>
-                    <Dropdown.Toggle className="user-btn">
+                    <Dropdown.Toggle className="user-btn" variant="link">
                         <label className="user-name">{ name }</label>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>

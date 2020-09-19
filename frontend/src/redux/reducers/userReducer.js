@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT } from '../actions/types'
+import { LOG_IN, LOG_OUT, GET_PORTFOLIOS } from '../actions/types'
 
 const initialState = {
     isAuthenticated: false,
@@ -30,6 +30,12 @@ export default function(state = initialState, action) {
                 surname: '',
                 jwt: '',
                 pref_currency: ''
+            }
+        case GET_PORTFOLIOS:
+            console.log(action.payload)
+            return {
+                ...state,
+                portfolios: action.payload
             }
         default: 
             return state

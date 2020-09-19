@@ -258,12 +258,8 @@ class UsersDAO {
       if (!portfolio.favourite) {
         await users.updateOne(
           { username },
-          {
-            $set: { "portfolios.$[port].favourite": portfolio.favourite }
-          },
-          {
-            arrayFilters: [{ "port.p_id": portfolio.p_id }]
-          }, { w: "majority" }
+          { $set: { "portfolios.$[port].favourite": portfolio.favourite } },
+          { arrayFilters: [{ "port.p_id": portfolio.p_id }] }, { w: "majority" }
         )
       }
       // Else remove the previous favourite wallet
@@ -276,40 +272,63 @@ class UsersDAO {
           // Change the new portfolio status to true
           await users.updateOne(
             { username },
-            {
-              $set: { "portfolios.$[port].favourite": portfolio.favourite }
-            },
-            {
-              arrayFilters: [{ "port.p_id": portfolio.p_id }]
-            }, { w: "majority" }
+            { $set: { "portfolios.$[port].favourite": portfolio.favourite } },
+            { arrayFilters: [{ "port.p_id": portfolio.p_id }] }, { w: "majority" }
           )
         }
 
         // Change that portfolios status to false
         await users.updateOne(
           { username },
-          {
-            $set: { "portfolios.$[port].favourite": false }
-          },
-          {
-            arrayFilters: [{ "port.favourite": true }]
-          }, { w: "majority" }
+          { $set: { "portfolios.$[port].favourite": false } },
+          { arrayFilters: [{ "port.favourite": true }] }, { w: "majority" }
         )
 
         // Change the new portfolio status to true
         await users.updateOne(
           { username },
-          {
-            $set: { "portfolios.$[port].favourite": portfolio.favourite }
-          },
-          {
-            arrayFilters: [{ "port.p_id": portfolio.p_id }]
-          }, { w: "majority" }
+          { $set: { "portfolios.$[port].favourite": portfolio.favourite } },
+          { arrayFilters: [{ "port.p_id": portfolio.p_id }] }, { w: "majority" }
         )
       }
     }
     catch (e) {
       console.error(`Error occurred while changing portfolio favourite status, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async deletePortfolio(username, delete_id, transfer_id, transfer_amnt) {
+    try {
+
+      // If no portfolio was specified to recieve the deleted amount
+      if (transfer_amnt === "default") {
+        await users.updateOne(
+          { username }, 
+          { $pull: { portfolios: { p_id: delete_id } } }, 
+          { w: "majority" }
+        )
+      }
+      else {
+
+        transfer_amnt = mongodb.Decimal128.fromString(transfer_amnt.toString())
+        // Update the amount in the new portfolio
+        await users.updateOne(
+          { username }, 
+          { $inc: { "portfolios.$[port].amount": transfer_amnt, }},
+          { arrayFilters: [{ "port.p_id": transfer_id }] },
+          { w: "majority" }
+        )
+        // Delete the old portfolio
+        await users.updateOne(
+          { username }, 
+          { $pull: { portfolios: { p_id: delete_id } } }, 
+          { w: "majority" }
+        )
+      }
+    }
+    catch (e) {
+      console.error(`Error occurred while deleting portfolio, ${e}`)
       return { error: e }
     }
   }

@@ -11,8 +11,6 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Form from 'react-bootstrap/Form'
 
-
-
 function PortfolioModal(props) {
 
     const [type, setType] = useState("placeholder")

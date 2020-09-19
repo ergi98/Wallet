@@ -221,6 +221,31 @@ class UsersController {
             return
         }
     }
+
+    static async deletePortfolio(req, res) {
+        try {
+            /**
+             * delete_id - The ID of the portfolio that will be deleted
+             * transfer_id - The ID of the portfolio that will get the money
+             *               from the deleted portfolio
+             * transfer_amnt - The amount to be transfered from the deleted portfolio
+             */
+            let { username, delete_id, transfer_id, transfer_amnt } = req.body
+
+            let result = await UsersDAO.deletePortfolio(username, delete_id, transfer_id, transfer_amnt)
+
+            console.log(`Username ${username}`)
+            console.log(`Delete: ${delete_id}`)
+            console.log(`Transfer: ${transfer_id}`)
+            console.log(`Amount: ${transfer_amnt}`)
+
+            res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
 }
 
 module.exports = { UsersController, User }

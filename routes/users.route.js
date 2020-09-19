@@ -10,6 +10,6 @@ router.route("/available-amount").post(users.UsersController.getAvailableAmount)
 router.route("/populate-transactions").post(users.UsersController.populateTransactionForm)
 router.route("/add-portfolio").post(users.UsersController.addPortfolio)
 router.route("/change-portfolio-fav").post(users.UsersController.changeFavourite)
-
+router.route("/delete-portfolio").post(users.UsersController.deletePortfolio)
 
 module.exports = router;

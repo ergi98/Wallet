@@ -11,6 +11,9 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 
+// Number Format
+import NumberFormat from 'react-number-format'
+
 function DeleteModal(props) {
 
     
@@ -52,12 +55,19 @@ function DeleteModal(props) {
                         </Col>
                         <Col>
                         <label className="title">Type:</label>
-                        <label className="value">{props.transaction.trans_type}</label> 
+                        <label className="value" style={{textTransform: "capitalize"}}>{props.transaction.trans_type}</label> 
                         </Col>
                     </Row>
                     <Row>
                         <label className="title">Amount:</label>
-                        <label className="value">{props.transaction.amount?.$numberDecimal}</label>
+                        <label className="value">
+                            <NumberFormat 
+                                value={props.transaction.amount?.$numberDecimal}
+                                displayType={'text'} 
+                                thousandSeparator={true} 
+                                prefix={' ' + props.transaction.currency + ' ' } 
+                            />  
+                        </label>
                     </Row>
                 </Container>
             </Modal.Body>

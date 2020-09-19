@@ -37,7 +37,7 @@ MongoClient.connect(
     {
         useUnifiedTopology: true,
         useNewUrlParser: true,
-        wtimeout: 2500,
+        wtimeout: 3500,
         poolSize: 50,
     },
 )

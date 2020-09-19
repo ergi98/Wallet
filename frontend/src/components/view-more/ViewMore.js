@@ -43,7 +43,7 @@ function ViewMore({ match })  {
     const [disabled, setDisabled] = useState(false)
     const [isInvalid, setInvalid] = useState(false)
 
-    const [editTransaction, setDeleteTransaction] = useState([])
+    const [deleteTransaction, setDeleteTransaction] = useState([])
     const [showDeleteModal, setDelete] = useState(false)
     const [showDeleteError, setDeleteError] = useState(false)
     const [showDeleteSuccess, setDeleteSuccess] = useState(false)
@@ -253,7 +253,7 @@ function ViewMore({ match })  {
             </Container>
             <DeleteModal 
                 show={showDeleteModal} 
-                transaction={editTransaction}
+                transaction={deleteTransaction}
                 date={date}
                 username={username}
                 onClose={closeDelete}

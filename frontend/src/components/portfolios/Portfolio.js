@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Portfolio.scss'
 
 // Bootstrap
@@ -7,9 +7,12 @@ import Row from 'react-bootstrap/esm/Row'
 import Col from 'react-bootstrap/esm/Col'
 import Button from 'react-bootstrap/Button'
 
+// Components
+import DeletePortfolio from './modals/DeletePortfolio'
+
 // Icons
 import { IconContext } from "react-icons"
-import { AiOutlineStar, AiFillStar, AiOutlineUnorderedList, AiFillEdit } from 'react-icons/ai'
+import { AiOutlineStar, AiFillStar, AiOutlineUnorderedList, AiFillDelete } from 'react-icons/ai'
 
 // Number Format
 import NumberFormat from 'react-number-format'
@@ -27,7 +30,10 @@ function Portfolio(props) {
 
     
     const username = useSelector((state) => state.user.username)
-    const history = useHistory();
+    const history = useHistory()
+
+    const [showDeleteModal, setShowDelete] = useState(false)
+    const [deletePortfolio, setDeletePortfolio] = useState({})    
 
     async function changeFavourite(portfolio) {
         if(portfolio.favourite) 
@@ -47,6 +53,10 @@ function Portfolio(props) {
 
     function navigateToTransactions(p_id) {
         history.push(`/portfolios/transactions/${p_id}`)
+    }
+
+    function closeDelete() {
+        setShowDelete(false)
     }
 
     return (
@@ -97,21 +107,20 @@ function Portfolio(props) {
                             />    
                         </label>
                     </Row>
-                    <Row className="row-item">
-                        <Col className="btn-col">
-                            <Button variant="primary" className="edit-btn">
-                                <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
-                                    <AiFillEdit/>
-                                </IconContext.Provider>
-                                Edit
-                            </Button>
-                        </Col>
-                        <Col className="btn-col">
-                            <Button variant="secondary" className="list-btn" onClick={() => navigateToTransactions(props.portfolio.p_id)}>
+                    <Row className="row-item">  
+                        <Col className="btn-col" xs={10}>
+                            <Button variant="primary" className="list-btn" onClick={() => navigateToTransactions(props.portfolio.p_id)}>
                                 <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
                                     <AiOutlineUnorderedList/>
                                 </IconContext.Provider>
                                 Transactions
+                            </Button>
+                        </Col>
+                        <Col className="btn-col" xs={2}>
+                            <Button variant="link" className="delete-btn" onClick={() => { setShowDelete(true); setDeletePortfolio(props.portfolio)}}>
+                                <IconContext.Provider value={{ size: "30", style: { verticalAlign: 'middle', marginTop: '-6px' } }}>
+                                    <AiFillDelete/>
+                                </IconContext.Provider>
                             </Button>
                         </Col>
                     </Row>
@@ -148,25 +157,32 @@ function Portfolio(props) {
                         </label>
                     </Row>
                     <Row className="row-item">
-                        <Col className="btn-col">
-                            <Button variant="primary" className="edit-btn">
-                                <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
-                                    <AiFillEdit/>
-                                </IconContext.Provider>
-                                Edit
-                            </Button>
-                        </Col>
-                        <Col className="btn-col">
-                            <Button variant="secondary" className="list-btn" onClick={() => navigateToTransactions(props.portfolio.p_id)}>
+                        <Col className="btn-col" xs={10}>
+                            <Button variant="primary" className="list-btn" onClick={() => navigateToTransactions(props.portfolio.p_id)}>
                                 <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
                                     <AiOutlineUnorderedList/>
                                 </IconContext.Provider>
                                 Transactions
                             </Button>
                         </Col>
+                        <Col className="btn-col" xs={2}>
+                            <Button variant="link" className="delete-btn" onClick={() => { setShowDelete(true); setDeletePortfolio(props.portfolio)}}>
+                                <IconContext.Provider value={{ size: "30", style: { verticalAlign: 'middle', marginTop: '-6px' } }}>
+                                    <AiFillDelete/>
+                                </IconContext.Provider>
+                            </Button>
+                        </Col>
                     </Row>
                 </Container>
             }
+
+            <DeletePortfolio 
+                show={showDeleteModal}
+                portfolio={deletePortfolio}
+                username={username}
+                onClose={closeDelete}
+                setDeleteStatus={props.setDeleteStatus}
+            />
         </Container>
     )
 }
