@@ -36,6 +36,24 @@ class UsersDAO {
     return await users.findOne({ username })
   }
 
+  static async getUserPassword(username) {
+    let pipeline = [
+      {
+        $match: {
+          username
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          password: 1
+        }
+      }
+    ]
+
+    return await users.aggregate(pipeline).toArray()
+  }
+
   static async loginUser(username, jwt) {
     try {
       await sessions.updateOne(
@@ -226,7 +244,9 @@ class UsersDAO {
             _id: 0,
             username: 1,
             createdAt: 1,
-            personal: 1
+            personal: 1,
+            categories: 1,
+            sources: 1
           }
         }
       ]
@@ -332,6 +352,56 @@ class UsersDAO {
       return { error: e }
     }
   }
+
+  static async newCategory(username, category) {
+    try {
+
+      category.amnt_spent = mongodb.Decimal128.fromString(category.amnt_spent)
+
+      let res = await users.findOne({ username, "categories.cat_name": category.cat_name })
+
+      if(res) {
+        console.error(`Insert unsuccessful`)
+        return { error: `Category already exists` }
+      }
+      else {
+        await users.updateOne(
+          { username }, 
+          { $push: { categories: category } }, 
+          { w: "majority" }
+        )
+      }
+    }
+    catch (e) {
+      console.error(`Error occurred while adding a new expense category, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async newSource(username, source) {
+    try {
+      source.amnt_spent = mongodb.Decimal128.fromString(source.amnt_spent)
+
+      let res = await users.findOne({ username, "sources.source_name": source.source_name })
+
+      if(res) {
+        console.error(`Insert unsuccessful`)
+        return { error: `Source already exists` }
+      }
+      else {
+        await users.updateOne(
+          { username }, 
+          { $push: { sources: source } }, 
+          { w: "majority" }
+        )
+      }
+    }
+    catch (e) {
+      console.error(`Error occurred while adding a new expense category, ${e}`)
+      return { error: e }
+    }
+  }
+
 }
 
 module.exports = UsersDAO;   

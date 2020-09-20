@@ -2,6 +2,16 @@
 
 .profile-container {
     margin: 15px auto;
+    height: 86vh;
+    overflow: auto;
+
+    .alert {
+        width: 100%;
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: 9999;
+    }
 
     .image-row {
         position: relative;
@@ -35,9 +45,9 @@
         }
     }
 
-    .personal-row, .general-container {
+    .personal-row, .general-container,  .category-row, .source-row {
         border: 2px solid $border-light;
-        margin: 15px auto;
+        margin: 30px auto;
         border-radius: 20px;
         padding: 20px;
         position: relative;
@@ -72,6 +82,27 @@
     .general-container {
         .row {
             padding-left: 20px;
+        }
+    }
+
+    .category-row {
+        margin: -5px 0px 20px 0px;
+    }
+
+    .source-row {
+        margin: 0px 0px 20px 0px;
+    }
+    
+    .table-row {
+        padding: 10px 10px 0px 10px;
+    }
+
+    .btn-row {
+        padding: 0px 10px 10px 10px;
+        
+        .btn {
+            width: 100%;
+            border-radius: 20px;
         }
     }
 }

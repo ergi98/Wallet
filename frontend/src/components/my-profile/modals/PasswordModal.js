@@ -1,8 +1,8 @@
 import React from 'react'
 import './PasswordModal.scss'
 
-// // Axios
-// import axios from 'axios'
+// Axios
+import axios from 'axios'
 
 // Bootstrap
 import Modal from 'react-bootstrap/Modal'
@@ -10,41 +10,38 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Spinner from 'react-bootstrap/Spinner'
 
-// Icons
-// import { IconContext } from "react-icons"
-// import { RiLoginCircleLine } from 'react-icons/ri'
-
 // Form Validation
 import * as yup from "yup"
 import { Formik } from 'formik'
 
-function DeletePortfolio(props) {
+// Redux
+import { useSelector } from "react-redux"
 
+function PasswordModal(props) {
+
+    const username = useSelector((state) => state.user.username)
     // Establish the validation schema
     const pwd_schema = yup.object({
         old_pass: yup.string().required(),
-        new_password: yup.string().required().min(7).max(15),
-        confirm_pass: yup.string().required().min(7).max(15)
+        new_password: yup.string().required().min(4).max(15),
+        confirm_pass: yup.string().required().min(4).max(15).oneOf([yup.ref('new_password')])
     })
 
-    async function deleteProfile() {
-        // try {
-        //     await axios.post('/users/delete-portfolio', { 
-        //         username: props.username, 
-        //         delete_id: props.portfolio.p_id, 
-        //         transfer_amnt: props.portfolio.amount.$numberDecimal,
-        //         transfer_id: selectedPortfolio 
-        //     })
-        //     props.setDeleteStatus("success")
-        //     props.onClose()
-        // }
-        // catch(err) {
-        //     props.setDeleteStatus("error")
-        // }
-    }
-
-    function updatePassword(event) {
-
+    async function updatePassword(event) {
+        try {
+            await axios.post('/users/change-password', {
+                username,
+                old_pass: event.old_pass,
+                new_pass: event.new_password
+            })
+            props.setPwdSuccess(true)
+            setTimeout(() => { props.setPwdSuccess(false) }, 2500)
+            props.onClose()
+        }
+        catch(err) {
+            props.setPwdError(true)
+            setTimeout(() => { props.setPwdError(false) }, 2500)
+        }
     }
 
     return (
@@ -115,7 +112,6 @@ function DeletePortfolio(props) {
                                         <Button
                                             className="psw-btn"
                                             variant="primary"
-                                            onClick={deleteProfile}
                                             disabled={
                                                 isSubmitting || 
                                                 values.new_password !== values.confirm_pass ||
@@ -147,4 +143,4 @@ function DeletePortfolio(props) {
     )
 }
 
-export default DeletePortfolio
+export default PasswordModal

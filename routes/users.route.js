@@ -11,5 +11,8 @@ router.route("/populate-transactions").post(users.UsersController.populateTransa
 router.route("/add-portfolio").post(users.UsersController.addPortfolio)
 router.route("/change-portfolio-fav").post(users.UsersController.changeFavourite)
 router.route("/delete-portfolio").post(users.UsersController.deletePortfolio)
+router.route("/change-password").post(users.UsersController.changePassword)
+router.route("/new-category").post(users.UsersController.newCategory)
+router.route("/new-source").post(users.UsersController.newSource)
 
 module.exports = router;

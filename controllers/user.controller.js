@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const UsersDAO = require("../dao/usersDAO")
 
-const hashPassword = async password => await bcrypt.hash("password", 10)
+const hashPassword = async password => await bcrypt.hash(password, 10)
 
 class User {
     constructor({ username, password, name, surname = {} } = {}) {
@@ -235,6 +235,64 @@ class UsersController {
             let result = await UsersDAO.deletePortfolio(username, delete_id, transfer_id, transfer_amnt)
             
             res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
+    static async changePassword(req, res) {
+        try {
+            let { username, old_pass, new_pass } = req.body
+
+            // Get current user password
+            let user = await UsersDAO.getUserPassword(username)
+
+            if(await bcrypt.compare(old_pass, user[0].password)) {
+                // Hashing the password
+                let hashed = await hashPassword(new_pass)
+                let result = await UsersDAO.updatePassword(username, hashed)
+                res.json({ result })
+            }
+            else {
+                res.status(401).json({ error: "The current password is not correct." })
+                return
+            }
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
+    static async newCategory(req, res) {
+        try {
+            let { username, category} = req.body
+
+            let result = await UsersDAO.newCategory(username, category)
+
+            if(result.error)
+                res.status(401).json({error: result.error})
+            else
+                res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
+    static async newSource(req, res) {
+        try {
+            let { username, source} = req.body
+
+            let result = await UsersDAO.newSource(username, source)
+ 
+            if(result.error)
+                res.status(401).json({error: result.error})
+            else
+                res.json({ result })
         }
         catch(e) {
             res.status(400).json({ error: e })
