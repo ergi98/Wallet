@@ -428,7 +428,7 @@ class UsersDAO {
 
   static async newSource(username, source) {
     try {
-      source.amnt_spent = mongodb.Decimal128.fromString(source.amnt_spent)
+      source.amount_earned = mongodb.Decimal128.fromString(source.amount_earned)
 
       let res = await users.findOne({ username, "sources.source_name": source.source_name })
 

@@ -60,8 +60,8 @@ function NewSrcCat(props) {
                     source_id: nanoid(6),
                     source_name: event.name.trim(),
                     count: 0,
-                    amnt_spent: "0",
-                    last_spent: null
+                    amount_earned: "0",
+                    last_earned: null
                 }
     
                 await axios.post('/users/new-source', { username, source })

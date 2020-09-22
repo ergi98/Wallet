@@ -14,12 +14,8 @@ function Statistics() {
     return (
         <Layout>
             <Container className="statistics-container">
-                <Row>
-                    <ExpenseByCategory/>
-                </Row>
-                <Row>
-                    <IncomeBySource/>
-                </Row>
+                <Row><ExpenseByCategory/></Row>
+                <Row><IncomeBySource/></Row>
             </Container>
         </Layout>
     )
