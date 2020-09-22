@@ -41,6 +41,7 @@ function MyProfile() {
 
     useEffect(() => {
         let _isMounted = true
+        
         async function getUserData(username) {
             try {
                 let res = await axios.post('/users/user-data', { username })

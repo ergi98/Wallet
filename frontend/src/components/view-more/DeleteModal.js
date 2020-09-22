@@ -23,7 +23,7 @@ function DeleteModal(props) {
 
         try {
             await axios.post('/transactions/delete-transaction', { username, date, transaction })
-            props.deleteStatus("success")
+            props.deleteStatus("success", transaction)
         }
         catch(err) {
             props.deleteStatus("error")

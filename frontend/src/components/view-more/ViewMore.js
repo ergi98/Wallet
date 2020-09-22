@@ -46,7 +46,6 @@ function ViewMore({ match })  {
     const [deleteTransaction, setDeleteTransaction] = useState([])
     const [showDeleteModal, setDelete] = useState(false)
     const [showDeleteError, setDeleteError] = useState(false)
-    const [showDeleteSuccess, setDeleteSuccess] = useState(false)
 
     useEffect(() => {
         let _isMounted = true
@@ -128,12 +127,11 @@ function ViewMore({ match })  {
         setDelete(false)
     }
 
-    function deleteStatus(status) {
+    function deleteStatus(status, transaction) {
         if(status === "success") {
-            // To invoke a refetch from the database without refreshing
-            setDate(parse(displayedDate, 'dd/MM/yyyy', new Date()))
-            setDeleteSuccess(true)
-            setTimeout(() => { setDeleteSuccess(false)}, 2500);
+            let newTransactions = transactions
+            newTransactions = newTransactions.filter(trans => { return trans.trans_id !== transaction.trans_id  })
+            setTransactions(newTransactions)
         }
         else {
             setDeleteError(true)
@@ -153,10 +151,6 @@ function ViewMore({ match })  {
                 <Alert show={showDeleteError} variant="danger" className="alert" as="Row">
                     <Alert.Heading className="heading">Delete Transaction</Alert.Heading>
                     An error occured while trying to delete this transaction.
-                </Alert>
-                <Alert show={showDeleteSuccess} variant="success" className="alert" as="Row">
-                    <Alert.Heading className="heading">Delete Transaction</Alert.Heading>
-                    Successfuly deleted the transaction.
                 </Alert>
                 <Row className="date-row">
                     <Col className="left-btn" xs={3}>
