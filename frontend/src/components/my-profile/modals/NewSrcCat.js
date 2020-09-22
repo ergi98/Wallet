@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './NewSrcCat.scss'
 
 // Axios
@@ -11,6 +11,7 @@ import Form from 'react-bootstrap/Form'
 import Spinner from 'react-bootstrap/Spinner'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Alert from 'react-bootstrap/Alert'
 
 // Form Validation
 import * as yup from "yup"
@@ -25,10 +26,11 @@ import { nanoid } from 'nanoid'
 function NewSrcCat(props) {
 
     const username = useSelector((state) => state.user.username)
+    const [catSrcError, setCatSrcError] = useState(false)
 
     // Establish the validation schema
     const pwd_schema = yup.object({
-        name: yup.string().required().matches(/^[a-zA-Z0-9 ]*$/).max(15),
+        name: yup.string().required().matches(/^[a-zA-Z0-9& ]*$/).max(30),
     })
 
     async function addNewSrcCat(event) {
@@ -43,13 +45,13 @@ function NewSrcCat(props) {
                 }
 
                 await axios.post('/users/new-category', { username, category })
-                props.setCatSrcSuccess(true)
-                setTimeout(() => { props.setCatSrcSuccess(false) }, 2500)
+
+                props.addCatSrc(category)
                 props.onClose()
             }
             catch(err) {
-                props.setCatSrcError(true)
-                setTimeout(() => { props.setCatSrcError(false) }, 2500)
+                setCatSrcError(true)
+                setTimeout(() => { setCatSrcError(false) }, 2500)
             }
         }
         else if(props.type === "Source") {
@@ -63,13 +65,13 @@ function NewSrcCat(props) {
                 }
     
                 await axios.post('/users/new-source', { username, source })
-                props.setCatSrcSuccess(true)
-                setTimeout(() => { props.setCatSrcSuccess(false) }, 2500)
+                
+                props.addCatSrc(source)
                 props.onClose()
             }
             catch(err) {
-                props.setCatSrcError(true)
-                setTimeout(() => { props.setCatSrcError(false) }, 2500)
+                setCatSrcError(true)
+                setTimeout(() => { setCatSrcError(false) }, 2500)
             }
         }
     }
@@ -80,6 +82,10 @@ function NewSrcCat(props) {
                 <Modal.Title>New {props.type}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                {/** New Source/Category alerts */}
+                <Alert show={catSrcError} variant="danger">
+                    A problem occured while trying to insert new {props.type.toLowerCase()}.
+                </Alert>
                 <Formik
                     validationSchema={pwd_schema}
                     onSubmit={addNewSrcCat}

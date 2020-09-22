@@ -32,12 +32,12 @@ function DeletePortfolio(props) {
     return (
         <Modal show={props.show} className="profile-delete" onHide={props.onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Delete Portfolio</Modal.Title>
+                <Modal.Title>Delete Account</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <label className="warning">Are you sure you want to delete this profile?</label>
+                <label className="warning">Are you sure you want to delete this account?</label>
                 <label className="detail-warning">
-                    WARNING: By deleting this profile you also erase all your data that this application
+                    WARNING: By deleting this account you also erase all your data that this application
                     is holding for you.
                 </label>
 
@@ -60,7 +60,6 @@ function DeletePortfolio(props) {
                     Delete
                 </Button>
             </Modal.Footer>
-
         </Modal>
     )
 }

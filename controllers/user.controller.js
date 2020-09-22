@@ -194,6 +194,34 @@ class UsersController {
         }
     }
 
+    static async getUserCategories(req, res) {
+        try {
+            let { username } = req.body
+
+            let result = await UsersDAO.getUserCategories(username)
+
+            res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
+    static async getUserSources(req, res) {
+        try {
+            let { username } = req.body
+
+            let result = await UsersDAO.getUserSources(username)
+
+            res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
     static async addPortfolio(req, res) {
         try {
             let { username, portfolio } = req.body
@@ -272,10 +300,11 @@ class UsersController {
 
             let result = await UsersDAO.newCategory(username, category)
 
-            if(result.error)
+            if(result.error) {
                 res.status(401).json({error: result.error})
-            else
-                res.json({ result })
+                return
+            }
+            res.json({ result })
         }
         catch(e) {
             res.status(400).json({ error: e })
@@ -289,12 +318,40 @@ class UsersController {
 
             let result = await UsersDAO.newSource(username, source)
  
-            if(result.error)
+            if(result.error) {
                 res.status(401).json({error: result.error})
-            else
-                res.json({ result })
+                return
+            }
+            res.json({ result })
         }
         catch(e) {
+            console.log(e)
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
+    static async deleteCategory(req, res) {
+        try {
+            let { username, category_id} = req.body
+            let result = await UsersDAO.deleteCategory(username, category_id)
+            res.json({ result })
+        }
+        catch(e) {
+            console.log(e)
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
+    static async deleteSource(req, res) {
+        try {
+            let { username, source_id} = req.body
+            let result = await UsersDAO.deleteSource(username, source_id)
+            res.json({ result })
+        }
+        catch(e) {
+            console.log(e)
             res.status(400).json({ error: e })
             return
         }

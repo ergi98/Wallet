@@ -245,8 +245,6 @@ class UsersDAO {
             username: 1,
             createdAt: 1,
             personal: 1,
-            categories: 1,
-            sources: 1
           }
         }
       ]
@@ -255,6 +253,54 @@ class UsersDAO {
     }
     catch (e) {
       console.error(`Error occurred while retrieving user data, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async getUserCategories(username) {
+    try {
+      let pipeline = [
+        {
+          $match: {
+            username
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            categories: 1
+          }
+        }
+      ]
+
+      return await users.aggregate(pipeline).toArray()
+    }
+    catch (e) {
+      console.error(`Error occurred while retrieving user categories, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async getUserSources(username) {
+    try {
+      let pipeline = [
+        {
+          $match: {
+            username
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            sources: 1
+          }
+        }
+      ]
+
+      return await users.aggregate(pipeline).toArray()
+    }
+    catch (e) {
+      console.error(`Error occurred while retrieving user sources, ${e}`)
       return { error: e }
     }
   }
@@ -370,6 +416,8 @@ class UsersDAO {
           { $push: { categories: category } }, 
           { w: "majority" }
         )
+
+        return { success: true }
       }
     }
     catch (e) {
@@ -394,10 +442,40 @@ class UsersDAO {
           { $push: { sources: source } }, 
           { w: "majority" }
         )
+
+        return { success: true }
       }
     }
     catch (e) {
       console.error(`Error occurred while adding a new expense category, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async deleteCategory(username, category_id) {
+    try {
+      await users.updateOne(
+        { username }, 
+        { $pull: { categories: { cat_id: category_id } }},
+        { w: "majority" }
+      )
+    }
+    catch (e) {
+      console.error(`Error occurred while deleting expense category, ${e}`)
+      return { error: e }
+    }
+  }
+
+  static async deleteSource(username, source_id) {
+    try {
+      await users.updateOne(
+        { username }, 
+        { $pull: { sources: { source_id: source_id } }},
+        { w: "majority" }
+      )
+    }
+    catch (e) {
+      console.error(`Error occurred while deleting income source, ${e}`)
       return { error: e }
     }
   }
