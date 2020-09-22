@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import './ExpenseByCategory.scss'
+import './IncomeBySource'
 
 // Axios
 import axios from 'axios'
@@ -18,27 +18,27 @@ import { useSelector } from 'react-redux'
 // Number Format
 import NumberFormat from 'react-number-format'
 
-function ExpenseByCategory() {
+function IncomeBySource() {
 
     const username = useSelector((state) => state.user.username)
     const pref_currency = useSelector((state) => state.user.pref_currency)
 
-    const [expenses, setExpenses] = useState([])
+    const [incomes, setIncome] = useState([])
 
-    async function getExpenses(username) {
+    async function getIncome(username) {
         try {
-            let res = await axios.post('/users/user-categories', { username })
+            let res = await axios.post('/users/user-sources', { username })
 
-            console.log(res.data.result[0].categories )
+            console.log(res.data.result[0].sources )
             if(res.data.result.length > 0) {
-                res.data.result[0].categories.sort((a, b) => {
-                    if(a.amnt_spent.$numberDecimal > b.amnt_spent.$numberDecimal) 
+                res.data.result[0].sources.sort((a, b) => {
+                    if(a.amount_earned.$numberDecimal > b.amount_earned.$numberDecimal) 
                         return 1
-                    if(a.amnt_spent.$numberDecimal < b.amnt_spent.$numberDecimal)
+                    if(a.amount_earned.$numberDecimal < b.amount_earned.$numberDecimal)
                         return -1
                     return 0
                 })
-                setExpenses(res.data.result[0].categories)
+                setIncome(res.data.result[0].sources)
             }
         }
         catch(err) {
@@ -48,7 +48,7 @@ function ExpenseByCategory() {
 
     useEffect(() => {
         let _isMounted = true
-        _isMounted && getExpenses(username)
+        _isMounted && getIncome(username)
         return () => {
             _isMounted = false
         }
@@ -58,9 +58,8 @@ function ExpenseByCategory() {
         // TODO
     }
 
-
     return (
-        <Card title="Expenses By Category" >
+        <Card title="Income By Source" >
             <Container className="list-container">
                 <Table responsive striped className="list-table header-fixed">
                     <thead>
@@ -85,17 +84,17 @@ function ExpenseByCategory() {
                     </thead>
                     <tbody>
                         {
-                            expenses.map((expense, index) => 
-                                <tr key={expense.cat_id}> 
-                                    <td>{ index+1 }</td>
-                                    <td>{expense.cat_name}</td>
-                                    <td>{expense.count}</td>
-                                    <td className="spending">
-                                        <NumberFormat 
-                                            value={expense.amnt_spent.$numberDecimal}
-                                            displayType={'text'} 
-                                            thousandSeparator={true} 
-                                            prefix={ pref_currency + ' ' } 
+                            incomes.map((income, index) =>
+                                <tr key={income.cat_id}>
+                                    <td>{index + 1}</td>
+                                    <td>{income.source_name}</td>
+                                    <td>{income.count}</td>
+                                    <td className="earning">
+                                        <NumberFormat
+                                            value={income.amount_earned.$numberDecimal}
+                                            displayType={'text'}
+                                            thousandSeparator={true}
+                                            prefix={pref_currency + ' '}
                                         />
                                     </td>
                                 </tr>
@@ -109,4 +108,4 @@ function ExpenseByCategory() {
     )
 }
 
-export default ExpenseByCategory
+export default IncomeBySource

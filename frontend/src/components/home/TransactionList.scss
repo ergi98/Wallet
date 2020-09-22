@@ -44,6 +44,6 @@
 @media only screen and (min-height: 900px) {
     .list-container {
         max-height: 480px !important;
-        min-height: 480px !important;
+        min-height: fit-content !important;
     }
 }
