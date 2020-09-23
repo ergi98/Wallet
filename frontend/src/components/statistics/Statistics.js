@@ -5,6 +5,7 @@ import './Statistics.scss'
 import Layout from '../layout/Layout'
 import ExpenseByCategory from './ExpenseByCategory'
 import IncomeBySource from './IncomeBySource'
+import IncomeVSExpense from './IncomeVSExpense'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
@@ -16,6 +17,7 @@ function Statistics() {
             <Container className="statistics-container">
                 <Row><ExpenseByCategory/></Row>
                 <Row><IncomeBySource/></Row>
+                <Row><IncomeVSExpense/></Row>
             </Container>
         </Layout>
     )

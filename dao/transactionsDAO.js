@@ -190,6 +190,39 @@ class TransactionsDAO {
       return { success: true }
     }
   }
+
+  static async incomeVSexpense(username, start_date, end_date) {
+    try {
+      let pipeline = [
+        {
+          $match: {
+            username, 
+            date: {
+              $gte: start_date, 
+              $lte: end_date
+            }
+          }
+        }, 
+        {
+          $group: {
+            _id: null, 
+            spend_amnt: { $sum: '$spendings' }, 
+            earn_amnt: { $sum: '$earnings' }
+          }
+        }
+      ]
+
+      const res = await transactions.aggregate(pipeline, {
+        level: "majority"
+      })
+
+      return res.toArray()
+    }
+    catch (e) {
+      console.log(`Error occurred while generating income expense chart, ${e}`)
+      return { error: e }
+    }
+  }
 }
 
 module.exports = TransactionsDAO;    

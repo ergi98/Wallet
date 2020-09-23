@@ -65,7 +65,6 @@ class TransactionsController {
                 res.status(404).json({ error: "Transaction type not supported." })
         }
         catch(err) {
-            console.log(err)
             res.status(400).json({ error: err })
             return
         }
@@ -79,7 +78,19 @@ class TransactionsController {
             res.json({ result })
         }
         catch(err) {
-            console.log(err)
+            res.status(400).json({error: err})
+            return
+        }
+    }
+
+    static async incomeVSexpense(req, res) {
+        try {
+            let { username, start_date, end_date } = req.body
+
+            let result = await TransactionsDAO.incomeVSexpense(username, start_date, end_date)
+            res.json({ result })
+        }
+        catch(err) {
             res.status(400).json({error: err})
             return
         }

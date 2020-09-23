@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import './ExpenseByCategory.scss'
 
 // Axios
 import axios from 'axios'
@@ -9,8 +8,16 @@ import Card from '../card/Card'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
-import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+
+// Material UI
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+
 
 // Redux
 import { useSelector } from 'react-redux'
@@ -29,19 +36,19 @@ function ExpenseByCategory() {
         try {
             let res = await axios.post('/users/user-categories', { username })
 
-            console.log(res.data.result[0].categories )
-            if(res.data.result.length > 0) {
+            console.log(res.data.result[0].categories)
+            if (res.data.result.length > 0) {
                 res.data.result[0].categories.sort((a, b) => {
-                    if(a.amnt_spent.$numberDecimal > b.amnt_spent.$numberDecimal) 
+                    if (a.amnt_spent.$numberDecimal > b.amnt_spent.$numberDecimal)
                         return 1
-                    if(a.amnt_spent.$numberDecimal < b.amnt_spent.$numberDecimal)
+                    if (a.amnt_spent.$numberDecimal < b.amnt_spent.$numberDecimal)
                         return -1
                     return 0
                 })
                 setExpenses(res.data.result[0].categories)
             }
         }
-        catch(err) {
+        catch (err) {
 
         }
     }
@@ -60,50 +67,42 @@ function ExpenseByCategory() {
 
 
     return (
-        <Card title="Expenses By Category" >
-            <Container className="list-container">
-                <Table responsive striped className="list-table header-fixed">
-                    <thead>
-                        <tr className="headers-row">
-                            <th style={{ verticalAlign: "middle" }}>#</th>
-                            <th>
-                                <Button variant="link" className="sort-btn" onClick={() => sortBy("category")}>
-                                    Category
-                                </Button>
-                            </th>
-                            <th>
-                                <Button variant="link" className="sort-btn" onClick={() => sortBy("transactions")}>
-                                    Trans.
-                                </Button>
-                            </th>
-                            <th>
-                                <Button variant="link" className="sort-btn" onClick={() => sortBy("amount")}>
-                                    Amount
-                                </Button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            expenses.map((expense, index) => 
-                                <tr key={expense.cat_id}> 
-                                    <td>{ index+1 }</td>
-                                    <td>{expense.cat_name}</td>
-                                    <td>{expense.count}</td>
-                                    <td className="spending">
-                                        <NumberFormat 
-                                            value={expense.amnt_spent.$numberDecimal}
-                                            displayType={'text'} 
-                                            thousandSeparator={true} 
-                                            prefix={ pref_currency + ' ' } 
-                                        />
-                                    </td>
-                                </tr>
-                            )
-                        }
-                    </tbody>
 
-                </Table>
+        <Card title="Expenses By Category" className="income-card">
+            <Container className="scrollable-container">
+                <TableContainer className="scrollable-table">
+                    <Table stickyHeader aria-label="sticky table" >
+                        <TableHead className="table-header">
+                            <TableRow>
+                                <TableCell>#</TableCell>
+                                <TableCell>Cateogry</TableCell>
+                                <TableCell>Trans.</TableCell>
+                                <TableCell>Amount</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                expenses.map((expense, index) => {
+                                    return (
+                                        <TableRow key={expense.cat_id}>
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>{expense.cat_name}</TableCell>
+                                            <TableCell>{expense.count}</TableCell>
+                                            <TableCell className="spending">
+                                                <NumberFormat
+                                                    value={expense.amnt_spent.$numberDecimal}
+                                                    displayType={'text'}
+                                                    thousandSeparator={true}
+                                                    prefix={pref_currency + ' '}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                            }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Container>
         </Card>
     )

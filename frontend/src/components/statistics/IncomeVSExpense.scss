@@ -1,0 +1,25 @@
+@import '../../styles/colors';
+
+.period-selector {
+    padding-bottom: 10px;
+}    
+
+.or-label {
+    font-weight: bold;
+    color: $text-gray;
+    background: white;
+}
+
+.custom-range {
+    color: black;
+    font-weight: 600;
+    padding-top: 10px;
+}
+
+.line-separator {
+    margin: 0 auto;
+    width: 95%;
+    height: 1px;
+    background:#717171;
+    border-bottom:1px solid $border-light;
+}

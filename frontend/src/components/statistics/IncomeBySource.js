@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import './IncomeBySource.scss'
 
 // Axios
 import axios from 'axios'
@@ -44,9 +45,9 @@ function IncomeBySource() {
                     console.log(res.data.result[0])
                     res.data.result[0].sources.sort((a, b) => {
                         if (a.amount_earned.$numberDecimal > b.amount_earned.$numberDecimal)
-                            return 1
-                        if (a.amount_earned.$numberDecimal < b.amount_earned.$numberDecimal)
                             return -1
+                        if (a.amount_earned.$numberDecimal < b.amount_earned.$numberDecimal)
+                            return 1
                         return 0
                     })
                     setIncome(res.data.result[0].sources)
@@ -65,16 +66,12 @@ function IncomeBySource() {
         }
     }, [username])
 
-    function sortBy(field) {
-        // TODO
-    }
-
     return (
-        <Card title="Income By Source" >
-            <Container className="list-container">
-                <TableContainer>
+        <Card title="Income By Source" className="income-card">
+            <Container className="scrollable-container">
+                <TableContainer className="scrollable-table">
                     <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
+                        <TableHead className="table-header">
                             <TableRow>
                                 <TableCell>#</TableCell>
                                 <TableCell>Cateogry</TableCell>
@@ -84,10 +81,10 @@ function IncomeBySource() {
                         </TableHead>
                         <TableBody>
                             {
-                                incomes.map((income) =>{
+                                incomes.map((income, index) =>{
                                     return (
                                         <TableRow key={income.source_id}>
-                                            <TableCell>1</TableCell>
+                                            <TableCell>{index+1}</TableCell>
                                             <TableCell>{income.source_name}</TableCell> 
                                             <TableCell>{income.count}</TableCell> 
                                             <TableCell className="earning">

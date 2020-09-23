@@ -330,7 +330,7 @@ class SpendingForm extends Component {
                                     <Col md={6} sm={6} xs={6} style={{ padding: "0" }}>
                                         <Form.Control
                                             id="amount"
-                                            type="string"
+                                            type="number"
                                             placeholder="Amount"
                                             value={values.amount}
                                             onChange={handleChange}

@@ -1,0 +1,47 @@
+@import '../../styles/colors';
+
+.scrollable-container {
+    padding: 0;
+
+    .scrollable-table {
+        max-height: 220px !important;
+        min-height: 220px !important;
+        
+
+        .table-header {
+            *{ font-weight: bold; font-size: 15px}
+        }
+    }
+
+    .earning {
+        color: $green
+    }
+    .spending {
+        color: $red
+    }
+}
+
+@media only screen and (max-height: 700px) {
+    .scrollable-container {
+      .scrollable-table {
+            height: 120px !important;
+        }  
+    }
+}
+
+@media only screen and (min-height: 800px) {
+    .scrollable-container {
+        .scrollable-table {
+            height: 300px !important;
+        }  
+    }
+}
+
+@media only screen and (min-height: 900px) {
+    .scrollable-container {
+        .scrollable-table {
+            max-height: 480px !important;
+            min-height: fit-content !important;
+        }  
+    }
+}
