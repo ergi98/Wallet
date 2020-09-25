@@ -8,7 +8,6 @@ import Card from '../card/Card'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
-import Button from 'react-bootstrap/Button'
 
 // Material UI
 import Table from '@material-ui/core/Table'
@@ -17,7 +16,6 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-
 
 // Redux
 import { useSelector } from 'react-redux'
@@ -35,8 +33,7 @@ function ExpenseByCategory() {
     async function getExpenses(username) {
         try {
             let res = await axios.post('/users/user-categories', { username })
-
-            console.log(res.data.result[0].categories)
+            
             if (res.data.result.length > 0) {
                 res.data.result[0].categories.sort((a, b) => {
                     if (a.amnt_spent.$numberDecimal > b.amnt_spent.$numberDecimal)
@@ -60,11 +57,6 @@ function ExpenseByCategory() {
             _isMounted = false
         }
     }, [username])
-
-    function sortBy(field) {
-        // TODO
-    }
-
 
     return (
 

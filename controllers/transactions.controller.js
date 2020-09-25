@@ -88,6 +88,7 @@ class TransactionsController {
             let { username, start_date, end_date } = req.body
 
             let result = await TransactionsDAO.incomeVSexpense(username, start_date, end_date)
+            
             res.json({ result })
         }
         catch(err) {

@@ -1,5 +1,66 @@
 @import '../../styles/colors';
 
+.income-vs-expense, .income-vs-expense-chart {
+    min-height: 250px;  
+}
+
+.income-vs-expense-chart {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 0.5fr 1fr;
+
+    .ivse-title {
+        color: $text-gray;
+        font-weight: bold;
+    }
+
+    .ivse-value {
+        margin-left: 10px;
+        font-weight: 600;
+
+    }
+
+    .chart-stats {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+    
+    .chart-div {
+        grid-row: 1/3;
+        background-color: rgb(238, 238, 238);
+        margin-bottom: 10px;
+        border-radius: 10px;
+        .pie-chart {
+            margin: 0 auto;
+            padding-right: 40px;
+        }
+    }
+
+    .chart-btn-holder {
+        grid-column: 1/2;
+        grid-row: 2/3;
+        padding: 1em 0 1em 0;
+    }
+}
+
+.loading-screen {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    background-color: $border-light;
+    font-size: 18px;
+    font-weight: 600;
+    
+    .row {
+        flex-grow: 1;
+        display: block;
+    }
+}
+
+
+
 .period-selector {
     padding-bottom: 10px;
 }    
@@ -22,4 +83,31 @@
     height: 1px;
     background:#717171;
     border-bottom:1px solid $border-light;
+}
+
+@media only screen and (max-width: 800px) {
+    .income-vs-expense-chart {
+        display: flex;
+        flex-direction: column;
+    
+        .chart-stats {
+            order: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-evenly;
+        }
+        
+        .chart-div {
+            .pie-chart {
+                margin: 0 auto;
+                padding-right: 40px;
+            }
+        }
+    
+        .chart-btn-holder {
+            order: 3;
+            padding: 1em 0 1em 0;
+        }
+    }
 }

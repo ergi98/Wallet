@@ -9,7 +9,6 @@ import Card from '../card/Card'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
-import Button from 'react-bootstrap/Button'
 
 // Material UI
 import Table from '@material-ui/core/Table'
@@ -30,8 +29,6 @@ function IncomeBySource() {
     const username = useSelector((state) => state.user.username)
     const pref_currency = useSelector((state) => state.user.pref_currency)
 
-    const [isLoading, setIsLoading] = useState(true)
-
     const [incomes, setIncome] = useState([])
 
     useEffect(() => {
@@ -42,7 +39,6 @@ function IncomeBySource() {
                 let res = await axios.post('/users/user-sources', { username })
     
                 if (res.data.result.length > 0) {
-                    console.log(res.data.result[0])
                     res.data.result[0].sources.sort((a, b) => {
                         if (a.amount_earned.$numberDecimal > b.amount_earned.$numberDecimal)
                             return -1
@@ -52,10 +48,9 @@ function IncomeBySource() {
                     })
                     setIncome(res.data.result[0].sources)
                 }
-                setIsLoading(false)
             }
             catch (err) {
-                setIsLoading(false)
+                console.log(err)
             }
         }
 

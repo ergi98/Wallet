@@ -17,7 +17,9 @@ function Statistics() {
             <Container className="statistics-container">
                 <Row><ExpenseByCategory/></Row>
                 <Row><IncomeBySource/></Row>
-                <Row><IncomeVSExpense/></Row>
+                <Row>
+                    <IncomeVSExpense/>
+                </Row>
             </Container>
         </Layout>
     )
