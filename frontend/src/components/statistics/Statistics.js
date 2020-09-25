@@ -5,7 +5,7 @@ import './Statistics.scss'
 import Layout from '../layout/Layout'
 import ExpenseByCategory from './ExpenseByCategory'
 import IncomeBySource from './IncomeBySource'
-import IncomeVSExpense from './IncomeVSExpense'
+import IncomeVSExpense from './income-vs-expense/IncomeVSExpense'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'

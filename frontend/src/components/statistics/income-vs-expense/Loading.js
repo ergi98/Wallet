@@ -9,10 +9,11 @@ import Row from 'react-bootstrap/esm/Row'
 function Loading() {
     return (
         <Container className="income-vs-expense loading-screen">
-            <Row>
+            <div className="loading">
                 <Spinner as="span" animation="border" size="lg" role="status" aria-hidden="true" />
                 <label>Loading Chart ...</label>
-            </Row>
+            </div>
+            
         </Container>
     )
 }

@@ -1,4 +1,4 @@
-@import '../../styles/colors';
+@import '../../../styles/colors';
 
 .income-vs-expense, .income-vs-expense-chart {
     min-height: 250px;  
@@ -46,17 +46,21 @@
 }
 
 .loading-screen {
+    .loading{ 
+        background-color: $border-light;
+        color: black;
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        flex-grow: 1;
+    }
     display: flex;
+    flex-direction: row;
     align-items: center;
     vertical-align: middle;
     background-color: $border-light;
     font-size: 18px;
     font-weight: 600;
-    
-    .row {
-        flex-grow: 1;
-        display: block;
-    }
 }
 
 

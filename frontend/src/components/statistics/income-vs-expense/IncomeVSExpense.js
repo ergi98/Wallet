@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './IncomeVSExpense.scss'
 
 // Components
-import Card from '../card/Card'
+import Card from '../../card/Card'
 import IvsEForm from './IvsEForm'
 import IvsEChart from './IvsEChart'
 import Loading from './Loading'
