@@ -140,7 +140,7 @@ function IvsEForm(props) {
     
     return (
         <Container className="income-vs-expense">
-            <Form.Group as={Row} className="period-selector align-items-center">
+            <Form.Group as={Row} className="period-selector">
                 <Form.Label column lg={2} md={4} sm={4} xs={4}> By Period </Form.Label>
                 <Col lg={10} md={8} sm={8} xs={8} style={{ padding: "0px 15px 0px 0px" }}>
                     <Form.Control
@@ -163,7 +163,7 @@ function IvsEForm(props) {
             <div className="line-separator"></div>
             <label className="custom-range">Custom Range</label>
 
-            <Form.Group as={Row} className="align-items-center">
+            <Form.Group as={Row}>
                 <Col>
                     <Form.Control
                         style={{ textAlign: "center" }}

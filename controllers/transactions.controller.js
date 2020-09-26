@@ -96,6 +96,20 @@ class TransactionsController {
             return
         }
     }
+
+    static async transactionChart(req, res) {
+        try {
+            let { username, type, start_date, end_date} = req.body
+
+            let result = await TransactionsDAO.transactionChart(username, type, start_date, end_date)
+            
+            res.json({ result })
+        } 
+        catch(err) {
+            res.status(400).json({error: err})
+            return
+        }
+    }
 }
 
 module.exports = { TransactionsController }

@@ -4,7 +4,6 @@ import './IncomeVSExpense.scss'
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
 import Spinner from 'react-bootstrap/esm/Spinner'
-import Row from 'react-bootstrap/esm/Row'
 
 function Loading() {
     return (

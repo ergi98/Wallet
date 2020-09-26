@@ -223,6 +223,29 @@ class TransactionsDAO {
       return { error: e }
     }
   }
+
+  static async transactionChart(username, type, start_date, end_date) {
+    try {
+      let pipeline
+      
+      if(type === "earnings")
+        pipeline = [{ $match: { username, date: { $gte: start_date, $lte: end_date } } }, { $project: { _id: 0, date: 1, earnings: 1 } }, { $sort: { date: 1} }]
+      else if(type==="spendings")
+        pipeline = [{ $match: { username, date: { $gte: start_date, $lte: end_date } } }, { $project: { _id: 0, date: 1, spendings: 1 } }, { $sort: { date: 1} }]
+      else 
+        pipeline = [{ $match: { username, date: { $gte: start_date, $lte: end_date } } }, { $project: { _id: 0, date: 1, earnings: 1, spendings: 1 } }, { $sort: { date: 1} }]
+      
+      const res = await transactions.aggregate(pipeline, {
+        level: "majority"
+      })
+
+      return res.toArray()
+    }
+    catch (e) {
+      console.log(`Error occurred while generating transaction chart, ${e}`)
+      return { error: e }
+    }
+  }
 }
 
 module.exports = TransactionsDAO;    

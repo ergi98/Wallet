@@ -37,7 +37,16 @@ function IncomeVSExpense() {
                     null
             }
             {isLoading ? <Loading /> : null}
-            {showChart ? <IvsEChart data={stats} range={range} displayForm={() => { setShowForm(true); setShowChart(false)} }/> : null}
+            {
+                showChart ? 
+                    <IvsEChart 
+                        data={stats} 
+                        range={range} 
+                        displayForm={() => { setShowForm(true); setShowChart(false)} }
+                    /> 
+                    : 
+                    null
+            }
         </Card>
     )
 }
