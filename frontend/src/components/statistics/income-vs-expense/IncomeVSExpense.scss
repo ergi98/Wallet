@@ -63,8 +63,6 @@
     font-weight: 600;
 }
 
-
-
 .period-selector {
     padding-bottom: 10px;
 }    
@@ -103,6 +101,7 @@
         }
         
         .chart-div {
+            width: 100%;
             .pie-chart {
                 margin: 0 auto;
                 padding-right: 40px;
