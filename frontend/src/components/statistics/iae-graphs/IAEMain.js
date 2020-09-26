@@ -24,7 +24,7 @@ function IAEMain() {
 
     return (
         <Card title="Transaction Charts">
-             {
+            {
                 showForm ?
                     <IAEForm 
                         username={username}
