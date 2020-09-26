@@ -7,14 +7,14 @@ import Row from 'react-bootstrap/esm/Row'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 // Redux
-// import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // Number Format
-// import NumberFormat from 'react-number-format'
+import NumberFormat from 'react-number-format'
 
 function IAEGraph(props) {
 
-    // const currency = useSelector((state) => state.user.pref_currency)
+    const currency = useSelector((state) => state.user.pref_currency)
 
     return (
         <Container className="income-vs-expense-chart">
@@ -27,7 +27,7 @@ function IAEGraph(props) {
                 </Row>
             </div>
             <div className="chart-div">
-                <ResponsiveContainer width="98%">
+                <ResponsiveContainer width="99%">
                     <LineChart
                         data={props.data[0]}
                         margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
