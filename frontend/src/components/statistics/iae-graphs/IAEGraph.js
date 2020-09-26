@@ -27,10 +27,12 @@ function IAEGraph(props) {
                 </Row>
             </div>
             <div className="chart-div">
-                <ResponsiveContainer width="99%">
+              
                     <LineChart
                         data={props.data[0]}
                         margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                        width={349}
+                        height={240}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="date" height={60} />
@@ -40,7 +42,6 @@ function IAEGraph(props) {
                         {props.type === "earnings" || props.type === "both" ? <Line type="monotone" dataKey="earnings" stroke="#3C800F" /> : null}
                         {props.type === "spendings" || props.type === "both" ? <Line type="monotone" dataKey="spendings" stroke="#D32A17" /> : null}
                     </LineChart>
-                </ResponsiveContainer>
             </div>
             <div className="chart-btn-holder">
                 <Button onClick={props.displayForm}>
