@@ -1,0 +1,120 @@
+@import '../../styles/colors';
+
+.signup-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .form-row {
+        width: 90%;
+        margin: 1rem 0 0 0;
+
+        .info {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            .section-title {
+                text-align: center;
+                font-size: 23px;
+                font-weight: bold;
+                color: $theme-blue;
+            }
+
+            .section-subtitle {
+                font-weight: 600;
+                color: $text-gray;
+                margin: 0 auto;
+            }
+        }
+
+        .form {
+            .form-group {
+                padding-bottom: 0px;
+
+                .form-label {
+                    margin-bottom: 0;
+                }
+
+                .input-field {
+                    margin-bottom: 0;
+                }
+
+                .invalid-feedback {
+                    margin-bottom: 0px !important;
+                }
+            }
+            
+            .double-field {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0 !important;
+
+                div {
+                    margin-bottom: 0 !important;
+                }
+
+                div:nth-of-type(1) {
+                    width: 60%;
+                }
+
+                div:nth-of-type(2) {
+                    width: 35%;
+                }
+            }
+        }
+
+       
+    }
+
+    .spinner-signup {
+        background-color: red;
+        margin:  5px 0px !important;
+    }
+}
+
+.stepper {
+    display: flex;
+    justify-content: space-evenly;
+    width: 85%;
+    height: 20px;
+    padding: 0.5rem 0;
+
+    .dot {
+        background-color: white;
+        border: 2px solid $theme-blue;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        font-size: 0.9rem;
+        justify-content: center;
+    }
+
+    .active {
+        background-color: $theme-blue;
+        color: white;
+        font-weight: 600;
+    }
+}
+
+.goto-login-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    .btn {
+        font-weight: 600;
+        text-decoration: none;
+        color: white;
+    }
+}
+
+.signup-buttons {
+    display: flex;
+    width: 100% !important;
+
+    .btn {
+        width: 40% !important;
+    }
+}
+

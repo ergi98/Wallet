@@ -13,6 +13,7 @@ import ProfitTransaction from '../transaction/ProfitTransaction'
 import NotFound from '../not-found/NotFound'
 import ViewMore from '../view-more/ViewMore'
 import MyProfile from '../my-profile/MyProfile'
+import SignUp from '../login/SignUp'
 
 // Redux
 import { connect } from 'react-redux'
@@ -26,6 +27,7 @@ class Router extends React.Component {
                 <main>
                     <Switch>
                         <Route path="/" exact component={Login} />
+                        <Route path="/sign-up" exact component={SignUp} />
                         {
                             this.props.isAuthenticated ?
                                 <>

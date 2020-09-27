@@ -14,10 +14,12 @@
     }
 
     .login-row {
-        margin: 0 auto;
-        width: 80%;
+        margin: 0 auto 20px auto;
+        width: 95%;
+       
 
-        .login-container {
+        .login-container { 
+            position: relative;
             margin-top: -55px;
             border-radius: 10px;
             background-color: white;
@@ -86,14 +88,6 @@
         padding-bottom: 10px;
     }
 
-    .seperator-row {
-        width: fit-content;
-        margin: auto;
-        font-weight: bold;
-        color: $text;
-        padding: 15px 0px 5px 0px;
-    }
-
     .signup-row {
         margin: auto;
         
@@ -112,11 +106,7 @@
         .email-btn {
             padding: 10px 0px 10px 0px;
         }
-
-        .google-btn {
-            padding: 10px 0px 10px 0px;
-        }
-
+        
         .btn-icon {
             margin: 0px 10px 0px 0px;
         }

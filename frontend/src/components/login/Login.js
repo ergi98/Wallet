@@ -16,7 +16,7 @@ import Spinner from 'react-bootstrap/Spinner'
 // Icons
 import { IconContext } from "react-icons"
 import { RiLoginCircleLine } from 'react-icons/ri'
-import { FcGoogle, FcBusinessman } from 'react-icons/fc'
+import { FcBusinessman } from 'react-icons/fc'
 
 // Redux 
 import { connect } from 'react-redux'
@@ -25,7 +25,7 @@ import PropTypes from 'prop-types'
 
 // Establish the validation schema
 const schema = yup.object({
-    username: yup.string().required(),
+    username: yup.string().required().matches(/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm),
     password: yup.string().required()
 });
 
@@ -75,6 +75,10 @@ class Login extends React.Component {
                 })
                 setTimeout(() => { this._isMounted && this.setState({ showAlert: false }) }, 2500)
             })
+    }
+
+    goToSignUp() {
+        window.location.href = '/sign-up'
     }
 
     render() {
@@ -173,24 +177,11 @@ class Login extends React.Component {
 
 
                 <Row className="signup-row">
-                    <Button variant="dark" className="email-btn">
+                    <Button variant="dark" className="email-btn" onClick={this.goToSignUp}>
                         <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginRight: '15px' } }}>
                             <FcBusinessman />
                         </IconContext.Provider>
                         Create an account
-                    </Button>
-                </Row>
-
-                <Row className="seperator-row">
-                    <label>OR</label>
-                </Row>
-
-                <Row className="signup-row" style={{ paddingBottom: "15px" }}>
-                    <Button variant="danger" className="google-btn">
-                        <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginRight: '15px' } }}>
-                            <FcGoogle />
-                        </IconContext.Provider>
-                        Signup with Google
                     </Button>
                 </Row>
             </Container>
