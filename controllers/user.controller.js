@@ -123,6 +123,23 @@ class UsersController {
         }
     }
 
+    static async registerUser(req, res) {
+        try {
+            let { userData } = req.body
+            
+            // Encrypting the user password
+            userData.password = await hashPassword(userData.password)
+            
+            let result = await UsersDAO.registerUser(userData)
+
+            res.json({ result })
+        }
+        catch (e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+
     static async populateTransactionForm(req, res) {
         try {
             const { username } = req.body

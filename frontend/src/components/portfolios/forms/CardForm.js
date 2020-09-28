@@ -37,12 +37,18 @@ const card_schema = yup.object({
 function CardForm(props) {
 
     async function addPortfolio(event) {
-        try {
-            await axios.post('users/add-portfolio', { username: props.username, portfolio: event})
-            props.setStatus("success")
+        if(props.caller==="portfolio") {
+            try {
+                await axios.post('users/add-portfolio', { username: props.username, portfolio: event})
+                props.setStatus("success")
+            }
+            catch(err) {
+                props.setStatus("error")
+            }  
         }
-        catch(err) {
-            props.setStatus("error")
+        else {
+            props.setPortfolio(event)
+            props.closeModal()
         }
     }
 

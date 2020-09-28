@@ -140,6 +140,7 @@ function Portfolios() {
                 }
             </Container>
             <PortfolioModal 
+                caller="portfolio"
                 show={showPortfolioModal}
                 username={username}
                 closeModal={closePortfolioModal}

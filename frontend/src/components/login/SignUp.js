@@ -13,73 +13,122 @@ import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 
-
 // Icons
 import { IconContext } from "react-icons"
 import { IoMdArrowRoundBack } from 'react-icons/io'
+import { RiLoginCircleLine } from 'react-icons/ri'
+
+// Axios
+import axios from 'axios'
 
 function SignUp() {
 
     const [activeStep, setActiveStep] = useState(0)
     const [info, setInfo] = useState({})
 
+    const [success, setSuccess] = useState(false)
+    const [error, setError] = useState(false)
+    const [isEditing, setIsEditing] = useState(true)
+
     function saveInfo(obj) {
         var merge = require('lodash.merge')
-
         let newInfo = merge(info, obj)
-
         setInfo(newInfo)
-        console.log(newInfo)
     }
 
     function renderForm() {
-        switch(activeStep) {
-            case 0: 
-                return <LoginInformatio info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep+1)}/>
-            case 1: 
-                return <PersonalInformation info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep+1)} decrement={() => setActiveStep(activeStep-1)}/>
-            case 2: 
-                return <PortfolioInformation info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep+1)} decrement={() => setActiveStep(activeStep-1)}/>
-            case 3: 
-                return <CategoryInformation info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep+1)} decrement={() => setActiveStep(activeStep-1)}/>
+        switch (activeStep) {
+            case 0:
+                return <LoginInformatio info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep + 1)} />
+            case 1:
+                return <PersonalInformation info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep + 1)} decrement={() => setActiveStep(activeStep - 1)} />
+            case 2:
+                return <PortfolioInformation info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep + 1)} decrement={() => setActiveStep(activeStep - 1)} />
+            case 3:
+                return <CategoryInformation info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep + 1)} decrement={() => setActiveStep(activeStep - 1)} />
             case 4:
-                return <SourcesInformation info={info} saveInfo={saveInfo} increment={() => setActiveStep(activeStep+1)} signup={signup}/>
+                return <SourcesInformation info={info} saveInfo={saveInfo} decrement={() => setActiveStep(activeStep - 1)} signup={signup} />
             default:
                 return
         }
     }
-    
-    function signup() {
 
+    async function signup() {
+        try {
+            await axios.post('/users/register-user', { userData: info })
+            setIsEditing(false)
+            setSuccess(true)
+        }
+        catch (err) {
+            setIsEditing(false)
+            setError(true)
+            setTimeout(() => { setError(false) }, 2500)
+        }
     }
 
     return (
         <Container className="main-container">
-
             <Row className="logo-row">
                 <div className="goto-login-btn">
-                    <Button variant="link" onClick={() =>  window.location.href = '/login'}>
-                        <IconContext.Provider value={{ size: "25", style: { color: "white", verticalAlign: 'middle', marginRight: '5px', marginTop: '-3px' } }}>
-                            <IoMdArrowRoundBack/>
-                        </IconContext.Provider>
-                        Log In
-                    </Button>
+                    {
+                        !success?
+                        <Button variant="link" onClick={() => window.location.href = '/login'}>
+                            <IconContext.Provider value={{ size: "25", style: { color: "white", verticalAlign: 'middle', marginRight: '5px', marginTop: '-3px' } }}>
+                                <IoMdArrowRoundBack />
+                            </IconContext.Provider>
+                            Login
+                        </Button> : null
+                    }
                 </div>
                 <img src={require('../../assets/logo.svg')} alt="Wallet Logo" />
             </Row>
 
             <Row className="login-row">
                 <Container className="login-container">
-                    <Row className="signup-row">
-                        <div className="stepper">
-                            <div className={`dot ${activeStep >= 0? "active" : "" }`}>1</div>
-                            <div className={`dot ${activeStep >= 1? "active" : "" }`}>2</div>
-                            <div className={`dot ${activeStep >= 2? "active" : "" }`}>3</div>
-                            <div className={`dot ${activeStep >= 3? "active" : "" }`}>4</div>
-                            <div className={`dot ${activeStep >= 4? "active" : "" }`}>5</div>
-                        </div>
-                        { renderForm() }
-                    </Row>
+                    {
+                        success ?
+                            <div className="success-div">
+                                <section>
+                                    <label className="title">Congratulations!</label>
+                                    <label className="subtitle">
+                                        Your account is ready. Please click the button below to authenticate and login.
+                                </label>
+                                </section>
+                                <Button variant="primary" onClick={() => window.location.href = '/login'}>
+                                    LOGIN
+                                    <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: "-2px" } }}>
+                                        <RiLoginCircleLine />
+                                    </IconContext.Provider>
+                                </Button>
+                            </div> : null
+                    }
+                    {
+                        isEditing ?
+                            <Row className="signup-row">
+                                <div className="stepper">
+                                    <div className={`dot ${activeStep >= 0 ? "active" : ""}`}>1</div>
+                                    <div className={`dot ${activeStep >= 1 ? "active" : ""}`}>2</div>
+                                    <div className={`dot ${activeStep >= 2 ? "active" : ""}`}>3</div>
+                                    <div className={`dot ${activeStep >= 3 ? "active" : ""}`}>4</div>
+                                    <div className={`dot ${activeStep >= 4 ? "active" : ""}`}>5</div>
+                                </div>
+                                {renderForm()}
+                            </Row> : null
+                    }
+                    {
+                        error ?
+                            <div className="success-div">
+                                <section>
+                                    <label className="error">Unsuccessful!</label>
+                                    <label className="subtitle">
+                                        An error occured while trying to register your account. Press the button below to try again.
+                                </label>
+                                </section>
+                                <Button variant="primary" onClick={() => window.location.href = '/sign-up'}>
+                                    TRY AGAIN
+                                </Button>
+                            </div> : null
+                    }
                 </Container>
             </Row>
         </Container>

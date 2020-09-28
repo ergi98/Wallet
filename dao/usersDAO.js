@@ -19,8 +19,19 @@ class UsersDAO {
     }
   }
 
-  static async addUser(userInfo) {
+  static async registerUser(userInfo) {
     try {
+      for(let i = 0; i < userInfo.portfolios.length; i++)
+        userInfo.portfolios[i].amount = mongodb.Decimal128.fromString(userInfo.portfolios[i].amount.toString())
+
+      for(let i = 0; i < userInfo.categories.length; i++)
+        userInfo.categories[i].amnt_spent = mongodb.Decimal128.fromString(userInfo.categories[i].amnt_spent.toString())
+
+      for(let i = 0; i < userInfo.sources.length; i++)
+        userInfo.sources[i].amount_earned = mongodb.Decimal128.fromString(userInfo.sources[i].amount_earned.toString())
+
+      console.log(userInfo)
+      
       await users.insertOne(userInfo, { w: "majority" })
       return { success: true }
     } catch (e) {

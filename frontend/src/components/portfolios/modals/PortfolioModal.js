@@ -51,13 +51,13 @@ function PortfolioModal(props) {
                     {
                         type === "wallet"?
                         <Row>
-                            <WalletForm username={props.username} setStatus={setStatus}/>
+                            <WalletForm closeModal={props.closeModal} caller={props.caller} username={props.username} setStatus={setStatus} setPortfolio={props.setPortfolio}/>
                         </Row> : null
                     }
                     {
                         type === "credit card"?
                         <Row>
-                            <CardForm username={props.username} setStatus={setStatus}/>
+                            <CardForm closeModal={props.closeModal} caller={props.caller} username={props.username} setStatus={setStatus} setPortfolio={props.setPortfolio}/>
                         </Row> : null
                     }
                 </Container>

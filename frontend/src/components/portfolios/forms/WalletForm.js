@@ -34,13 +34,20 @@ function WalletForm(props) {
         event.p_id = nanoid(10)
         event.type = "wallet"
         
-        try {
-            await axios.post('users/add-portfolio', { username: props.username, portfolio: event})
-            props.setStatus("success")
+        if(props.caller==="portfolio") {
+            try {
+                await axios.post('users/add-portfolio', { username: props.username, portfolio: event})
+                props.setStatus("success")
+            }
+            catch(err) {
+                props.setStatus("error")
+            }  
         }
-        catch(err) {
-            props.setStatus("error")
+        else {
+            props.setPortfolio(event)
+            props.closeModal()
         }
+
     }
 
     return (

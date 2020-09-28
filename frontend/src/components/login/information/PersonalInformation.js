@@ -38,7 +38,7 @@ function PersonalInformation(props) {
     function handleSubmit(event) {
         let res = event
         res.age = getAge(event.birthday)
-        props.saveInfo(res)
+        props.saveInfo({ personal: res })
         props.increment()
     }
 

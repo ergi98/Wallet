@@ -67,7 +67,6 @@
     }
 
     .spinner-signup {
-        background-color: red;
         margin:  5px 0px !important;
     }
 }
@@ -77,7 +76,7 @@
     justify-content: space-evenly;
     width: 85%;
     height: 20px;
-    padding: 0.5rem 0;
+    padding: 0.8rem 0 0 0;
 
     .dot {
         background-color: white;
@@ -115,6 +114,89 @@
 
     .btn {
         width: 40% !important;
+    }
+}
+
+.user-portfolios {
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+.user-categories {
+    width: 100%;
+    border: 2.5px solid $border-light;
+    overflow: auto;
+    height: 200px;
+    padding: 10px;
+    background-color: rgb(240, 240, 240);
+
+    section:not(:last-child){
+        border-bottom: 1px solid $border-light;
+    }
+
+    section {
+        display: flex;
+        justify-content: space-between;
+
+        .delete-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            margin: 0 !important;
+        }
+    }
+}
+
+.portfolio-plus-btn {
+    padding: 0px 12px !important;
+    width: 40px !important; 
+    height: 40px !important;
+    border-radius: 50% !important
+}
+
+.add-category {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 !important;
+
+    .form-label {
+        color: $theme-blue;
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+}
+
+.success-div {
+    padding: 1rem;
+    text-align: center;
+    section {
+        text-align: center;
+        .title {
+            font-weight: bold;
+            color: $theme-blue;
+            font-size: 1.6rem;
+            width: 100%;
+        }
+
+        .error {
+            font-weight: bold;
+            color: $red;
+            font-size: 1.6rem;
+            width: 100%;
+        }
+        .subtitle {
+            color: $text-gray;
+            font-weight: 600;
+        }
+    }
+
+    .btn {
+        margin-top: 2rem;
     }
 }
 

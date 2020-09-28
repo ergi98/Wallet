@@ -3,6 +3,7 @@ const users = require('../controllers/user.controller')
 
 router.route("/login").post(users.UsersController.login)
 router.route("/logout").post(users.UsersController.logout)
+router.route("/register-user").post(users.UsersController.registerUser)
 router.route("/session").post(users.UsersController.getSession)
 router.route("/portfolios").post(users.UsersController.getPortfolios)
 router.route("/user-data").post(users.UsersController.getUserData)

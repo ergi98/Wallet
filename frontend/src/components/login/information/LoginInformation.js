@@ -17,19 +17,20 @@ const schema = yup.object({
 })
 
 function LoginInformation(props) {
-
+    // TODO : VALIDATE THAT THE USERNAME IS UNIQUE
     let initial = {
         username: props.info.username || '',
         password: props.info.password || '',
         confirm: props.info.password || ''
     }
 
-    function handleSubmit(event) {
+    let date = new Date()
 
-        console.log(event)
+    function handleSubmit(event) {
         props.saveInfo({
             username: event.username,
-            password: event.password
+            password: event.password,
+            createdAt: date.toLocaleDateString("en-GB")
         })
         props.increment()
     }
