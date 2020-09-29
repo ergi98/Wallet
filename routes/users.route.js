@@ -2,6 +2,7 @@ const router = require('express').Router()
 const users = require('../controllers/user.controller')
 
 router.route("/login").post(users.UsersController.login)
+router.route("/used-usernames").get(users.UsersController.getUsedNames)
 router.route("/logout").post(users.UsersController.logout)
 router.route("/register-user").post(users.UsersController.registerUser)
 router.route("/session").post(users.UsersController.getSession)

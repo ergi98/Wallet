@@ -1,13 +1,11 @@
-.transaction-container {
+.pad-container {
     width: fit-content;
-    overflow: hidden;
     margin: 10px auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 85vh;
 
-    .pad-container {
-        padding:  5px 10px;
-
-        .title {
-            padding-bottom: 10px;
-        }
+    .title {
+        width: fit-content;
     }
 }

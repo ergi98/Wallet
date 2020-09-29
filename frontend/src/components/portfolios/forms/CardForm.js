@@ -23,15 +23,15 @@ import { IconContext } from "react-icons"
 import { BiWallet } from 'react-icons/bi'
 
 const card_schema = yup.object({
-    p_name: yup.string().required().matches(/[a-zA-Z0-9\s]+/),
-    amount: yup.string().required().matches(/^[0-9]+[.]?[0-9]+$/),
+    p_name: yup.string().required("Name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),
+    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!"}),
     currency: yup.string().required(),
-    bank: yup.string().required().matches(/[a-zA-Z0-9\s]+/),
-    card_no: yup.string().required().matches(/[0-9]{4}[\s][0-9]{4}[\s][0-9]{4}[\s][0-9]{4}/),
-    valid_m: yup.number().required().max(12).min(1),
-    valid_y: yup.number().required(),
-    card_holder: yup.string().required().matches(/[a-zA-Z0-9\s]+/),
-    cvc: yup.string().required()
+    bank: yup.string().required("Bank is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),
+    card_no: yup.string().required("Card number is required!").matches(/^[0-9]{4}[\s][0-9]{4}[\s][0-9]{4}[\s][0-9]{4}$/, { message: "Format is xxxx xxxx xxxx xxxx!"}),
+    valid_m: yup.number().required("Required!").max(12, "LEss than 12").min(1, "More than 1"),
+    valid_y: yup.number().required("Required!"),
+    card_holder: yup.string().required("Card holder required!").matches(/^[a-zA-Z\s]+$/, { message: "Only spaces and alphanumeric characters!"}),
+    cvc: yup.string().required().length(3) // no space
 })
 
 function CardForm(props) {
@@ -90,6 +90,7 @@ function CardForm(props) {
                                         placeholder="Choose the name of your card"
                                         isInvalid={touched.p_name && errors.p_name}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.p_name} </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
 
@@ -104,6 +105,7 @@ function CardForm(props) {
                                         onChange={handleChange}
                                         isInvalid={touched.amount && errors.amount}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.amount} </Form.Control.Feedback>
                                 </Col>
                                 <Col md={3} sm={3} xs={3}>
                                     <Form.Control
@@ -132,6 +134,7 @@ function CardForm(props) {
                                         placeholder="Enter the bank"
                                         isInvalid={touched.bank && errors.bank}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.bank} </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
 
@@ -146,6 +149,7 @@ function CardForm(props) {
                                         placeholder="XXXX XXXX XXXX XXXX"
                                         isInvalid={touched.card_no && errors.card_no}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.card_no} </Form.Control.Feedback>
                                 </Col>
                                 <Col md={2} sm={2} xs={2} style={{ padding: "0px 15px 0px 0px" }}>
                                     <Form.Control
@@ -170,6 +174,7 @@ function CardForm(props) {
                                         onChange={handleChange}
                                         isInvalid={touched.valid_m && errors.valid_m}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.valid_m} </Form.Control.Feedback>
                                 </Col>
                                 <Col md={5} sm={5} xs={5}>
                                     <Form.Control
@@ -180,6 +185,7 @@ function CardForm(props) {
                                         onChange={handleChange}
                                         isInvalid={touched.valid_y && errors.valid_y}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.valid_y} </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
 
@@ -193,6 +199,7 @@ function CardForm(props) {
                                         placeholder="Enter the card holder name"
                                         isInvalid={touched.card_holder && errors.card_holder}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.card_holder} </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
 

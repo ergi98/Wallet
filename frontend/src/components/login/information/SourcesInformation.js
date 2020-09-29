@@ -14,6 +14,7 @@ import { nanoid } from 'nanoid'
 
 function SourcesInformation(props) {
     const [newSource, setNewSource] = useState('')
+    const [srcValid, setSrcValid] = useState(false)
     const [sources, setSources] = useState(
         props.info.sources ||
         [
@@ -26,18 +27,26 @@ function SourcesInformation(props) {
 
     function addSource() {
         if(newSource !== '') {
-            let tempSrc = {
-                source_id: nanoid(10), 
-                source_name: newSource, 
-                count: 0,
-                amount_earned: 0, 
-                last_spent: null
+            let res = sources.findIndex(src => src.source_name.toLowerCase() === newSource.toLowerCase())
+
+            // If this category doesnt already exist
+            if(res === -1) {
+                setSrcValid(false)
+                let tempSrc = {
+                    source_id: nanoid(10), 
+                    source_name: newSource, 
+                    count: 0,
+                    amount_earned: 0, 
+                    last_spent: null
+                }
+                
+                let temp = sources
+                temp.unshift(tempSrc)
+                setSources(temp)
+                setNewSource('')
             }
-            
-            let temp = sources
-            temp.unshift(tempSrc)
-            setSources(temp)
-            setNewSource('')
+            else
+                setSrcValid(true)
         }
     }
 
@@ -63,15 +72,17 @@ function SourcesInformation(props) {
                 </label>
             </section>
             <div className="add-category">
-                <Form.Group>
+                <Form.Group className="category-form-group">
                     <Form.Label className="form-label">Source</Form.Label>
                     <Form.Control
                         className="input-field"
                         type="string"
                         placeholder="Enter Source"
+                        value={newSource}
                         onChange={(event) => setNewSource(event.target.value)}
+                        isInvalid={srcValid}
                     />
-                    <Form.Control.Feedback type="invalid"> Please provide a valid source. </Form.Control.Feedback> 
+                    <Form.Control.Feedback type="invalid"> Source already exists! </Form.Control.Feedback> 
                 </Form.Group>
                 <Button variant="primary" className="portfolio-plus-btn" onClick={addSource}>
                     <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '-5px', marginTop: '6px' } }}>

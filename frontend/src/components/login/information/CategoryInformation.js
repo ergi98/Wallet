@@ -15,6 +15,7 @@ import { nanoid } from 'nanoid'
 function CategoryInformation(props) {
 
     const [newCategory, setNewCategory] = useState('')
+    const [catValid, setCatValid] = useState(false)
     const [categories, setCategories] = useState(
         props.info.categories ||
         [
@@ -31,18 +32,25 @@ function CategoryInformation(props) {
 
     function addCategory() {
         if(newCategory !== '') {
-            let tempCat = {
-                cat_id: nanoid(10), 
-                cat_name: newCategory, 
-                count: 0,
-                amnt_spent: 0, 
-                last_spent: null
+            let res = categories.findIndex(cat => cat.cat_name.toLowerCase() === newCategory.toLowerCase())
+
+            // If this category doesnt already exist
+            if(res === -1) {
+                setCatValid(false)
+                let tempCat = {
+                    cat_id: nanoid(10), 
+                    cat_name: newCategory, 
+                    count: 0,
+                    amnt_spent: 0, 
+                    last_spent: null
+                }
+                let temp = categories
+                temp.unshift(tempCat)
+                setCategories(temp)
+                setNewCategory('')
             }
-            
-            let temp = categories
-            temp.unshift(tempCat)
-            setCategories(temp)
-            setNewCategory('')
+            else
+                setCatValid(true)
         }
     }
 
@@ -68,15 +76,17 @@ function CategoryInformation(props) {
                 </label>
             </section>
             <div className="add-category">
-                <Form.Group>
+                <Form.Group className="category-form-group">
                     <Form.Label className="form-label">Category</Form.Label>
                     <Form.Control
                         className="input-field"
                         type="string"
                         placeholder="Enter Category"
+                        value={newCategory}
                         onChange={(event) => setNewCategory(event.target.value)}
+                        isInvalid={catValid}
                     />
-                    <Form.Control.Feedback type="invalid"> Please provide a valid category. </Form.Control.Feedback> 
+                    <Form.Control.Feedback type="invalid"> Category already exists! </Form.Control.Feedback> 
                 </Form.Group>
                 <Button variant="primary" className="portfolio-plus-btn" onClick={addCategory}>
                     <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '-5px', marginTop: '6px' } }}>

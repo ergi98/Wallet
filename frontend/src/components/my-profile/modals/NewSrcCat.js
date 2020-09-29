@@ -29,8 +29,8 @@ function NewSrcCat(props) {
     const [catSrcError, setCatSrcError] = useState(false)
 
     // Establish the validation schema
-    const pwd_schema = yup.object({
-        name: yup.string().required().matches(/^[a-zA-Z0-9& ]*$/).max(30),
+    const srcCatSchema = yup.object({
+        name: yup.string().required("Name is required!").matches(/^[a-zA-Z0-9&\s]+$/, { message: "Only & and alphanumeric characters!"} ).max(30, "Maximum is 30 characters!"),
     })
 
     async function addNewSrcCat(event) {
@@ -87,7 +87,7 @@ function NewSrcCat(props) {
                     A problem occured while trying to insert new {props.type.toLowerCase()}.
                 </Alert>
                 <Formik
-                    validationSchema={pwd_schema}
+                    validationSchema={srcCatSchema}
                     onSubmit={addNewSrcCat}
                     initialValues={{
                         name: ''
@@ -115,8 +115,8 @@ function NewSrcCat(props) {
                                             onChange={handleChange}
                                             isInvalid={touched.name && errors.name}
                                         />
+                                        <Form.Control.Feedback type="invalid"> {errors.name} </Form.Control.Feedback>
                                     </Col>
-                                    <Form.Control.Feedback type="invalid"> Please provide your old password. </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Row className="btn-row">

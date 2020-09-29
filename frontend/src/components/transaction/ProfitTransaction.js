@@ -7,18 +7,15 @@ import ProfitForm from './ProfitForm'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
 
 function ProfitTransaction() {
     return (
         <Layout>
-            <Container className="transaction-container">
-                <Container className="pad-container">
-                    <Row className="title">
-                        <h4>Register Profit</h4>
-                    </Row>
-                    <ProfitForm/>
-                </Container>
+            <Container className="pad-container">
+                <div className="title">
+                    <h4>Register Profit</h4>
+                </div>
+                <ProfitForm/>
             </Container>
         </Layout>
     )

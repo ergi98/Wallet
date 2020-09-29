@@ -25,8 +25,8 @@ import PropTypes from 'prop-types'
 
 // Establish the validation schema
 const schema = yup.object({
-    username: yup.string().required().matches(/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm),
-    password: yup.string().required()
+    username: yup.string().required("Username is required!").matches(/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,15}$/igm, { message: "Username format is not correct!" }),
+    password: yup.string().required("Password is required").min(4, "Password must be more than 4 characters!").max(15, "Password can't be more than 15 characters!")
 });
 
 class Login extends React.Component {
@@ -125,7 +125,7 @@ class Login extends React.Component {
                                                     onChange={handleChange}
                                                     isInvalid={touched.username && errors.username}
                                                 />
-                                                <Form.Control.Feedback type="invalid"> Please provide a username. </Form.Control.Feedback>
+                                                <Form.Control.Feedback type="invalid"> {errors.username} </Form.Control.Feedback>
                                             </Form.Group>
 
                                             <Form.Group controlId="password">
@@ -138,7 +138,7 @@ class Login extends React.Component {
                                                     value={values.password}
                                                     isInvalid={touched.password && errors.password}
                                                 />
-                                                <Form.Control.Feedback type="invalid"> Please provide a password. </Form.Control.Feedback>
+                                                <Form.Control.Feedback type="invalid"> {errors.password} </Form.Control.Feedback>
                                             </Form.Group>
                                             <Form.Row className="btn-row">
                                                 {!this.state.isSubmitting ?

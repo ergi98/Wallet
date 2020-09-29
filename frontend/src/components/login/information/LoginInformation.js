@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 // Form Validation
 import * as yup from "yup"
@@ -9,14 +9,40 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 
-// Establish the validation schema
-const schema = yup.object({
-    username: yup.string().required().matches(/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm),
-    password: yup.string().required().min(4).max(15),
-    confirm: yup.string().required().min(4).max(15).oneOf([yup.ref('password')])
-})
+// Axios
+import axios from 'axios'
 
 function LoginInformation(props) {
+
+    const [usernames, setUsernames] = useState([])
+
+    // Establish the validation schema
+    const schema = yup.object({
+        username: yup.string().required("Username is required!").matches(/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,15}$/igm, { message: "Username format is not correct!" }).notOneOf(usernames, "This username already exists!"),
+        password: yup.string().required("Password is required!").min(4, "Password must be more than 4 characters!").max(15, "Password can't be more than 15 characters!"),
+        confirm: yup.string().required("Please confirm your passsword!").min(4).max(15).oneOf([yup.ref('password')], "Passwords must match!")
+    })
+
+    async function getUsernames() {
+        try {
+            let res = await axios.get('/users/used-usernames')
+            let temp = res.data.result.map(res => { return res.username })
+            setUsernames(temp)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        let _isMounted = true
+
+        _isMounted && getUsernames()
+        return () => {
+            _isMounted = false
+        }
+    }, [])
+
     // TODO : VALIDATE THAT THE USERNAME IS UNIQUE
     let initial = {
         username: props.info.username || '',
@@ -51,7 +77,7 @@ function LoginInformation(props) {
                     handleSubmit,
                     handleChange,
                     isSubmitting,
-                    values,
+                    values, 
                     touched,
                     errors
                 }) => (
@@ -66,7 +92,7 @@ function LoginInformation(props) {
                                     onChange={handleChange}
                                     isInvalid={touched.username && errors.username}
                                 />
-                                <Form.Control.Feedback type="invalid"> Please provide a username. </Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid"> {errors.username} </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group controlId="password">
@@ -79,7 +105,7 @@ function LoginInformation(props) {
                                     value={values.password}
                                     isInvalid={touched.password && errors.password}
                                 />
-                                <Form.Control.Feedback type="invalid"> Please provide a password. </Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid"> {errors.password} </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group controlId="confirm">
@@ -92,7 +118,7 @@ function LoginInformation(props) {
                                     onChange={handleChange}
                                     isInvalid={touched.confirm && errors.confirm}
                                 />
-                                <Form.Control.Feedback type="invalid"> Please provide a matching confirm. </Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid"> {errors.confirm} </Form.Control.Feedback>
                             </Form.Group>
 
 

@@ -14,13 +14,12 @@ import { parse, compareAsc } from 'date-fns'
 
 // Establish the validation schema
 const schema = yup.object({
-    name: yup.string().required(),
-    surname: yup.string().required(),
-    age: yup.number().min(1).max(99),
-    gender: yup.string().required().notOneOf(["default"]),
-    birthday: yup.string().required().transform(validateDate),
-    profession: yup.string().required(),
-    pref_curr: yup.string().required().notOneOf(["default"])
+    name: yup.string().required("Firstname is required!").matches(/^[a-zA-Z]+$/g, { message: "Can only contain alphabetical characters" }).min(2, "Must be more than 2 characters!").max(15, "Must be less than 15 characters!"),
+    surname: yup.string().required("Surname is required!").matches(/^[a-zA-Z]+$/g, { message: "Can only contain alphabetical characters" }).min(2, "Must be more than 2 characters!").max(20, "Must be less than 20 characters!"),
+    gender: yup.string().required("Required!").notOneOf(["default"], "Required!"),
+    birthday: yup.string().required("Date is required!").transform(validateDate),
+    profession: yup.string().required("Profession is required!").matches(/^[a-zA-Z\s]+$/g, { message: "Can only contain alphabetical characters and spaces" }).min(2, "Must be more than 2 characters!").max(30, "Must be less than 30 characters!"),
+    pref_curr: yup.string().required("Required!").notOneOf(["default"], "Required!")
 })
 
 function PersonalInformation(props) {
@@ -73,7 +72,7 @@ function PersonalInformation(props) {
                                     onChange={handleChange}
                                     isInvalid={touched.name && errors.name}
                                 />
-                                <Form.Control.Feedback type="invalid"> Please provide a valid name. </Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid"> {errors.name} </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group controlId="surname">
@@ -86,7 +85,7 @@ function PersonalInformation(props) {
                                     value={values.surname}
                                     isInvalid={touched.surname && errors.surname}
                                 />
-                                <Form.Control.Feedback type="invalid"> Please provide a valid surname. </Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid"> {errors.surname}  </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="double-field">
@@ -135,7 +134,7 @@ function PersonalInformation(props) {
                                     value={values.birthday}
                                     isInvalid={touched.birthday && errors.birthday}
                                 />
-                                <Form.Control.Feedback type="invalid"> Please provide a valid birthday. </Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid"> {errors.birthday} </Form.Control.Feedback>
                             </Form.Group>
 
                             
@@ -150,7 +149,7 @@ function PersonalInformation(props) {
                                     onChange={handleChange}
                                     isInvalid={touched.profession && errors.profession}
                                 />
-                                <Form.Control.Feedback type="invalid"> Please provide a valid profession. </Form.Control.Feedback> 
+                                <Form.Control.Feedback type="invalid"> {errors.profession} </Form.Control.Feedback> 
                             </Form.Group>
 
                             <Form.Row className="signup-buttons">

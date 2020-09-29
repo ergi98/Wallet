@@ -23,9 +23,9 @@ import { IconContext } from "react-icons"
 import { BiWallet } from 'react-icons/bi'
 
 const wallet_schema = yup.object({
-    p_name: yup.string().required().matches(/[a-zA-Z0-9\s]+/),
+    p_name: yup.string().required("Portfolio name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message: "Only spaces and alphanumberic characters!" }),
     currency: yup.string().required(),
-    amount: yup.string().required().matches(/^[0-9]+[.]?[0-9]+$/)
+    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!" })
 })
 
 function WalletForm(props) {
@@ -33,15 +33,15 @@ function WalletForm(props) {
     async function addPortfolio(event) {
         event.p_id = nanoid(10)
         event.type = "wallet"
-        
-        if(props.caller==="portfolio") {
+
+        if (props.caller === "portfolio") {
             try {
-                await axios.post('users/add-portfolio', { username: props.username, portfolio: event})
+                await axios.post('users/add-portfolio', { username: props.username, portfolio: event })
                 props.setStatus("success")
             }
-            catch(err) {
+            catch (err) {
                 props.setStatus("error")
-            }  
+            }
         }
         else {
             props.setPortfolio(event)
@@ -80,6 +80,7 @@ function WalletForm(props) {
                                         placeholder="Choose the name of your wallet"
                                         isInvalid={touched.p_name && errors.p_name}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.p_name}  </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
 
@@ -94,6 +95,7 @@ function WalletForm(props) {
                                         onChange={handleChange}
                                         isInvalid={touched.amount && errors.amount}
                                     />
+                                    <Form.Control.Feedback type="invalid"> {errors.amount}  </Form.Control.Feedback>
                                 </Col>
                                 <Col md={3} sm={3} xs={3}>
                                     <Form.Control
@@ -130,8 +132,6 @@ function WalletForm(props) {
                         </Form>
                     )
             }
-
-
         </Formik>
     )
 }

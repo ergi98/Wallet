@@ -34,8 +34,8 @@ function DeletePortfolio(props) {
                 transfer_amnt: props.portfolio.amount.$numberDecimal,
                 transfer_id: selectedPortfolio 
             })
-            props.setDeleteStatus("success")
             props.onClose()
+            props.setDeleteStatus("success", props.portfolio, selectedPortfolio)
         }
         catch(err) {
             props.setDeleteStatus("error")

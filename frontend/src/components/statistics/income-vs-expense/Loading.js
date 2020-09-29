@@ -10,7 +10,7 @@ function Loading() {
         <Container className="income-vs-expense loading-screen">
             <div className="loading">
                 <Spinner as="span" animation="border" size="lg" role="status" aria-hidden="true" />
-                <label>Loading Chart ...</label>
+                <label>Loading ...</label>
             </div>
             
         </Container>

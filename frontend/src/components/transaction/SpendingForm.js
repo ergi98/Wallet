@@ -34,17 +34,17 @@ import PropTypes from 'prop-types'
 
 // Establish the validation schema
 const transaction_schema = yup.object({
-    date: yup.string().required().transform(parseDate),
-    hours: yup.string().required().max(2),
-    minutes: yup.string().required().max(2),
+    date: yup.string().required("Date is required!").transform(parseDate),
+    hours: yup.string().required("Required!").max(2, "Invalid Format!"),
+    minutes: yup.string().required("Required!").max(2, "Invalid Format!"),
     long: yup.string(),
     lat: yup.string(),
-    amount: yup.string().required().matches(/^[0-9]+[.]?[0-9]+$/).notOneOf(["0"]),
+    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!" }).notOneOf(["0"], "Can not be 0!"),
     currency: yup.string().required(),
-    portfolio: yup.string().required().notOneOf(["Choose portfolio to withdraw ..."]),
-    category: yup.string().required().notOneOf(["Choose category of expense ..."]),
-    description: yup.string().required().max(30).matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/),
-    long_desc: yup.string().notRequired().max(100).matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/)
+    portfolio: yup.string().required("Portfolio is required!").notOneOf(["Choose portfolio to withdraw ..."], "Please select a portfolio!"),
+    category: yup.string().required("Category is required!").notOneOf(["Choose category of expense ..."], "Please select an expense category!"),
+    description: yup.string().required("Please provide a short description!").max(40, "Maximum is 40 characters!").matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/, { message: "Only numbers, characters, '_' '.' and ',' allowed!"}),
+    long_desc: yup.string().notRequired().max(100, "Maximum is 100 characters!").matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/, { message: "Only numbers, characters, '_' '.' and ',' allowed!"})
 });
 
 function parseDate(value, originalValue) {
@@ -194,7 +194,7 @@ class SpendingForm extends Component {
                         setFieldValue
                     }) => (
                             <Form noValidate onSubmit={handleSubmit} id="transaction-form">
-                                <Form.Group as={Row} controlId="date" className="align-items-center">
+                                <Form.Group as={Row} controlId="date">
                                     <Form.Label column md={3} sm={3} xs={3} > Date </Form.Label>
                                     <Col md={6} sm={6} xs={6} style={{ padding: "0px" }}>
                                         <Form.Control
@@ -205,6 +205,7 @@ class SpendingForm extends Component {
                                             isInvalid={touched.date && errors.date}
                                             readOnly={this.state.isDateChecked}
                                         />
+                                        <Form.Control.Feedback type="invalid"> {errors.date}  </Form.Control.Feedback>
                                     </Col>
                                     <Col md={3} sm={3} xs={3}>
                                         <Form.Check type="checkbox" label="Auto" onChange={(event) => {
@@ -224,7 +225,7 @@ class SpendingForm extends Component {
                                     </Col>
                                 </Form.Group>
 
-                                <Form.Group as={Row} className="align-items-center">
+                                <Form.Group as={Row}>
                                     <Form.Label column md={3} sm={3} xs={3} > Time </Form.Label>
                                     <Col md={3} sm={3} xs={3} style={{ padding: "0px" }}>
                                         <Form.Control
@@ -236,6 +237,7 @@ class SpendingForm extends Component {
                                             isInvalid={touched.hours && errors.hours}
                                             readOnly={this.state.isTimeChecked}
                                         />
+                                        <Form.Control.Feedback type="invalid"> {errors.hours}  </Form.Control.Feedback>
                                     </Col>
                                     <Col md="auto" sm="auto" xs="auto" style={{ padding: "0px 5px" }}> : </Col>
                                     <Col md={3} sm={3} xs={3} style={{ padding: "0px" }}>
@@ -248,6 +250,7 @@ class SpendingForm extends Component {
                                             isInvalid={touched.minutes && errors.minutes}
                                             readOnly={this.state.isTimeChecked}
                                         />
+                                        <Form.Control.Feedback type="invalid"> {errors.minutes}  </Form.Control.Feedback>
                                     </Col>
                                     <Col md={2} sm={2} xs={2}>
                                         <Form.Check type="checkbox" id="time" label="Auto" onChange={(event) => {
@@ -298,7 +301,7 @@ class SpendingForm extends Component {
                                             disabled={this.state.isLocationChecked}
                                         >
                                             Choose
-                                    <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-7px' } }}>
+                                            <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-7px' } }}>
                                                 <FaMapMarkedAlt />
                                             </IconContext.Provider>
                                         </Button>
@@ -325,7 +328,7 @@ class SpendingForm extends Component {
                                     </Col>
                                 </Form.Group>
 
-                                <Form.Group as={Row} className="align-items-center">
+                                <Form.Group as={Row}>
                                     <Form.Label column md={3} sm={3} xs={3}> Amount </Form.Label>
                                     <Col md={6} sm={6} xs={6} style={{ padding: "0" }}>
                                         <Form.Control
@@ -336,6 +339,7 @@ class SpendingForm extends Component {
                                             onChange={handleChange}
                                             isInvalid={touched.amount && errors.amount}
                                         />
+                                        <Form.Control.Feedback type="invalid"> {errors.amount} </Form.Control.Feedback>
                                     </Col>
                                     <Col md={3} sm={3} xs={3}>
                                         <Form.Control
@@ -354,7 +358,7 @@ class SpendingForm extends Component {
                                     </Col>
                                 </Form.Group>
 
-                                <Form.Group as={Row} controlId="portfolio" className="align-items-center">
+                                <Form.Group as={Row} controlId="portfolio">
                                     <Form.Label column md={3} sm={3} xs={3}> Portfolio </Form.Label>
                                     <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
                                         <Form.Control
@@ -377,10 +381,11 @@ class SpendingForm extends Component {
                                                 )
                                             }
                                         </Form.Control>
+                                        <Form.Control.Feedback type="invalid"> {errors.portfolio} </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
 
-                                <Form.Group as={Row} controlId="category" className="align-items-center">
+                                <Form.Group as={Row} controlId="category">
                                     <Form.Label column md={3} sm={3} xs={3}> Category </Form.Label>
                                     <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
                                         <Form.Control
@@ -403,10 +408,11 @@ class SpendingForm extends Component {
                                                 )
                                             }
                                         </Form.Control>
+                                        <Form.Control.Feedback type="invalid"> {errors.category} </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
 
-                                <Form.Group as={Row} controlId="description" className="align-items-center">
+                                <Form.Group as={Row} controlId="description">
                                     <Form.Label column md={3} sm={3} xs={3}> Description </Form.Label>
                                     <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
                                         <Form.Control
@@ -416,10 +422,11 @@ class SpendingForm extends Component {
                                             onChange={handleChange}
                                             isInvalid={touched.description && errors.description}
                                         />
+                                        <Form.Control.Feedback type="invalid"> {errors.description} </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
 
-                                <Form.Group as={Container} controlId="long_desc" className="align-items-center" style={{ padding: "0px" }}>
+                                <Form.Group as={Container} controlId="long_desc" style={{ padding: "0px" }}>
                                     <Form.Label> Detailed Description </Form.Label>
                                     <Col style={{ padding: "0px 0px 0px 0px" }}>
                                         <Form.Control
@@ -432,6 +439,7 @@ class SpendingForm extends Component {
                                             onChange={handleChange}
                                             isInvalid={touched.long_desc && errors.long_desc}
                                         />
+                                        <Form.Control.Feedback type="invalid"> {errors.long_desc} </Form.Control.Feedback>
                                     </Col>
                                 </Form.Group>
 

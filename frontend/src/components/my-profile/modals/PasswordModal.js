@@ -22,9 +22,9 @@ function PasswordModal(props) {
     const username = useSelector((state) => state.user.username)
     // Establish the validation schema
     const pwd_schema = yup.object({
-        old_pass: yup.string().required(),
-        new_password: yup.string().required().min(4).max(15),
-        confirm_pass: yup.string().required().min(4).max(15).oneOf([yup.ref('new_password')])
+        old_pass: yup.string().required("Old password is required!").min(4, "Password must be more than 4 characters!").max(15, "Password can't be more than 15 characters!"),
+        new_password: yup.string().required("Password is required!").min(4, "Password must be more than 4 characters!").max(15, "Password can't be more than 15 characters!"),
+        confirm_pass: yup.string().required("Confirm is required!").min(4, "Password must be more than 4 characters!").max(15, "Password can't be more than 15 characters!").oneOf([yup.ref('new_password')], "Passwords do not match!")
     })
 
     async function updatePassword(event) {
@@ -78,7 +78,7 @@ function PasswordModal(props) {
                                         onChange={handleChange}
                                         isInvalid={touched.old_pass && errors.old_pass}
                                     />
-                                    <Form.Control.Feedback type="invalid"> Please provide your old password. </Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid"> {errors.old_pass} </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Group controlId="new_password">
@@ -91,7 +91,7 @@ function PasswordModal(props) {
                                         value={values.new_password}
                                         isInvalid={touched.new_password && errors.new_password}
                                     />
-                                    <Form.Control.Feedback type="invalid"> Please provide a valid password. Between 7 and 15 characters </Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid"> {errors.new_password} </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Group controlId="confirm_pass">
@@ -104,7 +104,7 @@ function PasswordModal(props) {
                                         value={values.confirm_pass}
                                         isInvalid={touched.confirm_pass && errors.confirm_pass}
                                     />
-                                    <Form.Control.Feedback type="invalid"> Please provide a valid password. Between 7 and 15 characters </Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid"> {errors.confirm_pass} </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Row className="btn-row">
@@ -112,12 +112,7 @@ function PasswordModal(props) {
                                         <Button
                                             className="psw-btn"
                                             variant="primary"
-                                            disabled={
-                                                isSubmitting || 
-                                                values.new_password !== values.confirm_pass ||
-                                                values.new_password === '' ||
-                                                values.confirm_pass === ''
-                                            }
+                                            disabled={ isSubmitting }
                                             form="pswd-form"
                                             type="submit"
                                         >

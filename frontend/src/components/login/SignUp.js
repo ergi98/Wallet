@@ -23,7 +23,7 @@ import axios from 'axios'
 
 function SignUp() {
 
-    const [activeStep, setActiveStep] = useState(0)
+    const [activeStep, setActiveStep] = useState(2)
     const [info, setInfo] = useState({})
 
     const [success, setSuccess] = useState(false)

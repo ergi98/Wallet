@@ -123,6 +123,18 @@ class UsersController {
         }
     }
 
+    static async getUsedNames(req, res) {
+        try {
+            let result = await UsersDAO.getUsedNames()
+
+            res.json({ result })
+        }
+        catch (e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
+    
     static async registerUser(req, res) {
         try {
             let { userData } = req.body

@@ -47,6 +47,25 @@ class UsersDAO {
     return await users.findOne({ username })
   }
 
+  static async getUsedNames() {
+    try {
+      let pipeline = [
+        {
+          $project: {
+            _id: 0,
+            username: 1
+          }
+        }
+      ]
+
+      return await users.aggregate(pipeline).toArray()
+    }
+    catch(e) {
+      console.log(`Error occurred while getting used usernames, ${e}`)
+      return { error: e }
+    }
+  }
+
   static async getUserPassword(username) {
     let pipeline = [
       {

@@ -5,6 +5,7 @@ import './Portfolios.scss'
 import Layout from '../layout/Layout'
 import Portfolio from './Portfolio'
 import PortfolioModal from './modals/PortfolioModal'
+import Loading from '../statistics/income-vs-expense/Loading'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
@@ -32,6 +33,8 @@ function Portfolios() {
     const [showPortfolioError, setPortfolioError] = useState(false)
     const [showPortfolioSuccess, setPortfolioSuccess] = useState(false)
 
+    const [isLoading, setIsLoading] = useState(true)
+
     const [favSuccess, setFavSuccess] = useState(false)
     const [favError, setFavError] = useState(false)
 
@@ -41,7 +44,7 @@ function Portfolios() {
     useEffect(() => {
         let _isMounted = true
 
-        _isMounted && dispatch(getPortfolios({ username })).then(res => setPortfolios(res))
+        _isMounted && dispatch(getPortfolios({ username })).then(res => { setPortfolios(res); setIsLoading(false)})
 
         return () => {
             // Clean up the subscription
@@ -56,7 +59,8 @@ function Portfolios() {
 
     function addPortfolioStatus(status) {
         if(status === "success") {
-            dispatch(getPortfolios({ username })).then(res => setPortfolios(res))
+            setIsLoading(true)
+            dispatch(getPortfolios({ username })).then(res => { setPortfolios(res); setIsLoading(false) })
             setPortfolioSuccess(true)
             setTimeout(() => { setPortfolioSuccess(false)}, 2500);
         }
@@ -66,9 +70,31 @@ function Portfolios() {
         }
     }
 
-    function setFavStatus(status) {
+    function setFavStatus(status, portfolio) {
         if(status === "success") {
-            dispatch(getPortfolios({ username })).then(res => setPortfolios(res))
+            // If this is to be the new favourite portfolio
+            if(portfolio.favourite) {
+                // Unfavourite the previous portfolio
+                let temp = portfolios
+                temp.forEach(tmp => {
+                    // Favourite the new portfolio
+                    if(tmp.p_id === portfolio.p_id)
+                        tmp.favourite = portfolio.favourite
+                    else if(tmp.p_id !== portfolio.p_id && tmp.favourite)
+                        tmp.favourite = !tmp.favourite
+                })
+
+                setPortfolios(temp)
+            }
+            // If you only need to remove the favourite status
+            else {
+                let temp = portfolios
+                temp.forEach(tmp => {
+                    // Favourite the new portfolio
+                    if(tmp.favourite)
+                        tmp.favourite = !tmp.favourite 
+                })
+            }
             setFavSuccess(true)
             setTimeout(() => { setFavSuccess(false)}, 2500);
         }
@@ -78,9 +104,22 @@ function Portfolios() {
         }
     }
 
-    function setDeleteStatus(status) {
+    function setDeleteStatus(status, portfolio, transfer_id) {
         if(status === "success") {
-            dispatch(getPortfolios({ username })).then(res => setPortfolios(res))
+            let temp = portfolios
+
+            // Deleting the portfolio
+            temp = temp.filter(tmp => { return tmp.p_id !== portfolio.p_id  })
+
+            // Transfering amount if a recieving portfolio is defined
+            if(transfer_id !== "default") {
+                let index = temp.findIndex(tmp => tmp.p_id === transfer_id)
+                let currAmnt = parseInt(temp[index].amount.$numberDecimal)
+                let addAmnt = parseInt(portfolio.amount.$numberDecimal)
+                temp[index].amount.$numberDecimal = (currAmnt + addAmnt).toString()
+            }
+
+            setPortfolios(temp)
             setDeleteSuccess(true)
             setTimeout(() => { setDeleteSuccess(false) }, 2500)
         }
@@ -128,16 +167,26 @@ function Portfolios() {
                 </Button>
 
                 {
-                    portfolios === undefined? null :
-                    portfolios.map(portfolio => 
-                        <Portfolio 
-                            key={portfolio.p_id} 
-                            portfolio = { portfolio } 
-                            setFavStatus={setFavStatus} 
-                            setDeleteStatus={setDeleteStatus}   
-                        />
-                    ) 
+                    portfolios.length >= 1 && !isLoading? 
+                        portfolios.map(portfolio => 
+                            <Portfolio 
+                                key={portfolio.p_id} 
+                                portfolio = { portfolio } 
+                                setFavStatus={setFavStatus} 
+                                setDeleteStatus={setDeleteStatus}   
+                            />
+                        ) 
+                        :
+                        null
                 }
+                {
+                    portfolios.length < 1 && !isLoading?
+                    <div className="no-transactions">
+                        <label className="title-label">You have no portfolios!</label><br/>
+                        <label className="sub-label">Insert a new portfolio by clicking the button above. Without a portfolio you can not record a spending or an earning!</label>
+                    </div> : null
+                }
+                { isLoading? <Loading/> : null }
             </Container>
             <PortfolioModal 
                 caller="portfolio"

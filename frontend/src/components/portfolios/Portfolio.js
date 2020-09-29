@@ -43,7 +43,7 @@ function Portfolio(props) {
 
         try {
             await axios.post('/users/change-portfolio-fav', { username, portfolio })
-            props.setFavStatus("success")
+            props.setFavStatus("success", portfolio)
         }
         catch(err) {
             props.setFavStatus("error")

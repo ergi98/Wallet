@@ -5,6 +5,7 @@ import axios from 'axios'
 
 // Components
 import Card from '../card/Card'
+import SmallLoading from './SmallLoading'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
@@ -36,7 +37,8 @@ class TodayRecap extends React.Component {
             today_earnings: 0,
             yesterday_earnings: 0,
             s_comp: 0,
-            e_comp: 0
+            e_comp: 0,
+            isLoading: true
         }
 
     }
@@ -86,9 +88,9 @@ class TodayRecap extends React.Component {
             yesterday_earnings: y_earnings,
             amount: amount,
             e_comp,
-            s_comp
+            s_comp,
+            isLoading: false
         })
-
     }
 
     render() {
@@ -99,12 +101,17 @@ class TodayRecap extends React.Component {
                         <Col className="spendings-col">
                             <span>Spendings</span>
                             <span className="s-tot">
-                                <NumberFormat 
-                                    value={this.state.today_spendings} 
-                                    displayType={'text'} 
-                                    thousandSeparator={true} 
-                                    prefix={' ' + this.props.currency + ' ' } 
-                                />    
+                                {
+                                    this.state.isLoading?
+                                        <SmallLoading/>
+                                        :
+                                        <NumberFormat 
+                                            value={this.state.today_spendings} 
+                                            displayType={'text'} 
+                                            thousandSeparator={true} 
+                                            prefix={' ' + this.props.currency + ' ' } 
+                                        /> 
+                                }
                             </span>
                             <span className="comp">
                                 {this.state.s_comp}%
@@ -113,12 +120,17 @@ class TodayRecap extends React.Component {
                         <Col className="earnings-col">
                             <span>Earnings</span>
                             <span className="e-tot">
-                                <NumberFormat 
-                                    value={this.state.today_earnings}
-                                    displayType={'text'} 
-                                    thousandSeparator={true} 
-                                    prefix={this.props.currency + ' ' } 
-                                />
+                                {
+                                    this.state.isLoading?
+                                        <SmallLoading/>
+                                        :
+                                        <NumberFormat 
+                                            value={this.state.today_earnings}
+                                            displayType={'text'} 
+                                            thousandSeparator={true} 
+                                            prefix={this.props.currency + ' ' } 
+                                        />
+                                }
                             </span>
                             <span className="comp">
                                 {this.state.e_comp}%
@@ -128,12 +140,17 @@ class TodayRecap extends React.Component {
                     <Row className="total-row">
                         <span>Available Amount: </span>
                         <span className="tot-sum">
-                            <NumberFormat 
-                                value={this.state.amount}
-                                displayType={'text'} 
-                                thousandSeparator={true} 
-                                prefix={this.props.currency + ' ' } 
-                            />
+                            {
+                                this.state.isLoading?
+                                    <SmallLoading/>
+                                    :
+                                    <NumberFormat 
+                                        value={this.state.amount}
+                                        displayType={'text'} 
+                                        thousandSeparator={true} 
+                                        prefix={this.props.currency + ' ' } 
+                                    />
+                            }
                         </span>
                     </Row>
                 </Container>

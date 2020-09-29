@@ -7,6 +7,8 @@ import DeleteModal from './modals/DeleteModal'
 import PasswordModal from './modals/PasswordModal'
 import IncomeSources from './IncomeSources'
 import ExpenseCategories from './ExpenseCategories'
+import InlineLoading from './InlineLoading'
+import SmallLoading from '../home/SmallLoading'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
@@ -39,6 +41,8 @@ function MyProfile() {
     const [pwdSuccess, setPwdSuccess] = useState(false)
     const [pwdError, setPwdError] = useState(false)
 
+    const [isLoading, setIsLoading] = useState(true)
+
     useEffect(() => {
         let _isMounted = true
         
@@ -48,9 +52,11 @@ function MyProfile() {
 
                 if (res.data.result.length > 0)
                     setUser(res.data.result[0])
+                setIsLoading(false)
             }
             catch (err) {
                 console.log(err)
+                setIsLoading(false)
             }
         }
 
@@ -84,10 +90,10 @@ function MyProfile() {
                         </Button>
                     </Row>
                     <Row>
-                        <label className="name">{user?.personal?.name} {user?.personal?.surname}</label>
+                        { isLoading? <SmallLoading/> : <label className="name">{user?.personal?.name} {user?.personal?.surname}</label> }
                     </Row>
                     <Row>
-                        <label className="occupation">{user?.personal?.profession}</label>
+                        { isLoading? null : <label className="occupation">{user?.personal?.profession}</label> }
                     </Row>
                 </Container>
                 <Row className="personal-row">
@@ -95,47 +101,51 @@ function MyProfile() {
                     <Col className="left-col" >
                         <Row>
                             <label className="desc">Name:</label>
-                            <label className="value">{user?.personal?.name}</label>
+                            { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.name}</label> }
                         </Row>
                         <Row>
                             <label className="desc">Age:</label>
-                            <label className="value">{user?.personal?.age}</label>
+                            { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.age}</label> }
                         </Row>
                         <Row>
                             <label className="desc">Gender:</label>
-                            <label className="value">
-                                {user?.personal?.gender === "M" ? "Male" : "Female"}
-                            </label>
+                            { 
+                                isLoading? 
+                                    <label className="value"><InlineLoading/></label> :
+                                    <label className="value">
+                                        {user?.personal?.gender === "M" ? "Male" : "Female"}
+                                    </label>
+                            }
                         </Row>
                     </Col>
                     <Col className="right-col">
                         <Row>
                             <label className="desc">Surname:</label>
-                            <label className="value">{user?.personal?.surname}</label>
+                            { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.surname}</label> }
                         </Row>
                         <Row>
                             <label className="desc">Birthday:</label>
-                            <label className="value">{user?.personal?.birthday}</label>
+                            { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.birthday}</label> }
                         </Row>
                     </Col>
                     <Container className="profession">
                         <label className="desc">Profession</label>
-                        <label className="value">{user?.personal?.profession}</label>
+                        { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.profession}</label> }
                     </Container>
                 </Row>
                 <Container className="general-container">
                     <div className="section-title">General Information</div>
                     <Row>
                         <label className="desc">Username:</label>
-                        <label className="value">{user?.username}</label>
+                        { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.username}</label> }
                     </Row>
                     <Row>
                         <label className="desc">Password:</label>
-                        <label className="value">********</label>
+                        { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">********</label> }
                     </Row>
                     <Row>
                         <label className="desc">Joined:</label>
-                        <label className="value">{user?.createdAt}</label>
+                        { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.createdAt}</label> }
                     </Row>
                     <Button variant="primary" className="action-btn" onClick={() => setPasswordModal(true)}>
                         Change Password
