@@ -7,6 +7,7 @@ import axios from 'axios'
 // Components 
 import Layout from '../layout/Layout'
 import DeleteModal from './DeleteModal'
+import Loading from '../statistics/income-vs-expense/Loading'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
@@ -40,7 +41,7 @@ function ViewMore({ match })  {
     const [transactions, setTransactions] = useState([])
 
     const [displayError, setError] = useState(false)
-    const [disabled, setDisabled] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [isInvalid, setInvalid] = useState(false)
 
     const [deleteTransaction, setDeleteTransaction] = useState([])
@@ -50,7 +51,7 @@ function ViewMore({ match })  {
     useEffect(() => {
         let _isMounted = true
         
-        _isMounted && setDisabled(true)
+        _isMounted && setIsLoading(true)
         
         async function getTransactions(username, date) {
             try {    
@@ -73,7 +74,7 @@ function ViewMore({ match })  {
                 }, 2500);
             }
             finally {
-                _isMounted && setDisabled(false)
+                _isMounted && setIsLoading(false)
             }
         }
 
@@ -101,8 +102,6 @@ function ViewMore({ match })  {
 
             if(parsedDate.toJSON !== null && res !== -1) {
                 setInvalid(false)
-                if(parsedDate.toLocaleDateString('en-GB') !== date.toLocaleDateString('en-GB'))
-                    setDate(parsedDate)
             }
             else
                 setInvalid(true)
@@ -125,6 +124,16 @@ function ViewMore({ match })  {
 
     function closeDelete() {
         setDelete(false)
+    }
+
+    function updateTransactions() {
+          // If the date entered by the user is not invalid
+          if(!isInvalid) {
+            let parsedDate = parse(displayedDate, 'dd/MM/yyyy', new Date())
+            // If user entered date is not the same as the current date
+            if(parsedDate.toLocaleDateString('en-GB') !== date.toLocaleDateString('en-GB'))
+                setDate(parsedDate)
+        }
     }
 
     function deleteStatus(status, transaction) {
@@ -154,7 +163,7 @@ function ViewMore({ match })  {
                 </Alert>
                 <Row className="date-row">
                     <Col className="left-btn" xs={3}>
-                        <Button variant="link" onClick={() => changeDate("decrement")} disabled={disabled}>
+                        <Button variant="link" onClick={() => changeDate("decrement")} disabled={isLoading}>
                             <IconContext.Provider value={{ size: "35", style: { verticalAlign: 'middle', marginTop: "-5px" } }}>
                                 <AiFillCaretLeft />
                             </IconContext.Provider> 
@@ -167,12 +176,14 @@ function ViewMore({ match })  {
                                 aria-label="Date"
                                 value={displayedDate}
                                 onChange={validateDate}
+                                onBlur={updateTransactions}
                                 isInvalid={isInvalid}
+                                readOnly={isLoading}
                             />
                         </InputGroup>
                     </Col>
                     <Col className="right-btn" xs={3}>
-                        <Button variant="link" onClick={() => changeDate("increment")} disabled={disabled || date.toLocaleDateString('en-GB') === new Date().toLocaleDateString('en-GB')}>
+                        <Button variant="link" onClick={() => changeDate("increment")} disabled={isLoading || date.toLocaleDateString('en-GB') === new Date().toLocaleDateString('en-GB')}>
                             <IconContext.Provider value={{ size: "35", style: { verticalAlign: 'middle', marginTop: "-5px" } }}>
                                 <AiFillCaretRight />
                             </IconContext.Provider> 
@@ -180,7 +191,7 @@ function ViewMore({ match })  {
                     </Col>
                 </Row>
                 {
-                    transactions.length > 0? 
+                    transactions.length > 0 && !isLoading? 
                         <Container className="more-transactions">
                             {   
                                 transactions.map(transaction => 
@@ -239,11 +250,16 @@ function ViewMore({ match })  {
                             }
                         </Container>
                         :
-                        <div className="no-transactions">
+                        null
+                }
+                {
+                    transactions.length === 0 && !isLoading?
+                    <div className="no-transactions">
                             <label className="title-label">There seem to be no transactions for the selected date.</label><br/>
                             <label className="sub-label">Please choose a different date.</label>
-                        </div>
+                    </div> : null 
                 }
+                { isLoading? <Loading/> : null}
             </Container>
             <DeleteModal 
                 show={showDeleteModal} 

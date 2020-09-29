@@ -31,14 +31,10 @@ function Portfolios() {
 
     const [showPortfolioModal, setPortfolioModal] = useState(false)
     const [showPortfolioError, setPortfolioError] = useState(false)
-    const [showPortfolioSuccess, setPortfolioSuccess] = useState(false)
 
     const [isLoading, setIsLoading] = useState(true)
 
-    const [favSuccess, setFavSuccess] = useState(false)
     const [favError, setFavError] = useState(false)
-
-    const [deleteSuccess, setDeleteSuccess] = useState(false)
     const [deleteError, setDeleteError] = useState(false)
 
     useEffect(() => {
@@ -57,12 +53,15 @@ function Portfolios() {
         setPortfolioModal(false)
     }
 
-    function addPortfolioStatus(status) {
+    function addPortfolioStatus(status, portfolio) {
         if(status === "success") {
-            setIsLoading(true)
-            dispatch(getPortfolios({ username })).then(res => { setPortfolios(res); setIsLoading(false) })
-            setPortfolioSuccess(true)
-            setTimeout(() => { setPortfolioSuccess(false)}, 2500);
+            let temp = portfolios.concat()
+            let amount = portfolio.amount
+            delete portfolio.amount
+            portfolio.amount = { $numberDecimal: amount }
+            console.log(portfolio)
+            temp.push(portfolio)
+            setPortfolios(temp)
         }
         else {
             setPortfolioError(true)
@@ -72,31 +71,29 @@ function Portfolios() {
 
     function setFavStatus(status, portfolio) {
         if(status === "success") {
+            let temp
             // If this is to be the new favourite portfolio
             if(portfolio.favourite) {
                 // Unfavourite the previous portfolio
-                let temp = portfolios
-                temp.forEach(tmp => {
+                temp = portfolios.map(tmp => {
                     // Favourite the new portfolio
                     if(tmp.p_id === portfolio.p_id)
                         tmp.favourite = portfolio.favourite
                     else if(tmp.p_id !== portfolio.p_id && tmp.favourite)
                         tmp.favourite = !tmp.favourite
+                    return tmp
                 })
-
-                setPortfolios(temp)
             }
             // If you only need to remove the favourite status
             else {
-                let temp = portfolios
-                temp.forEach(tmp => {
+                temp = portfolios.map(tmp => {
                     // Favourite the new portfolio
                     if(tmp.favourite)
                         tmp.favourite = !tmp.favourite 
+                    return tmp
                 })
             }
-            setFavSuccess(true)
-            setTimeout(() => { setFavSuccess(false)}, 2500);
+            setPortfolios(temp)
         }
         else {
             setFavError(true)
@@ -106,10 +103,10 @@ function Portfolios() {
 
     function setDeleteStatus(status, portfolio, transfer_id) {
         if(status === "success") {
-            let temp = portfolios
+            let temp
 
             // Deleting the portfolio
-            temp = temp.filter(tmp => { return tmp.p_id !== portfolio.p_id  })
+            temp = portfolios.filter(tmp => { return tmp.p_id !== portfolio.p_id  })
 
             // Transfering amount if a recieving portfolio is defined
             if(transfer_id !== "default") {
@@ -120,8 +117,6 @@ function Portfolios() {
             }
 
             setPortfolios(temp)
-            setDeleteSuccess(true)
-            setTimeout(() => { setDeleteSuccess(false) }, 2500)
         }
         else {
             setDeleteError(true)
@@ -132,31 +127,13 @@ function Portfolios() {
     return (
         <Layout>
             <Container className="portfolio_container">
-                { /* Add portfolio */ }
-                <Alert show={showPortfolioSuccess} variant="success" className="alert" as="Row">
-                    <Alert.Heading className="heading">Add Porftolio</Alert.Heading>
-                    Portfolio successfully added.
-                </Alert>
                 <Alert show={showPortfolioError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Add Porftolios</Alert.Heading>
                     An error occured while trying to add this portfolio.
                 </Alert>
-                { /* Favourite status change */ }
-                <Alert show={favSuccess} variant="success" className="alert" as="Row">
-                    <Alert.Heading className="heading">Change Porftolio Status</Alert.Heading>
-                    Portfolio status successfully changed.
-                </Alert>
                 <Alert show={favError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Change Porftolio Status</Alert.Heading>
                     An error occured while trying to change porftolio status.
                 </Alert>
-                { /* Delete portfolio */ }
-                <Alert show={deleteSuccess} variant="success" className="alert" as="Row">
-                    <Alert.Heading className="heading">Delete Porftolio</Alert.Heading>
-                    Portfolio deleted successfully.
-                </Alert>
                 <Alert show={deleteError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Delete Porftolio</Alert.Heading>
                     An error occured while trying to delete porftolio.
                 </Alert>
                 <Button variant="primary" className="portfolio-btn" onClick={() => setPortfolioModal(true)}>
@@ -165,7 +142,6 @@ function Portfolios() {
                         <BiWallet />
                     </IconContext.Provider> 
                 </Button>
-
                 {
                     portfolios.length >= 1 && !isLoading? 
                         portfolios.map(portfolio => 

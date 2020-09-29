@@ -40,7 +40,7 @@ function CardForm(props) {
         if(props.caller==="portfolio") {
             try {
                 await axios.post('users/add-portfolio', { username: props.username, portfolio: event})
-                props.setStatus("success")
+                props.setStatus("success", event)
             }
             catch(err) {
                 props.setStatus("error")

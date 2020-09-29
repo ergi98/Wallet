@@ -15,9 +15,9 @@ function PortfolioModal(props) {
 
     const [type, setType] = useState("placeholder")
 
-    function setStatus(status) {
+    function setStatus(status, portfolio) {
         if(status==="success") {
-            props.setPortfolioStatus("success")
+            props.setPortfolioStatus("success", portfolio)
             props.closeModal()
         }
         else if(status==="error") {
