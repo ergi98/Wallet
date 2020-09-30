@@ -4,7 +4,6 @@ import './DeletePortfolio.scss'
 // Axios
 import axios from 'axios'
 
-
 // Redux
 import { useSelector } from 'react-redux'
 
@@ -26,7 +25,6 @@ function DeletePortfolio(props) {
     const portfolios = useSelector((state) => state.user.portfolios)
 
     async function deletePortfolio() {
-
         try {
             await axios.post('/users/delete-portfolio', { 
                 username: props.username, 
@@ -96,7 +94,7 @@ function DeletePortfolio(props) {
                         </Container>
                 }
                 {
-                    props.portfolio.amount?.$numberDecimal > 0 ?
+                    props.portfolio.amount?.$numberDecimal > 0 && portfolios.length > 1 ?
                         <Container className='transfer-container'>
                             <Form.Check
                                 className="checkbox"
@@ -121,8 +119,11 @@ function DeletePortfolio(props) {
                             >
                                 <option value="default" disabled>Choose the portfolio to transfer the amount</option>
                                 {
-                                    portfolios !== undefined?
-                                    portfolios.map(portfolio => <option key={portfolio.p_id} value={portfolio.p_id}>{portfolio.p_name}</option>) : null
+                                    portfolios.map(portfolio => { 
+                                            if(portfolio.p_id !== props.portfolio.p_id)
+                                                return <option key={portfolio.p_id} value={portfolio.p_id}>{portfolio.p_name}</option>
+                                            return null
+                                        })
                                 }
                             </Form.Control>
                         </Container> : null

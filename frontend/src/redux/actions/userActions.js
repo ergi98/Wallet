@@ -1,4 +1,12 @@
-import { LOG_IN, LOG_OUT, GET_PORTFOLIOS } from '../actions/types'
+// Actions
+import { 
+    LOG_IN, 
+    LOG_OUT, 
+    GET_PORTFOLIOS,
+    UPDATE_PORTFOLIOS,
+} from '../actions/types'
+
+// Axios
 import axios from 'axios'
 
 
@@ -59,4 +67,11 @@ export const getPortfolios = (event) => async (dispatch) => {
     catch(err) {
         console.log(err)        
     }
+}
+
+export const updatePortfolios = (event) => (dispatch) => {
+    dispatch({
+        type: UPDATE_PORTFOLIOS,
+        payload: event.portfolios
+    })
 }

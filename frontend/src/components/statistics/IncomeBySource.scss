@@ -4,9 +4,7 @@
     padding: 0;
 
     .scrollable-table {
-        max-height: 220px !important;
-        min-height: 220px !important;
-        
+        height: 250px !important;        
 
         .table-header {
             *{ font-weight: bold; font-size: 15px}
@@ -19,6 +17,26 @@
     .spending {
         color: $red
     }
+
+    .no-transactions {
+        display: flex;
+        flex-direction: column;
+        background-color: $border-light;
+        padding: 30px;
+        width: 100%;
+        height: 100% !important;
+        text-align: center;
+
+        .title-label {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .sub-label {
+            font-weight: 400;
+        }
+    }
+    
 }
 
 @media only screen and (max-height: 700px) {

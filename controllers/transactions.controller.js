@@ -25,13 +25,7 @@ class TransactionsController {
         try {
             let { username, date, portfolio } = req.body
 
-            let result = await TransactionsDAO.getTransactions(username, date, portfolio)
-
-            if(!result) {
-                res.status(401).json({ error: "Transactions not found for this user." })
-                return
-            }
-            
+            let result = await TransactionsDAO.getTransactions(username, date, portfolio)            
             res.json({ result })
         } 
         catch(err) {

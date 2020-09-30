@@ -6,8 +6,7 @@
     text-align: center;
     padding: 0px;
     overflow: auto;
-    max-height: 220px !important;
-    min-height: 220px !important;
+    height: 250px !important;
 
     .list-table {
         .headers-row {
@@ -30,21 +29,18 @@
     .no-transactions {
         display: flex;
         flex-direction: column;
-        background-color: rgb(163, 163, 163);
-        padding-top: 15px;
+        background-color: $border-light;
+        padding: 30px;
         width: 100%;
-        max-height: 220px !important;
-        min-height: 220px !important;
+        height: 100% !important;
         text-align: center;
 
         .title-label {
             font-size: 18px;
-            font-weight: 600;
-            color: white;
+            font-weight: bold;
         }
 
         .sub-label {
-            color: rgb(235, 235, 235);
             font-weight: 400;
         }
     }
@@ -52,15 +48,13 @@
 
 @media only screen and (max-height: 700px) {
     .list-container {
-        max-height: 120px !important;
-        min-height: 120px !important;
+        height: 120px !important;
     }
 }
 
 @media only screen and (min-height: 800px) {
     .list-container {
-        max-height: 300px !important;
-        min-height: 300px !important;
+        height: 300px !important;
     }
 }
 

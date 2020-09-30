@@ -1,4 +1,10 @@
-import { LOG_IN, LOG_OUT, GET_PORTFOLIOS } from '../actions/types'
+// Actions
+import { 
+    LOG_IN, 
+    LOG_OUT, 
+    GET_PORTFOLIOS, 
+    UPDATE_PORTFOLIOS 
+} from '../actions/types'
 
 const initialState = {
     isAuthenticated: false,
@@ -32,6 +38,11 @@ export default function(state = initialState, action) {
                 pref_currency: ''
             }
         case GET_PORTFOLIOS:
+            return {
+                ...state,
+                portfolios: action.payload
+            }
+        case UPDATE_PORTFOLIOS:
             return {
                 ...state,
                 portfolios: action.payload

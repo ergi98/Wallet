@@ -20,7 +20,7 @@ import { IconContext } from "react-icons"
 import { BiWallet } from 'react-icons/bi'
 
 // Actions
-import { getPortfolios } from '../../redux/actions/userActions'
+import { getPortfolios, updatePortfolios } from '../../redux/actions/userActions'
 
 function Portfolios() {
 
@@ -59,9 +59,10 @@ function Portfolios() {
             let amount = portfolio.amount
             delete portfolio.amount
             portfolio.amount = { $numberDecimal: amount }
-            console.log(portfolio)
             temp.push(portfolio)
+
             setPortfolios(temp)
+            dispatch(updatePortfolios({ portfolios: temp }))
         }
         else {
             setPortfolioError(true)
@@ -94,6 +95,7 @@ function Portfolios() {
                 })
             }
             setPortfolios(temp)
+            dispatch(updatePortfolios({ portfolios: temp }))
         }
         else {
             setFavError(true)
@@ -117,6 +119,7 @@ function Portfolios() {
             }
 
             setPortfolios(temp)
+            dispatch(updatePortfolios({ portfolios: temp }))
         }
         else {
             setDeleteError(true)

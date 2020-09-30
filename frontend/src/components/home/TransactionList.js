@@ -46,14 +46,13 @@ class TransactionList extends React.Component {
         try {
             let res = await axios.post('/transactions/list', { username: this.props.username, date })
 
-            if(res.data.result.length > 0) {
-                let { transactions } = res.data.result[0]
+            let transactions = res.data.result.length === 0? [] : res.data.result[0].transactions 
 
-                this._isMounted && this.setState({
-                    transactions,
-                    isLoading: false
-                })
-            }
+            this._isMounted && this.setState({
+                transactions,
+                isLoading: false
+            })
+            
         }
         catch(err){
             console.log(err)
@@ -114,8 +113,8 @@ class TransactionList extends React.Component {
                     {
                         this.state.transactions.length < 1 && !this.state.isLoading?
                         <div className="no-transactions">
-                            <label className="title-label">You have not made any transactions today.</label><br/>
-                            <label className="sub-label">Insert a new transaction by clicking one the buttons above.</label>
+                            <label className="title-label">You have not made any transactions today!</label><br/>
+                            <label className="sub-label">Insert a new transaction by clicking one of the buttons above.</label>
                         </div> : null
                     }
                     { this.state.isLoading? <Loading/> : null }

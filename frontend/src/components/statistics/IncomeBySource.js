@@ -6,6 +6,7 @@ import axios from 'axios'
 
 // Components
 import Card from '../card/Card'
+import Loading from './income-vs-expense/Loading'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
@@ -30,6 +31,7 @@ function IncomeBySource() {
     const pref_currency = useSelector((state) => state.user.pref_currency)
 
     const [incomes, setIncome] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         let _isMounted = true
@@ -37,7 +39,7 @@ function IncomeBySource() {
         async function getIncome() {
             try {
                 let res = await axios.post('/users/user-sources', { username })
-    
+
                 if (res.data.result.length > 0) {
                     res.data.result[0].sources.sort((a, b) => {
                         if (a.amount_earned.$numberDecimal > b.amount_earned.$numberDecimal)
@@ -48,8 +50,10 @@ function IncomeBySource() {
                     })
                     setIncome(res.data.result[0].sources)
                 }
+                setLoading(false)
             }
             catch (err) {
+                setLoading(false)
                 console.log(err)
             }
         }
@@ -64,39 +68,53 @@ function IncomeBySource() {
     return (
         <Card title="Income By Source" className="income-card">
             <Container className="scrollable-container">
-                <TableContainer className="scrollable-table">
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead className="table-header">
-                            <TableRow>
-                                <TableCell>#</TableCell>
-                                <TableCell>Cateogry</TableCell>
-                                <TableCell>Trans.</TableCell>
-                                <TableCell>Amount</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                incomes.map((income, index) =>{
-                                    return (
-                                        <TableRow key={income.source_id}>
-                                            <TableCell>{index+1}</TableCell>
-                                            <TableCell>{income.source_name}</TableCell> 
-                                            <TableCell>{income.count}</TableCell> 
-                                            <TableCell className="earning">
-                                                <NumberFormat
-                                                    value={income.amount_earned?.$numberDecimal}
-                                                    displayType={'text'}
-                                                    thousandSeparator={true}
-                                                    prefix={pref_currency + ' '}
-                                                />
-                                            </TableCell>                                    
-                                        </TableRow>
-                                    )
-                                })
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                {
+                    incomes.length >= 1 && !loading ?
+                        <TableContainer className="scrollable-table">
+                            <Table stickyHeader aria-label="sticky table">
+                                <TableHead className="table-header">
+                                    <TableRow>
+                                        <TableCell>#</TableCell>
+                                        <TableCell>Cateogry</TableCell>
+                                        <TableCell>Trans.</TableCell>
+                                        <TableCell>Amount</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        incomes.map((income, index) => {
+                                            return (
+                                                <TableRow key={income.source_id}>
+                                                    <TableCell>{index + 1}</TableCell>
+                                                    <TableCell>{income.source_name}</TableCell>
+                                                    <TableCell>{income.count}</TableCell>
+                                                    <TableCell className="earning">
+                                                        <NumberFormat
+                                                            value={income.amount_earned?.$numberDecimal}
+                                                            displayType={'text'}
+                                                            thousandSeparator={true}
+                                                            prefix={pref_currency + ' '}
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
+                                        })
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer> : null
+                }
+                {
+                    incomes.length < 1 && !loading?
+                        <div className="no-transactions">
+                            <label className="title-label">You have no income sources!</label><br/>
+                            <label className="sub-label">
+                                You can insert a new income source by going to your profile and scrolling down to the income sources table.
+                                Without any sources you can not view this table!
+                            </label>
+                        </div> : null
+                }
+                { loading? <Loading/> : null }
             </Container>
         </Card>
     )
