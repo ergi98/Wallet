@@ -16,7 +16,7 @@ import Row from 'react-bootstrap/esm/Row'
 function Statistics() {
     return (
         <Layout>
-            <Container className="statistics-container">
+            <Container fluid className="statistics-container">
                 <Row><ExpenseByCategory/></Row>
                 <Row><IncomeBySource/></Row>
                 <Row><IncomeVSExpense/></Row>

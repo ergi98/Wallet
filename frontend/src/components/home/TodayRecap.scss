@@ -2,7 +2,7 @@
 
 .amount-container {
     text-align: center;
-
+    padding: 0px 10px;
     .amount {
         font-weight: bold;
         font-size: 26px;
@@ -12,8 +12,8 @@
     .earnings-col, .spendings-col {
         border: 1px solid $border-light;
         border-radius: 15px;
-        padding: 10px;
-        margin: 10px;
+        padding: 0px 20px;
+        margin:  0px 10px 0px 10px;
         height: fit-content;
         * {
             font-size: 20px;
@@ -41,9 +41,9 @@
         border: 1px solid $border-light;
         border-radius: 20px;
         padding: 10px 20px 10px 20px;
-        margin: 0 auto;
-        margin-bottom: 10px;
-        justify-content: space-evenly;
+        margin: 10px auto 10px auto;
+        display: flex;
+        justify-content: space-around;
         * {
             font-size: 20px;
         }

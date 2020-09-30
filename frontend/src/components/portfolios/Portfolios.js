@@ -5,6 +5,7 @@ import './Portfolios.scss'
 import Layout from '../layout/Layout'
 import Portfolio from './Portfolio'
 import PortfolioModal from './modals/PortfolioModal'
+import TransferModal from './modals/TransferModal'
 import Loading from '../statistics/income-vs-expense/Loading'
 
 // Bootstrap
@@ -17,10 +18,11 @@ import { useSelector, useDispatch } from 'react-redux'
 
 // Icons
 import { IconContext } from "react-icons"
-import { BiWallet } from 'react-icons/bi'
+import { BiWallet, BiTransfer } from 'react-icons/bi'
 
 // Actions
 import { getPortfolios, updatePortfolios } from '../../redux/actions/userActions'
+
 
 function Portfolios() {
 
@@ -31,11 +33,13 @@ function Portfolios() {
 
     const [showPortfolioModal, setPortfolioModal] = useState(false)
     const [showPortfolioError, setPortfolioError] = useState(false)
+    const [showPortfolioTransfer, setShowPortfolioTransfer] = useState(false)
 
     const [isLoading, setIsLoading] = useState(true)
 
     const [favError, setFavError] = useState(false)
     const [deleteError, setDeleteError] = useState(false)
+    const [transferError, setTransferError] = useState(false)
 
     useEffect(() => {
         let _isMounted = true
@@ -67,6 +71,31 @@ function Portfolios() {
         else {
             setPortfolioError(true)
             setTimeout(() => { setPortfolioError(false)}, 2500);
+        }
+    }
+
+    function setTransferStatus(status, from, to, amount) {
+        if(status === "success") {
+            let temp = portfolios.map(portfolio => {
+                if(portfolio.p_id === to){
+                    let current = parseFloat(portfolio.amount.$numberDecimal)
+                    current = current + parseFloat(amount)
+                    portfolio.amount.$numberDecimal = current.toFixed(2).toString()
+                }
+                if(portfolio.p_id === from) {
+                    let current = parseFloat(portfolio.amount.$numberDecimal)
+                    current = current - parseFloat(amount)
+                    portfolio.amount.$numberDecimal = current.toFixed(2).toString()
+                }
+                return portfolio
+            })
+
+            setPortfolios(temp)
+            dispatch(updatePortfolios({ portfolios: temp }))
+        }
+        else {
+            setTransferError(true)
+            setTimeout(() => { setTransferError(false)}, 2500);
         }
     }
 
@@ -129,7 +158,7 @@ function Portfolios() {
 
     return (
         <Layout>
-            <Container className="portfolio_container">
+            <Container fluid className="portfolio_container">
                 <Alert show={showPortfolioError} variant="danger" className="alert" as="Row">
                     An error occured while trying to add this portfolio.
                 </Alert>
@@ -139,12 +168,23 @@ function Portfolios() {
                 <Alert show={deleteError} variant="danger" className="alert" as="Row">
                     An error occured while trying to delete porftolio.
                 </Alert>
-                <Button variant="primary" className="portfolio-btn" onClick={() => setPortfolioModal(true)}>
-                    Add new portfolio
-                    <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
-                        <BiWallet />
-                    </IconContext.Provider> 
-                </Button>
+                <Alert show={transferError} variant="danger" className="alert" as="Row">
+                    An error occured while trying to transfer amount.
+                </Alert>
+                <div className="container portfolio-btn-holder">
+                    <Button variant="primary" className="portfolio-btn" onClick={() => setPortfolioModal(true)}>
+                        New Portfolio
+                        <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
+                            <BiWallet />
+                        </IconContext.Provider> 
+                    </Button>
+                    <Button variant="secondary" className="portfolio-btn" onClick={() => setShowPortfolioTransfer(true)}>
+                        Transfer
+                        <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
+                            <BiTransfer />
+                        </IconContext.Provider> 
+                    </Button>
+                </div>
                 {
                     portfolios.length >= 1 && !isLoading? 
                         portfolios.map(portfolio => 
@@ -173,6 +213,12 @@ function Portfolios() {
                 username={username}
                 closeModal={closePortfolioModal}
                 setPortfolioStatus={addPortfolioStatus}
+            />
+            <TransferModal
+                show={showPortfolioTransfer}
+                username={username}
+                closeModal={() => setShowPortfolioTransfer(false)}
+                setTransferStatus={setTransferStatus}
             />
         </Layout>
     )

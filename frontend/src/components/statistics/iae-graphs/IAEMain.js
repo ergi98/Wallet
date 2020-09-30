@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import './IAEMain.scss'
 
 // Redux
 import { useSelector } from "react-redux"
@@ -23,7 +22,7 @@ function IAEMain() {
     const [chartType, setChartType] = useState('')
 
     return (
-        <Card title="Transaction Charts">
+        <Card title="Transaction Charts" style={{marginBottom: "20px !important"}}>
             {
                 showForm ?
                     <IAEForm 

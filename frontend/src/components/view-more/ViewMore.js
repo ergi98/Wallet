@@ -150,7 +150,7 @@ function ViewMore({ match })  {
 
     return (
         <Layout>
-            <Container className="view-more_container">
+            <Container fluid className="view-more_container">
                 {/** Transaction List Errors */}
                 <Alert show={displayError} variant="danger" className="alert" as="Row">
                     <Alert.Heading className="heading">Display Transactions</Alert.Heading>
@@ -192,65 +192,59 @@ function ViewMore({ match })  {
                 </Row>
                 {
                     transactions.length > 0 && !isLoading? 
-                        <Container className="more-transactions">
-                            {   
-                                transactions.map(transaction => 
-                                    <Row key={transaction.trans_id} className="transaction">
-                                        <Col className="field-col" xs={11} lg={11}>
-                                            <Row className="desc">
-                                                <label className="field-desc">Description:</label>
-                                                <label className="field-value">{transaction.short_desc}</label>
-                                            </Row>
-                                            <Row className="location">
-                                                <label className="field-desc">Location:</label>
-                                                <Button variant="link" className="map-btn"> View in Map</Button>
-                                            </Row>
-                                            <Row className="time-type">
-                                                <Col className="time">
-                                                    <label className="field-desc">Time:</label>
-                                                    <label className="field-value">{transaction.time}</label>
-                                                </Col>
-                                                <Col className="type">
-                                                    <label className="field-desc">Type:</label>
-                                                    <label className="field-value">{transaction.trans_type}</label>
-                                                </Col>
-                                            </Row>
-                                            {
-                                                transaction.desc? 
-                                                <Row className="long-desc">
-                                                    <label className="field-desc">Detailed Description:</label>
-                                                    <label className="field-value">{transaction.desc}</label>
-                                                </Row>
-                                                :
-                                                null
-                                            }
-                                            <Row className="amount">
-                                                <label className="field-desc">Amount:</label>
-                                                <label className={`field-value ${transaction.trans_type === "expense"? "expense" : "profit" }`}>
-                                                    <NumberFormat 
-                                                        value={ transaction.amount.$numberDecimal }
-                                                        displayType={'text'} 
-                                                        thousandSeparator={true} 
-                                                        prefix={ transaction.currency + ' ' } 
-                                                    /> 
-                                                </label>
-                                            </Row>       
+                        transactions.map(transaction => 
+                            <Row key={transaction.trans_id} className="transaction">
+                                <Col className="field-col" xs={11} lg={11}>
+                                    <Row className="desc">
+                                        <label className="field-desc">Description:</label>
+                                        <label className="field-value">{transaction.short_desc}</label>
+                                    </Row>
+                                    <Row className="location">
+                                        <label className="field-desc">Location:</label>
+                                        <Button variant="link" className="map-btn"> View in Map</Button>
+                                    </Row>
+                                    <Row className="time-type">
+                                        <Col className="time">
+                                            <label className="field-desc">Time:</label>
+                                            <label className="field-value">{transaction.time}</label>
                                         </Col>
-                                        <Col className="btn-col" xs={1} lg={1}>
-                                            <Row className="btn-row">
-                                                <Button className="btn" variant="link" onClick={() => { setDelete(true); setDeleteTransaction(transaction) }}>
-                                                    <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
-                                                        <AiFillDelete />
-                                                    </IconContext.Provider> 
-                                                </Button>
-                                            </Row>
+                                        <Col className="type">
+                                            <label className="field-desc">Type:</label>
+                                            <label className="field-value">{transaction.trans_type}</label>
                                         </Col>
                                     </Row>
-                                )
-                            }
-                        </Container>
-                        :
-                        null
+                                    {
+                                        transaction.desc? 
+                                        <Row className="long-desc">
+                                            <label className="field-desc">Detailed Description:</label>
+                                            <label className="field-value">{transaction.desc}</label>
+                                        </Row>
+                                        :
+                                        null
+                                    }
+                                    <Row className="amount">
+                                        <label className="field-desc">Amount:</label>
+                                        <label className={`field-value ${transaction.trans_type === "expense"? "expense" : "profit" }`}>
+                                            <NumberFormat 
+                                                value={ transaction.amount.$numberDecimal }
+                                                displayType={'text'} 
+                                                thousandSeparator={true} 
+                                                prefix={ transaction.currency + ' ' } 
+                                            /> 
+                                        </label>
+                                    </Row>       
+                                </Col>
+                                <Col className="btn-col" xs={1} lg={1}>
+                                    <Row className="btn-row">
+                                        <Button className="btn" variant="link" onClick={() => { setDelete(true); setDeleteTransaction(transaction) }}>
+                                            <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
+                                                <AiFillDelete />
+                                            </IconContext.Provider> 
+                                        </Button>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        ) : null
                 }
                 {
                     transactions.length === 0 && !isLoading?

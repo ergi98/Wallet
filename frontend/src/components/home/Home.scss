@@ -1,5 +1,5 @@
 .home-container {
-    margin: 15px auto;
+    margin: 0px auto;
     width: 100%;
 
     .btn-container {
@@ -7,8 +7,8 @@
         margin: 15px auto;
         padding: 0px;
         height: 44px;
-        justify-content: space-around;
         display: flex;
+        justify-content: space-around;
 
         .transaction-btn {
             width: 45%;

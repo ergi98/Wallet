@@ -1,5 +1,5 @@
 import React from 'react'
-import './ProfitTransaction.scss'
+import './SpendingTransaction.scss'
 
 // Components
 import Layout from '../layout/Layout'

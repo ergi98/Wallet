@@ -510,6 +510,35 @@ class UsersDAO {
     }
   }
 
+  static async transfer(username, from, to, amount) {
+    try {
+      let inc_amount = mongodb.Decimal128.fromString(amount)
+      let dec_amnt = mongodb.Decimal128.fromString((-1*amount).toString())
+     
+      // Decrement the amount in the sending portfolio
+      await users.updateOne(
+        { username }, 
+        { $inc: { "portfolios.$[port].amount": dec_amnt, }},
+        { arrayFilters: [{ "port.p_id": from }] },
+        { w: "majority" }
+      )
+
+      // Increment the amount in the recieving portfolio
+      await users.updateOne(
+        { username }, 
+        { $inc: { "portfolios.$[port].amount": inc_amount, }},
+        { arrayFilters: [{ "port.p_id": to }] },
+        { w: "majority" }
+      )
+
+      return { success : true }
+    }
+    catch (e) {
+      console.error(`Error occurred while transfering amount, ${e}`)
+      return { error: e }
+    }
+  }
+
 }
 
 module.exports = UsersDAO;   

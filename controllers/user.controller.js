@@ -385,6 +385,19 @@ class UsersController {
             return
         }
     }
+
+    static async transfer(req, res) {
+        try {
+            let { username, from, to, amount } = req.body
+
+            let result = await UsersDAO.transfer(username, from, to, amount)
+            res.json({ result })
+        }
+        catch(e) {
+            res.status(400).json({ error: e })
+            return
+        }
+    }
 }
 
 module.exports = { UsersController, User }

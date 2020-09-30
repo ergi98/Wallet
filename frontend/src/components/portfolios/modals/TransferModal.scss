@@ -1,0 +1,42 @@
+@import '../../../styles/colors';
+
+.fields-div {
+
+    .form-group {
+        margin-bottom: 0px !important;
+    }
+    
+    .amount-form  {
+        display: flex;
+        justify-content: space-evenly;
+
+        .form-label, .input-field {
+            margin-bottom: 0px;
+        }
+    }
+
+    .amount-form {
+        display: flex;
+        flex-direction: column;
+
+        .input-field {
+            flex-grow: 1;
+        }
+
+    }
+
+    .avail-label {
+        margin-top: 1rem;
+        width: 100%;
+        text-align: center;
+        border-radius: 0.9rem;
+        padding: .8rem .4rem .4rem .4rem;
+        background-color: $light-blue;
+        font-weight: 600;
+
+        .amount-avail {
+            font-weight: bold;
+            margin-left: 0.3rem;
+        }
+    }
+}

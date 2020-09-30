@@ -16,8 +16,8 @@ class NavBar extends React.Component {
 
     render () {
         return (
-            <Navbar fixed="bottom" expand bg="dark" className="my_nav">
-                <Nav fill defaultActiveKey="/home">
+            <Navbar fixed="bottom" expand bg="dark" className="my-navbar">
+                <Nav className="my-nav" fill defaultActiveKey="/home">
                     <Nav.Item className="item">
                         <NavLink to="/portfolios" className="link" activeClassName="selected">
                             <div className="link-desc"><FaWallet className="icon"/> Portfolios </div>

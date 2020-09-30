@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './WalletForm.scss'
 
 // Form Validation
@@ -18,17 +18,41 @@ import { nanoid } from 'nanoid'
 // Axios
 import axios from 'axios'
 
+// Redux
+import { useSelector } from 'react-redux'
+
 // Icons
 import { IconContext } from "react-icons"
 import { BiWallet } from 'react-icons/bi'
 
-const wallet_schema = yup.object({
-    p_name: yup.string().required("Portfolio name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message: "Only spaces and alphanumberic characters!" }),
-    currency: yup.string().required(),
-    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!" })
-})
-
 function WalletForm(props) {
+
+    const portfolios = useSelector((state) => state.user.portfolios)
+
+    const [unavailable, setUnavailable] = useState([])
+
+    const wallet_schema = yup.object({
+        p_name: yup.string().required("Portfolio name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message: "Only spaces and alphanumberic characters!" }).notOneOf(unavailable, "Name already used!"),
+        currency: yup.string().required(),
+        amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!" })
+    })
+
+    useEffect(() => {
+        let isMounted = true 
+
+        // Getting the list of the already used names
+        function fillUnavailable() {
+            let temp = []
+            portfolios.forEach(portfolio =>  temp.push(portfolio.p_name))
+            setUnavailable(temp)
+        }
+
+        isMounted && fillUnavailable()
+
+        return () => {
+            isMounted = false
+        }
+    }, [portfolios])
 
     async function addPortfolio(event) {
         event.p_id = nanoid(10)
@@ -93,7 +117,9 @@ function WalletForm(props) {
                                         placeholder="Enter the amount"
                                         value={values.amount}
                                         onChange={handleChange}
-                                        isInvalid={touched.amount && errors.amount}
+                                        isInvalid={touched.amount && errors.amount} 
+                                        inputmode="numeric" 
+                                        pattern="[0-9]*"
                                     />
                                     <Form.Control.Feedback type="invalid"> {errors.amount}  </Form.Control.Feedback>
                                 </Col>

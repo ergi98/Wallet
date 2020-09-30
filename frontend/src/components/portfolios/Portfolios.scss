@@ -2,13 +2,19 @@
 
 .portfolio_container {
     overflow: auto;
-    height: 88vh;
+    text-align: center;
 
-    .portfolio-btn {
-        margin: 10px 0px;
-        width: 100%;
-        border-radius: 15px;
-        font-size: 18px;
+    .portfolio-btn-holder {
+        display: flex;
+        justify-content: space-between;
+        padding: 0px;
+        
+        .portfolio-btn {
+            margin: 10px 0px;
+            border-radius: 15px;
+            font-size: 18px;
+            flex-grow: .45;
+        }
     }
     
     .alert {

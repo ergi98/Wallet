@@ -19,7 +19,7 @@ class Home extends React.Component {
     render() {
         return (
             <Layout>
-                <Container className="home-container">
+                <Container fluid className="home-container">
                     <TodayRecap></TodayRecap>
                     <Container className="btn-container">
                         <Button variant="secondary" className="transaction-btn" onClick={() => { window.location = '/expense-transaction' }}>

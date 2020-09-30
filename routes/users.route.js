@@ -20,5 +20,6 @@ router.route("/new-category").post(users.UsersController.newCategory)
 router.route("/new-source").post(users.UsersController.newSource)
 router.route("/delete-category").post(users.UsersController.deleteCategory)
 router.route("/delete-source").post(users.UsersController.deleteSource)
+router.route("/transfer").post(users.UsersController.transfer)
 
 module.exports = router;

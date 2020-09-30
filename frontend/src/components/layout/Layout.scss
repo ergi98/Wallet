@@ -4,8 +4,7 @@
     height: 100vh;
 
     .user-row {
-        height: 6vh;
-        position: relative;
+        height: 5vh;
         align-items: center;
         background-color: #cacacab6;
 
@@ -22,5 +21,6 @@
     .scrollable {
         overflow: auto;
         width: 100vw;
+        height: 90vh !important;
     }
 }

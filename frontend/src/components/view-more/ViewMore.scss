@@ -3,7 +3,8 @@
 .view-more_container {
     position: relative;
     overflow: auto;
-    min-height: 500px;
+    height: 90vh;
+
     .alert {
         width: 100%;
         position: fixed;
@@ -31,87 +32,83 @@
         }
     }
 
-    // TODO: MAKE IT RESPONSIVE //
-    .more-transactions {
-        padding-top: 10px;
-        overflow: auto;
-        height: 75vh;
-        padding: 5px 5px 0px 5px;
+    .transaction {
+        position: relative;
+        max-width: 600px;
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 $box-shadow;
+        padding: 10px;
+        margin: 0px auto 10px auto;
+        border: 1px solid #ECECEC;
 
-        .transaction {
-            position: relative;
-            max-width: 600px;
-            border-radius: 10px;
-            background-color: white;
-            box-shadow: 0 4px 8px 0 $box-shadow;
-            padding: 10px;
-            margin: 0px auto 10px auto;
-            border: 1px solid #ECECEC;
+        .field-col {
+            padding: 0px;
 
-            .field-col {
-                padding: 0px;
+            .row {
+                margin: 0;
+            }
 
-                .row {
-                    margin: 0;
-                }
-    
-                .col {
-                    padding: 0;
-                }
-    
-                .desc {
-                    .field-value {
-                        text-transform: capitalize;
-                    };
-                }
-    
-                .location {
-                    vertical-align: middle;
-                    .map-btn {
-                        padding: 0px 0px 0px 5px;
-                        margin-top: -8px;
-                    }
-                }
-    
-                .field-desc {
-                    font-weight: 600;
-                    padding-right: 10px;
-                }
-    
-                .type {
-                    .field-value {
-                        text-transform: capitalize;
-                    }
-                }
-    
-                .long-desc {
-                    .field-value {
-                        width: 60%;
-                        word-wrap: normal;
-                    }
-                }
-    
-                .amount {
-                    .field-value {
-                        font-weight: 600;
-                    }
-    
-                    .expense {
-                        color: $red;
-                    }
-    
-                    .profit {
-                        color: $green;
-                    }
+            .col {
+                padding: 0;
+            }
+
+            .desc {
+                .field-value {
+                    text-transform: capitalize;
+                };
+            }
+
+            .location {
+                vertical-align: middle;
+                .map-btn {
+                    padding: 0px 0px 0px 5px;
+                    margin-top: -8px;
                 }
             }
 
-            .btn-col {
-                padding: 0px;
+            .field-desc {
+                font-weight: 600;
+                padding-right: 10px;
+            }
 
-                .btn-row {
-                    height: 100%;
+            .type {
+                .field-value {
+                    text-transform: capitalize;
                 }
+            }
+
+            .long-desc {
+                display: flex;
+                flex-direction: column;
+                .field-desc, .field-value {
+                    flex-grow: 1;
+                }
+                .field-value {
+                    word-wrap: normal;
+                }
+            }
+
+            .amount {
+                .field-value {
+                    font-weight: 600;
+                }
+
+                .expense {
+                    color: $red;
+                }
+
+                .profit {
+                    color: $green;
+                }
+            }
+        }
+
+        .btn-col {
+            padding: 0px;
+
+            .btn-row {
+                height: 100%;
             }
         }
     }
