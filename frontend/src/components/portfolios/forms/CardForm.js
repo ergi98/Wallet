@@ -24,7 +24,7 @@ import { BiWallet } from 'react-icons/bi'
 
 const card_schema = yup.object({
     p_name: yup.string().required("Name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),
-    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[,]?[0-9]+$/, { message: "Only numbers and dots allowed!"}),
+    amount: yup.string().required("Amount is required!").matches(/(^[1-9]+[,.]{0,1}[0-9]+$)|(^[0]{1}[,.][0-9]+$)/, { message: "Only numbers and dots or commas allowed!"}),
     currency: yup.string().required(),
     bank: yup.string().required("Bank is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),
     card_no: yup.string().required("Card number is required!").matches(/^[0-9]{4}[\s][0-9]{4}[\s][0-9]{4}[\s][0-9]{4}$/, { message: "Format is xxxx xxxx xxxx xxxx!"}),
