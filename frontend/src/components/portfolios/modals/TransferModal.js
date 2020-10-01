@@ -38,9 +38,9 @@ function TransferModal(props) {
         function transformPortfolios() {
             let temp = {}
 
-            const iterator = portfolios.values();
+            console.log(portfolios)
 
-            for(const portfolio of iterator) {
+            for(const portfolio of portfolios) {
                 temp[portfolio.p_id] = {
                     amount: portfolio.amount.$numberDecimal,
                     currency: portfolio.currency
