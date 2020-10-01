@@ -17,13 +17,13 @@ import NumberFormat from 'react-number-format'
 
 function TransferModal(props) {
 
+    const portfolios = useSelector((state) => state.user.portfolios)
+
     const [from, setFrom] = useState('default')
     const [to, setTo] = useState('default')
     const [amount, setAmount] = useState('')
 
     const [availAmnt, setAvailAmnt] = useState({})
-
-    const portfolios = useSelector((state) => state.user.portfolios)
 
     const [portfolioMap, setPortfolioMap] = useState({})
 
@@ -39,7 +39,7 @@ function TransferModal(props) {
             let temp = {}
 
             console.log(portfolios)
-            
+
             if(portfolios !== undefined) {
                 for(const portfolio of portfolios) {
                     temp[portfolio.p_id] = {
