@@ -24,7 +24,7 @@ import { BiWallet } from 'react-icons/bi'
 
 const card_schema = yup.object({
     p_name: yup.string().required("Name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),
-    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!"}),
+    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[,]?[0-9]+$/, { message: "Only numbers and dots allowed!"}),
     currency: yup.string().required(),
     bank: yup.string().required("Bank is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),
     card_no: yup.string().required("Card number is required!").matches(/^[0-9]{4}[\s][0-9]{4}[\s][0-9]{4}[\s][0-9]{4}$/, { message: "Format is xxxx xxxx xxxx xxxx!"}),
@@ -37,17 +37,21 @@ const card_schema = yup.object({
 function CardForm(props) {
 
     async function addPortfolio(event) {
+
+        let portfolio = {...event}
+        portfolio.amount = portfolio.amount.replace(',', '.')
+
         if(props.caller==="portfolio") {
             try {
-                await axios.post('users/add-portfolio', { username: props.username, portfolio: event})
-                props.setStatus("success", event)
+                await axios.post('users/add-portfolio', { username: props.username, portfolio})
+                props.setStatus("success", portfolio)
             }
             catch(err) {
                 props.setStatus("error")
             }  
         }
         else {
-            props.setPortfolio(event)
+            props.setPortfolio(portfolio)
             props.closeModal()
         }
     }
@@ -103,7 +107,7 @@ function CardForm(props) {
                                         placeholder="Enter the amount"
                                         value={values.amount}
                                         onChange={handleChange}
-                                        inputmode="decimal"
+                                        inputMode="decimal"
                                         isInvalid={touched.amount && errors.amount}
                                     />
                                     <Form.Control.Feedback type="invalid"> {errors.amount} </Form.Control.Feedback>

@@ -4,9 +4,6 @@ import './TransferModal.scss'
 // Axios
 import axios from 'axios'
 
-// Redux
-import { useSelector } from 'react-redux'
-
 // Bootstrap
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -36,8 +33,6 @@ function TransferModal(props) {
         function transformPortfolios() {
             let temp = {}
 
-            console.log(props.portfolios)
-
             for(const portfolio of props.portfolios) {
                 temp[portfolio.p_id] = {
                     amount: portfolio.amount.$numberDecimal,
@@ -61,9 +56,9 @@ function TransferModal(props) {
                 username: props.username,
                 from,
                 to,
-                amount,
+                amount: amount.replace(',', '.'),
             })
-            props.setTransferStatus("success", from, to, amount)
+            props.setTransferStatus("success", from, to, amount.replace(',', '.'))
             props.closeModal()
         }
         catch (err) {
@@ -75,11 +70,13 @@ function TransferModal(props) {
 
         let regex = new RegExp(/^[0-9]+[.]?[0-9]+$/)
 
+        let amnt = amount.replace(',', '.')
+
         // Test if the format is right
-        let match = regex.test(amount)
+        let match = regex.test(amnt)
 
         // If amount is left empty
-        if (amount === '') {
+        if (amnt === '') {
             setInvalid(true)
             setError("Amount is required!")
         }
@@ -88,12 +85,12 @@ function TransferModal(props) {
             setInvalid(true)
             setError("Only numbers and dots allowed!")
         }
-        else if (parseFloat(amount) <= 0) {
+        else if (parseFloat(amnt) <= 0) {
             setInvalid(true)
             setError("Amount must be a pozitive number!")
         }
         // If the amount transfered is greater than the portfolio amount 
-        else if (parseFloat(amount) > parseFloat(portfolioMap[from].amount)) {
+        else if (parseFloat(amnt) > parseFloat(portfolioMap[from].amount)) {
             setInvalid(true)
             setError("Not enough money to transfer!")
         }
@@ -167,7 +164,7 @@ function TransferModal(props) {
                             value={amount}
                             disabled={from === 'default' || to === 'default'}
                             placeholder="Enter transfer amount"
-                            inputmode="decimal"
+                            inputMode="decimal"
                             onChange={(event) => setAmount(event.target.value)}
                             isInvalid={invalid}
                         />
@@ -178,7 +175,7 @@ function TransferModal(props) {
                             Available amount to transfer:
                                 <label className="amount-avail">
                                 <NumberFormat
-                                    value={parseFloat(availAmnt.amount - amount).toFixed(2)}
+                                    value={parseFloat(availAmnt.amount - amount.replace(',', '.')).toFixed(2)}
                                     displayType={'text'}
                                     thousandSeparator={true}
                                     prefix={availAmnt.currency + ' '}

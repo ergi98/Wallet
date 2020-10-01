@@ -36,7 +36,7 @@ const transaction_schema = yup.object({
     date: yup.string().required("Date is required!").transform(parseDate),
     hours: yup.string().required("Required!").max(2, "Invalid Format!"),
     minutes: yup.string().required("Required!").max(2, "Invalid Format!"),
-    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!" }).notOneOf(["0"], "Can not be 0!"),
+    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[,]?[0-9]+$/, { message: "Only numbers and dots allowed!" }).notOneOf(["0"], "Can not be 0!"),
     currency: yup.string().required(),
     portfolio: yup.string().required("Portfolio is required!").notOneOf(["Choose portfolio to deposit ..."], "Please select a portfolio!"),
     source: yup.string().required("Source is required!").notOneOf(["Choose source of income ..."], "Please select an income source!"),
@@ -112,7 +112,7 @@ class ProfitForm extends Component {
             trans_id: nanoid(10),
             time: `${event.hours}:${event.minutes}`,
             trans_type: 'profit',
-            amount: event.amount,
+            amount: event.amount.replace(',', '.'),
             currency: event.currency,
             portfolio: event.portfolio,
             source: event.source,
@@ -274,7 +274,7 @@ class ProfitForm extends Component {
                                             placeholder="Amount"
                                             value={values.amount}
                                             onChange={handleChange}
-                                            inputmode="decimal"
+                                            inputMode="decimal"
                                             isInvalid={touched.amount && errors.amount}
                                         />
                                         <Form.Control.Feedback type="invalid"> {errors.amount}  </Form.Control.Feedback>

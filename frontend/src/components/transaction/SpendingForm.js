@@ -39,7 +39,7 @@ const transaction_schema = yup.object({
     minutes: yup.string().required("Required!").max(2, "Invalid Format!"),
     long: yup.string(),
     lat: yup.string(),
-    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!" }).notOneOf(["0"], "Can not be 0!"),
+    amount: yup.string().required("Amount is required!").matches(/^[0-9]+[,]?[0-9]+$/, { message: "Only numbers and dots allowed!" }).notOneOf(["0"], "Can not be 0!"),
     currency: yup.string().required(),
     portfolio: yup.string().required("Portfolio is required!").notOneOf(["Choose portfolio to withdraw ..."], "Please select a portfolio!"),
     category: yup.string().required("Category is required!").notOneOf(["Choose category of expense ..."], "Please select an expense category!"),
@@ -114,7 +114,7 @@ class SpendingForm extends Component {
             trans_id: nanoid(10),
             time: `${event.hours}:${event.minutes}`,
             trans_type: 'expense',
-            amount: event.amount,
+            amount: event.amount.replace(',', '.'),
             currency: event.currency,
             portfolio: event.portfolio,
             type: event.category,
@@ -334,7 +334,7 @@ class SpendingForm extends Component {
                                         <Form.Control
                                             id="amount"
                                             type="string"
-                                            inputmode="decimal"
+                                            inputMode="decimal"
                                             placeholder="Amount"
                                             value={values.amount}
                                             onChange={handleChange}

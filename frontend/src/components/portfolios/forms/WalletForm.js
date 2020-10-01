@@ -34,7 +34,7 @@ function WalletForm(props) {
     const wallet_schema = yup.object({
         p_name: yup.string().required("Portfolio name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message: "Only spaces and alphanumberic characters!" }).notOneOf(unavailable, "Name already used!"),
         currency: yup.string().required(),
-        amount: yup.string().required("Amount is required!").matches(/^[0-9]+[.]?[0-9]+$/, { message: "Only numbers and dots allowed!" })
+        amount: yup.string().required("Amount is required!").matches(/^[0-9]+[,]?[0-9]+$/, { message: "Only numbers and dots allowed!" })
     })
 
     useEffect(() => {
@@ -55,23 +55,25 @@ function WalletForm(props) {
     }, [portfolios])
 
     async function addPortfolio(event) {
-        event.p_id = nanoid(10)
-        event.type = "wallet"
+        let portfolio = {...event}
+        
+        portfolio.amount = portfolio.amount.replace(',', '.')
+        portfolio.p_id = nanoid(10)
+        portfolio.type = "wallet"
 
         if (props.caller === "portfolio") {
             try {
-                await axios.post('users/add-portfolio', { username: props.username, portfolio: event })
-                props.setStatus("success", event)
+                await axios.post('users/add-portfolio', { username: props.username, portfolio })
+                props.setStatus("success", portfolio)
             }
             catch (err) {
                 props.setStatus("error")
             }
         }
         else {
-            props.setPortfolio(event)
+            props.setPortfolio(portfolio)
             props.closeModal()
         }
-
     }
 
     return (
@@ -118,7 +120,7 @@ function WalletForm(props) {
                                         value={values.amount}
                                         onChange={handleChange}
                                         isInvalid={touched.amount && errors.amount} 
-                                        inputmode="decimal"
+                                        inputMode="decimal"
                                     />
                                     <Form.Control.Feedback type="invalid"> {errors.amount}  </Form.Control.Feedback>
                                 </Col>

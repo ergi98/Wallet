@@ -256,7 +256,6 @@ class UsersController {
             let { username, portfolio } = req.body
 
             let result = await UsersDAO.addPortfolio(username, portfolio)
-
             res.json({ result })
         }
         catch(e) {
