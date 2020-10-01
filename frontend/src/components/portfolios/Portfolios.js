@@ -219,6 +219,7 @@ function Portfolios() {
                 username={username}
                 closeModal={() => setShowPortfolioTransfer(false)}
                 setTransferStatus={setTransferStatus}
+                portfolios = {portfolios}
             />
         </Layout>
     )

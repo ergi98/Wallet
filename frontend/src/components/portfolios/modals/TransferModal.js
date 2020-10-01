@@ -17,8 +17,6 @@ import NumberFormat from 'react-number-format'
 
 function TransferModal(props) {
 
-    const portfolios = useSelector((state) => state.user.portfolios)
-
     const [from, setFrom] = useState('default')
     const [to, setTo] = useState('default')
     const [amount, setAmount] = useState('')
@@ -38,14 +36,12 @@ function TransferModal(props) {
         function transformPortfolios() {
             let temp = {}
 
-            console.log(portfolios)
+            console.log(props.portfolios)
 
-            if(portfolios !== undefined) {
-                for(const portfolio of portfolios) {
-                    temp[portfolio.p_id] = {
-                        amount: portfolio.amount.$numberDecimal,
-                        currency: portfolio.currency
-                    } 
+            for(const portfolio of props.portfolios) {
+                temp[portfolio.p_id] = {
+                    amount: portfolio.amount.$numberDecimal,
+                    currency: portfolio.currency
                 } 
             }
             
@@ -57,7 +53,7 @@ function TransferModal(props) {
         return () => {
             isMounted = false
         }
-    }, [portfolios])
+    }, [props.portfolios])
 
     async function makeTransfer() {
         try {
@@ -137,7 +133,7 @@ function TransferModal(props) {
                         >
                             <option value="default" disabled>Transfer from this portfolio</option>
                             {
-                                portfolios.map(portfolio => <option key={portfolio.p_id} value={portfolio.p_id}>{portfolio.p_name}</option>)
+                                props.portfolios.map(portfolio => <option key={portfolio.p_id} value={portfolio.p_id}>{portfolio.p_name}</option>)
                             }
                         </Form.Control>
                     </Form.Group>
@@ -155,7 +151,7 @@ function TransferModal(props) {
                         >
                             <option value="default" disabled>Transfer to this portfolio</option>
                             {
-                                portfolios.map(portfolio => {
+                                props.portfolios.map(portfolio => {
                                     if (portfolio.p_id !== from && portfolio.currency === portfolioMap[from]?.currency)
                                         return <option key={portfolio.p_id} value={portfolio.p_id}>{portfolio.p_name}</option>
                                     return null
