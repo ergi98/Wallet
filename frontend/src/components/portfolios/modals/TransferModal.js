@@ -88,7 +88,7 @@ function TransferModal(props) {
             setInvalid(true)
             setError("Only numbers and dots allowed!")
         }
-        else if (amount <= 0) {
+        else if (parseFloat(amount) <= 0) {
             setInvalid(true)
             setError("Amount must be a pozitive number!")
         }
@@ -163,10 +163,11 @@ function TransferModal(props) {
                         <Form.Label className="form-label">Amount</Form.Label>
                         <Form.Control
                             className="input-field"
-                            type="number"
+                            type="string"
                             value={amount}
                             disabled={from === 'default' || to === 'default'}
                             placeholder="Enter transfer amount"
+                            inputmode="decimal"
                             onChange={(event) => setAmount(event.target.value)}
                             isInvalid={invalid}
                         />

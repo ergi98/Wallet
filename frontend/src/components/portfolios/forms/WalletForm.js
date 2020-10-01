@@ -118,8 +118,7 @@ function WalletForm(props) {
                                         value={values.amount}
                                         onChange={handleChange}
                                         isInvalid={touched.amount && errors.amount} 
-                                        inputmode="numeric" 
-                                        pattern="[0-9]*"
+                                        inputmode="decimal"
                                     />
                                     <Form.Control.Feedback type="invalid"> {errors.amount}  </Form.Control.Feedback>
                                 </Col>

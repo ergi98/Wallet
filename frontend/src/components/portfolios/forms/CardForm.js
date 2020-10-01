@@ -103,6 +103,7 @@ function CardForm(props) {
                                         placeholder="Enter the amount"
                                         value={values.amount}
                                         onChange={handleChange}
+                                        inputmode="decimal"
                                         isInvalid={touched.amount && errors.amount}
                                     />
                                     <Form.Control.Feedback type="invalid"> {errors.amount} </Form.Control.Feedback>

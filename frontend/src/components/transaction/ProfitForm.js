@@ -270,10 +270,11 @@ class ProfitForm extends Component {
                                     <Col md={6} sm={6} xs={6} style={{ padding: "0" }}>
                                         <Form.Control
                                             id="amount"
-                                            type="number"
+                                            type="string"
                                             placeholder="Amount"
                                             value={values.amount}
                                             onChange={handleChange}
+                                            inputmode="decimal"
                                             isInvalid={touched.amount && errors.amount}
                                         />
                                         <Form.Control.Feedback type="invalid"> {errors.amount}  </Form.Control.Feedback>
