@@ -39,11 +39,13 @@ function TransferModal(props) {
             let temp = {}
 
             console.log(portfolios)
-
-            for(const portfolio of portfolios) {
-                temp[portfolio.p_id] = {
-                    amount: portfolio.amount.$numberDecimal,
-                    currency: portfolio.currency
+            
+            if(portfolios !== undefined) {
+                for(const portfolio of portfolios) {
+                    temp[portfolio.p_id] = {
+                        amount: portfolio.amount.$numberDecimal,
+                        currency: portfolio.currency
+                    } 
                 } 
             }
             
