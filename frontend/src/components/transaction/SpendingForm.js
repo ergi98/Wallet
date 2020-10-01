@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useRef } from 'react'
 import './SpendingForm.scss'
 
 // Axios
@@ -6,6 +6,9 @@ import axios from 'axios'
 
 // NanoID
 import { nanoid } from 'nanoid'
+
+// Components
+import MapModal from './modals/MapModal'
 
 // Bootstrap
 import Container from 'react-bootstrap/Container'
@@ -71,7 +74,8 @@ class SpendingForm extends Component {
             categories: [],
             portfolios: [],
             displayError: false,
-            displaySuccess: false
+            displaySuccess: false,
+            showMapModal: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -156,6 +160,10 @@ class SpendingForm extends Component {
         }
     }
 
+    getPinLocation(position) {
+        console.log(position)
+    }
+
     render() {
         return (
             <Row className="form-row">
@@ -233,6 +241,7 @@ class SpendingForm extends Component {
                                             value={values.hours}
                                             onChange={handleChange}
                                             type="string"
+                                            inputMode="numeric"
                                             placeholder="Hour"
                                             isInvalid={touched.hours && errors.hours}
                                             readOnly={this.state.isTimeChecked}
@@ -245,6 +254,7 @@ class SpendingForm extends Component {
                                             id="minutes"
                                             value={values.minutes}
                                             onChange={handleChange}
+                                            inputMode="numeric"
                                             type="string"
                                             placeholder="Minutes"
                                             isInvalid={touched.minutes && errors.minutes}
@@ -299,6 +309,7 @@ class SpendingForm extends Component {
                                             variant="primary"
                                             style={{ width: "100%" }}
                                             disabled={this.state.isLocationChecked}
+                                            onClick={() => this.setState({showMapModal: true})}
                                         >
                                             Choose
                                             <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-7px' } }}>
@@ -310,16 +321,16 @@ class SpendingForm extends Component {
                                         <Form.Check type="checkbox" id="location" label="Current Location" onChange={(event) => {
                                             if (event.target.checked) {
                                                 navigator.geolocation.getCurrentPosition(pos => {
-                                                    setFieldValue("long", pos.coords.latitude)
-                                                    setFieldValue("lat", pos.coords.longitude)
+                                                    setFieldValue("lat", pos.coords.latitude)
+                                                    setFieldValue("long", pos.coords.longitude)
                                                 })
                                                 this.setState({
                                                     isLocationChecked: event.target.checked
                                                 })
                                             }
                                             else {
-                                                setFieldValue("long", '')
                                                 setFieldValue("lat", '')
+                                                setFieldValue("long", '')
                                                 this.setState({
                                                     isLocationChecked: event.target.checked
                                                 })
@@ -461,6 +472,11 @@ class SpendingForm extends Component {
                             </Form>
                         )}
                 </Formik>
+                <MapModal
+                    show={this.state.showMapModal}
+                    closeModal={() => this.setState({showMapModal: false})}
+                    getPinLocation={this.getPinLocation}
+                />
             </Row>
         )
     }

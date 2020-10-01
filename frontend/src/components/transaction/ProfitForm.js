@@ -225,6 +225,7 @@ class ProfitForm extends Component {
                                             value={values.hours}
                                             onChange={handleChange}
                                             type="string"
+                                            inputMode="numeric"
                                             placeholder="Hour"
                                             isInvalid={touched.hours && errors.hours}
                                             readOnly={this.state.isTimeChecked}
@@ -238,6 +239,7 @@ class ProfitForm extends Component {
                                             value={values.minutes}
                                             onChange={handleChange}
                                             type="string"
+                                            inputMode="numeric"
                                             placeholder="Minutes"
                                             isInvalid={touched.minutes && errors.minutes}
                                             readOnly={this.state.isTimeChecked}
