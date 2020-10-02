@@ -17,7 +17,6 @@ function NewSrcCat(props) {
     const [deleteSrcCatError, setDeleteSrcCatError] = useState(false)
 
     async function deleteSrcCat() {
-        console.log(props.item)
         if(props.type === "Category") {
             try {
                 await axios.post('/users/delete-category', { username, category_id: props.item.cat_id })

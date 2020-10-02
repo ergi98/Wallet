@@ -73,4 +73,4 @@ function PortfolioInformation(props) {
     )
 }
 
-export default PortfolioInformation
+export default React.memo(PortfolioInformation)

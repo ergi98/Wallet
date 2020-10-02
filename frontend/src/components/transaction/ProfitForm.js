@@ -232,7 +232,7 @@ class ProfitForm extends Component {
                                         />
                                         <Form.Control.Feedback type="invalid"> {errors.hours}  </Form.Control.Feedback>
                                     </Col>
-                                    <Col md="auto" sm="auto" xs="auto" style={{ padding: "0px 5px" }}> : </Col>
+                                    <Col md="auto" sm="auto" xs="auto" style={{ padding: "0px 5px", lineHeight: "2" }}> : </Col>
                                     <Col md={3} sm={3} xs={3} style={{ padding: "0px" }}>
                                         <Form.Control
                                             id="minutes"
@@ -292,8 +292,8 @@ class ProfitForm extends Component {
                                             isInvalid={touched.currency && errors.currency}
                                         >
                                             <option value="ALL">ALL</option>
-                                            <option value="Dollar">$</option>
-                                            <option value="Euro">€</option>
+                                            {/* <option value="$">$</option>
+                                            <option value="€">€</option> */}
                                         </Form.Control>
                                     </Col>
                                 </Form.Group>

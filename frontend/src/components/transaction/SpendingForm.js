@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import './SpendingForm.scss'
 
 // Axios
@@ -23,6 +23,7 @@ import Alert from 'react-bootstrap/Alert'
 import { IconContext } from "react-icons"
 import { FaMapMarkedAlt } from 'react-icons/fa'
 import { AiOutlineFileDone } from 'react-icons/ai'
+import { TiTick } from 'react-icons/ti'
 
 // Form Validation
 import * as yup from "yup"
@@ -32,8 +33,7 @@ import { Formik } from 'formik'
 import { parse } from "date-fns"
 
 // Redux 
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 // Establish the validation schema
 const transaction_schema = yup.object({
@@ -46,9 +46,9 @@ const transaction_schema = yup.object({
     currency: yup.string().required(),
     portfolio: yup.string().required("Portfolio is required!").notOneOf(["Choose portfolio to withdraw ..."], "Please select a portfolio!"),
     category: yup.string().required("Category is required!").notOneOf(["Choose category of expense ..."], "Please select an expense category!"),
-    description: yup.string().required("Please provide a short description!").max(40, "Maximum is 40 characters!").matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/, { message: "Only numbers, characters, '_' '.' and ',' allowed!"}),
-    long_desc: yup.string().notRequired().max(100, "Maximum is 100 characters!").matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/, { message: "Only numbers, characters, '_' '.' and ',' allowed!"})
-});
+    description: yup.string().required("Please provide a short description!").max(40, "Maximum is 40 characters!").matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/, { message: "Only numbers, characters, '_' '.' and ',' allowed!" }),
+    long_desc: yup.string().notRequired().max(100, "Maximum is 100 characters!").matches(/^[A-Za-z0-9 _.,]*[A-Za-z0-9][A-Za-z0-9 _.,]*$/, { message: "Only numbers, characters, '_' '.' and ',' allowed!" })
+})
 
 function parseDate(value, originalValue) {
     const parsedDate = parse(originalValue, "dd/MM/yyyy", new Date())
@@ -60,55 +60,47 @@ function parseDate(value, originalValue) {
     return false
 }
 
-class SpendingForm extends Component {
+function SpendingForm() {
 
-    constructor() {
-        super()
+    const username = useSelector((state) => state.user.username)
 
-        this._isMounted = false
+    const [dateChecked, setDateChecked] = useState(false)
+    const [timeChecked, setTimeChecked] = useState(false)
+    const [locationChecked, setLocationChecked] = useState(false)
 
-        this.state = {
-            isDateChecked: false,
-            isTimeChecked: false,
-            isLocationChecked: false,
-            categories: [],
-            portfolios: [],
-            displayError: false,
-            displaySuccess: false,
-            showMapModal: false
-        }
+    const [categories, setCategories] = useState([])
+    const [portfolios, setPortfolios] = useState([])
 
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
+    const [displayError, setDisplayError] = useState(false)
+    const [displaySuccess, setDisplaySuccess] = useState(false)
+    const [showMapModal, setShowMapModal] = useState(false)
 
-    componentDidMount() {
-        this._isMounted = true
-        this._isMounted && this.getValues()
-    }
+    useEffect(() => {
+        let _isMounted = true
 
-    componentWillUnmount() {
-        this._isMounted = false
-    }
+        async function getValues() {
+            try {
+                let res = await axios.post('/users/populate-transactions', { username })
 
-    async getValues() {
-        try {
-            let res = await axios.post('/users/populate-transactions', { username: this.props.username })
+                if (res.data.result.length > 0) {
+                    let { categories, portfolios } = res.data.result[0]
 
-            if (res.data.result.length > 0) {
-                let { categories, portfolios } = res.data.result[0]
-
-                this._isMounted && this.setState({
-                    categories,
-                    portfolios
-                })
+                    _isMounted && setPortfolios(portfolios)
+                    _isMounted && setCategories(categories)
+                }
+            }
+            catch (err) {
+                console.log(err)
             }
         }
-        catch (err) {
-            console.log(err)
-        }
-    }
 
-    async handleSubmit(event, { resetForm }) {
+        _isMounted && getValues()
+        return () => {
+            _isMounted = false
+        }
+    }, [username])
+
+    async function handleSubmit(event, { resetForm }) {
         if (event.hours < 10)
             event.hours = `0${event.hours}`
         if (event.minutes < 10)
@@ -134,360 +126,328 @@ class SpendingForm extends Component {
 
         try {
             await axios.post('/transactions/new-transaction', {
-                username: this.props.username,
+                username,
                 date: event.date,
                 transaction
             })
-            this._isMounted && this.setState({
-                displaySuccess: true
-            })
-            setTimeout(() => {
-                this._isMounted && this.setState({
-                    displaySuccess: false
-                })
-            }, 2500);
+
+            setDisplaySuccess(true)
+            setTimeout(() => { setDisplaySuccess(false) }, 2500)
             resetForm({})
         }
         catch (error) {
-            this._isMounted && this.setState({
-                displayError: true
-            })
-            setTimeout(() => {
-                this._isMounted && this.setState({
-                    displayError: false
-                })
-            }, 2500);
+            setDisplayError(true)
+            setTimeout(() => { setDisplayError(false) }, 2500)
         }
     }
 
-    getPinLocation(position) {
-        console.log(position)
-    }
+    return (
+        <Row className="form-row">
+            <Alert show={displaySuccess} variant="success" className="alert" as="Row">
+                Successfully register transaction!
+            </Alert>
+            <Alert show={displayError} variant="danger" className="alert" as="Row">
+                The transaction you are trying to register did not go through!
+            </Alert>
+            <Formik
+                validationSchema={transaction_schema}
+                onSubmit={handleSubmit}
+                initialValues={{
+                    date: '',
+                    hours: '',
+                    minutes: '',
+                    long: '',
+                    lat: '',
+                    amount: '',
+                    currency: 'ALL',
+                    portfolio: 'Choose portfolio to withdraw ...',
+                    category: 'Choose category of expense ...',
+                    description: '',
+                    long_desc: ''
+                }}
+            >
+                {({
+                    handleSubmit,
+                    handleChange,
+                    values,
+                    touched,
+                    errors,
+                    isSubmitting,
+                    setFieldValue
+                }) => (
+                        <Form noValidate onSubmit={handleSubmit} id="transaction-form">
+                            <Form.Group as={Row} controlId="date">
+                                <Form.Label column md={3} sm={3} xs={3} > Date </Form.Label>
+                                <Col md={6} sm={6} xs={6} style={{ padding: "0px" }}>
+                                    <Form.Control
+                                        value={values.date}
+                                        onChange={handleChange}
+                                        type="string"
+                                        placeholder="Date"
+                                        isInvalid={touched.date && errors.date}
+                                        readOnly={dateChecked}
+                                    />
+                                    <Form.Control.Feedback type="invalid"> {errors.date}  </Form.Control.Feedback>
+                                </Col>
+                                <Col md={3} sm={3} xs={3}>
+                                    <Form.Check type="checkbox" label="Auto" onChange={(event) => {
+                                        if (event.target.checked)
+                                            setFieldValue("date", new Date().toLocaleDateString('en-GB'))
+                                        else
+                                            setFieldValue("date", '')
+                                        setDateChecked(event.target.checked)
+                                    }} />
+                                </Col>
+                            </Form.Group>
 
-    render() {
-        return (
-            <Row className="form-row">
-                <Alert show={this.state.displaySuccess} variant="success" className="alert" as="Row">
-                    <Alert.Heading className="heading">Transaction Succeeded</Alert.Heading>
-                        Successfully register transaction!
-                    </Alert>
-                <Alert show={this.state.displayError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Transaction Failed</Alert.Heading>
-                        The transaction you are trying to register did not go through!
-                    </Alert>
-                <Formik
-                    validationSchema={transaction_schema}
-                    onSubmit={this.handleSubmit}
-                    initialValues={{
-                        date: '',
-                        hours: '',
-                        minutes: '',
-                        long: '',
-                        lat: '',
-                        amount: '',
-                        currency: 'ALL',
-                        portfolio: 'Choose portfolio to withdraw ...',
-                        category: 'Choose category of expense ...',
-                        description: '',
-                        long_desc: ''
-                    }}
-                >
-                    {({
-                        handleSubmit,
-                        handleChange,
-                        values,
-                        touched,
-                        errors,
-                        isSubmitting,
-                        setFieldValue
-                    }) => (
-                            <Form noValidate onSubmit={handleSubmit} id="transaction-form">
-                                <Form.Group as={Row} controlId="date">
-                                    <Form.Label column md={3} sm={3} xs={3} > Date </Form.Label>
-                                    <Col md={6} sm={6} xs={6} style={{ padding: "0px" }}>
-                                        <Form.Control
-                                            value={values.date}
-                                            onChange={handleChange}
-                                            type="string"
-                                            placeholder="Date"
-                                            isInvalid={touched.date && errors.date}
-                                            readOnly={this.state.isDateChecked}
-                                        />
-                                        <Form.Control.Feedback type="invalid"> {errors.date}  </Form.Control.Feedback>
-                                    </Col>
-                                    <Col md={3} sm={3} xs={3}>
-                                        <Form.Check type="checkbox" label="Auto" onChange={(event) => {
-                                            if (event.target.checked) {
-                                                setFieldValue("date", new Date().toLocaleDateString('en-GB'))
-                                                this.setState({
-                                                    isDateChecked: event.target.checked
-                                                })
-                                            }
-                                            else {
-                                                setFieldValue("date", '')
-                                                this.setState({
-                                                    isDateChecked: event.target.checked
-                                                })
-                                            }
-                                        }} />
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Row}>
-                                    <Form.Label column md={3} sm={3} xs={3} > Time </Form.Label>
-                                    <Col md={3} sm={3} xs={3} style={{ padding: "0px" }}>
-                                        <Form.Control
-                                            id="hours"
-                                            value={values.hours}
-                                            onChange={handleChange}
-                                            type="string"
-                                            inputMode="numeric"
-                                            placeholder="Hour"
-                                            isInvalid={touched.hours && errors.hours}
-                                            readOnly={this.state.isTimeChecked}
-                                        />
-                                        <Form.Control.Feedback type="invalid"> {errors.hours}  </Form.Control.Feedback>
-                                    </Col>
-                                    <Col md="auto" sm="auto" xs="auto" style={{ padding: "0px 5px" }}> : </Col>
-                                    <Col md={3} sm={3} xs={3} style={{ padding: "0px" }}>
-                                        <Form.Control
-                                            id="minutes"
-                                            value={values.minutes}
-                                            onChange={handleChange}
-                                            inputMode="numeric"
-                                            type="string"
-                                            placeholder="Minutes"
-                                            isInvalid={touched.minutes && errors.minutes}
-                                            readOnly={this.state.isTimeChecked}
-                                        />
-                                        <Form.Control.Feedback type="invalid"> {errors.minutes}  </Form.Control.Feedback>
-                                    </Col>
-                                    <Col md={2} sm={2} xs={2}>
-                                        <Form.Check type="checkbox" id="time" label="Auto" onChange={(event) => {
-                                            if (event.target.checked) {
-                                                let date = new Date()
-                                                setFieldValue("hours", date.getHours())
-                                                setFieldValue("minutes", date.getMinutes())
-                                                this.setState({
-                                                    isTimeChecked: event.target.checked
-                                                })
-                                            }
-                                            else {
-                                                setFieldValue("hours", '')
-                                                setFieldValue("minutes", '')
-                                                this.setState({
-                                                    isTimeChecked: event.target.checked
-                                                })
-                                            }
-                                        }} />
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Row} className="align-items-center">
-                                    <Form.Label column md={3} sm={3} xs={3}> Location </Form.Label>
-                                    <Col md={4} sm={4} xs={4} style={{ padding: "0" }}>
-                                        <Form.Control
-                                            id="long"
-                                            value={values.long}
-                                            onChange={handleChange}
-                                            type="string"
-                                            placeholder="Longitude"
-                                            isInvalid={touched.long && errors.long}
-                                            style={{ display: "none" }}
-                                        />
-                                        <Form.Control
-                                            id="lat"
-                                            value={values.lat}
-                                            onChange={handleChange}
-                                            type="string"
-                                            placeholder="Latitude"
-                                            isInvalid={touched.lat && errors.lat}
-                                            readOnly={this.state.isTimeChecked}
-                                            style={{ display: "none" }}
-                                        />
-                                        <Button
-                                            variant="primary"
-                                            style={{ width: "100%" }}
-                                            disabled={this.state.isLocationChecked}
-                                            onClick={() => this.setState({showMapModal: true})}
-                                        >
-                                            Choose
-                                            <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-7px' } }}>
-                                                <FaMapMarkedAlt />
-                                            </IconContext.Provider>
-                                        </Button>
-                                    </Col>
-                                    <Col md={5} sm={5} xs={5}>
-                                        <Form.Check type="checkbox" id="location" label="Current Location" onChange={(event) => {
-                                            if (event.target.checked) {
-                                                navigator.geolocation.getCurrentPosition(pos => {
-                                                    setFieldValue("lat", pos.coords.latitude)
-                                                    setFieldValue("long", pos.coords.longitude)
-                                                })
-                                                this.setState({
-                                                    isLocationChecked: event.target.checked
-                                                })
-                                            }
-                                            else {
-                                                setFieldValue("lat", '')
-                                                setFieldValue("long", '')
-                                                this.setState({
-                                                    isLocationChecked: event.target.checked
-                                                })
-                                            }
-                                        }} />
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Row}>
-                                    <Form.Label column md={3} sm={3} xs={3}> Amount </Form.Label>
-                                    <Col md={6} sm={6} xs={6} style={{ padding: "0" }}>
-                                        <Form.Control
-                                            id="amount"
-                                            type="string"
-                                            inputMode="decimal"
-                                            placeholder="Amount"
-                                            value={values.amount}
-                                            onChange={handleChange}
-                                            isInvalid={touched.amount && errors.amount}
-                                        />
-                                        <Form.Control.Feedback type="invalid"> {errors.amount} </Form.Control.Feedback>
-                                    </Col>
-                                    <Col md={3} sm={3} xs={3}>
-                                        <Form.Control
-                                            id="currency"
-                                            as="select"
-                                            className="mr-sm-2"
-                                            custom
-                                            value={values.currency}
-                                            onChange={handleChange}
-                                            isInvalid={touched.currency && errors.currency}
-                                        >
-                                            <option value="ALL">ALL</option>
-                                            <option value="Dollar">$</option>
-                                            <option value="Euro">€</option>
-                                        </Form.Control>
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Row} controlId="portfolio">
-                                    <Form.Label column md={3} sm={3} xs={3}> Portfolio </Form.Label>
-                                    <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
-                                        <Form.Control
-                                            as="select"
-                                            className="mr-sm-2"
-                                            custom
-                                            value={values.portfolio}
-                                            onChange={handleChange}
-                                            isInvalid={touched.portfolio && errors.portfolio}
-                                        >
-                                            <option disabled>Choose portfolio to withdraw ...</option>
-                                            {
-                                                this.state.portfolios.map(portfolio =>
-                                                    <option
-                                                        value={portfolio.p_id}
-                                                        key={portfolio.p_id}
-                                                    >
-                                                        {portfolio.p_name}
-                                                    </option>
-                                                )
-                                            }
-                                        </Form.Control>
-                                        <Form.Control.Feedback type="invalid"> {errors.portfolio} </Form.Control.Feedback>
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Row} controlId="category">
-                                    <Form.Label column md={3} sm={3} xs={3}> Category </Form.Label>
-                                    <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
-                                        <Form.Control
-                                            as="select"
-                                            className="mr-sm-2"
-                                            custom
-                                            value={values.category}
-                                            onChange={handleChange}
-                                            isInvalid={touched.category && errors.category}
-                                        >
-                                            <option disabled>Choose category of expense ...</option>
-                                            {
-                                                this.state.categories.map(category =>
-                                                    <option
-                                                        value={category.cat_id}
-                                                        key={category.cat_id}
-                                                    >
-                                                        {category.cat_name}
-                                                    </option>
-                                                )
-                                            }
-                                        </Form.Control>
-                                        <Form.Control.Feedback type="invalid"> {errors.category} </Form.Control.Feedback>
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Row} controlId="description">
-                                    <Form.Label column md={3} sm={3} xs={3}> Description </Form.Label>
-                                    <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
-                                        <Form.Control
-                                            type="string"
-                                            placeholder="Description"
-                                            value={values.description}
-                                            onChange={handleChange}
-                                            isInvalid={touched.description && errors.description}
-                                        />
-                                        <Form.Control.Feedback type="invalid"> {errors.description} </Form.Control.Feedback>
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Container} controlId="long_desc" style={{ padding: "0px" }}>
-                                    <Form.Label> Detailed Description </Form.Label>
-                                    <Col style={{ padding: "0px 0px 0px 0px" }}>
-                                        <Form.Control
-                                            as="textarea"
-                                            rows="2"
-                                            name="long_desc"
-                                            laceholder="Detailed Description"
-                                            style={{ resize: "none" }}
-                                            value={values.long_desc}
-                                            onChange={handleChange}
-                                            isInvalid={touched.long_desc && errors.long_desc}
-                                        />
-                                        <Form.Control.Feedback type="invalid"> {errors.long_desc} </Form.Control.Feedback>
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Row className="btn-row">
-                                    <Button variant="primary" type="submit" form="transaction-form" disabled={isSubmitting}>
-                                        {isSubmitting ?
-                                            <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-                                            :
-                                            <span>
-                                                Finalize
-                                            <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
-                                                    <AiOutlineFileDone />
-                                                </IconContext.Provider>
-                                            </span>
+                            <Form.Group as={Row}>
+                                <Form.Label column md={3} sm={3} xs={3} > Time </Form.Label>
+                                <Col md={3} sm={3} xs={3} style={{ padding: "0px" }}>
+                                    <Form.Control
+                                        id="hours"
+                                        value={values.hours}
+                                        onChange={handleChange}
+                                        type="string"
+                                        inputMode="numeric"
+                                        placeholder="Hour"
+                                        isInvalid={touched.hours && errors.hours}
+                                        readOnly={timeChecked}
+                                    />
+                                    <Form.Control.Feedback type="invalid"> {errors.hours}  </Form.Control.Feedback>
+                                </Col>
+                                <Col md="auto" sm="auto" xs="auto" style={{ padding: "0px 5px", lineHeight: "2" }}> : </Col>
+                                <Col md={3} sm={3} xs={3} style={{ padding: "0px" }}>
+                                    <Form.Control
+                                        id="minutes"
+                                        value={values.minutes}
+                                        onChange={handleChange}
+                                        inputMode="numeric"
+                                        type="string"
+                                        placeholder="Minutes"
+                                        isInvalid={touched.minutes && errors.minutes}
+                                        readOnly={timeChecked}
+                                    />
+                                    <Form.Control.Feedback type="invalid"> {errors.minutes}  </Form.Control.Feedback>
+                                </Col>
+                                <Col md={2} sm={2} xs={2}>
+                                    <Form.Check type="checkbox" id="time" label="Auto" onChange={(event) => {
+                                        if (event.target.checked) {
+                                            let date = new Date()
+                                            setFieldValue("hours", date.getHours())
+                                            setFieldValue("minutes", date.getMinutes())
                                         }
+                                        else {
+                                            setFieldValue("hours", '')
+                                            setFieldValue("minutes", '')
+                                        }
+                                        setTimeChecked(event.target.checked)
+                                    }} />
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Group as={Row} className="align-items-center">
+                                <Form.Label column md={3} sm={3} xs={3}> Location </Form.Label>
+                                <Col md={4} sm={4} xs={4} style={{ padding: "0" }}>
+                                    <Form.Control
+                                        id="long"
+                                        value={values.long}
+                                        onChange={handleChange}
+                                        type="string"
+                                        placeholder="Longitude"
+                                        isInvalid={touched.long && errors.long}
+                                        style={{ display: "none" }}
+                                    />
+                                    <Form.Control
+                                        id="lat"
+                                        value={values.lat}
+                                        onChange={handleChange}
+                                        type="string"
+                                        placeholder="Latitude"
+                                        isInvalid={touched.lat && errors.lat}
+                                        style={{ display: "none" }}
+                                    />
+                                    <Button
+                                        variant={values.lat !== '' && values.long !== ''? "success" : "primary"}
+                                        style={{ width: "100%" }}
+                                        disabled={locationChecked}
+                                        onClick={() => setShowMapModal(true)}
+                                    >
+                                    {
+                                        values.lat === '' && values.long === ''?
+                                            <React.Fragment>
+                                                Choose
+                                                <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-7px' } }}>
+                                                    <FaMapMarkedAlt />
+                                                </IconContext.Provider>  
+                                            </React.Fragment>
+                                        :
+                                            <React.Fragment>
+                                                Located
+                                                <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-7px' } }}>
+                                                    <TiTick />
+                                                </IconContext.Provider>  
+                                            </React.Fragment>
+                                    } 
                                     </Button>
-                                </Form.Row>
-                            </Form>
-                        )}
-                </Formik>
-                <MapModal
-                    show={this.state.showMapModal}
-                    closeModal={() => this.setState({showMapModal: false})}
-                    getPinLocation={this.getPinLocation}
-                />
-            </Row>
-        )
-    }
+
+                                    <MapModal
+                                        show={showMapModal}
+                                        closeModal={() => setShowMapModal(false)}
+                                        setUserLocation={setFieldValue}
+                                    />
+                                </Col>
+                                <Col md={5} sm={5} xs={5}>
+                                    <Form.Check type="checkbox" id="location" label="Current Location" onChange={(event) => {
+                                        if (event.target.checked) {
+                                            navigator.geolocation.getCurrentPosition(pos => {
+                                                setFieldValue("lat", pos.coords.latitude)
+                                                setFieldValue("long", pos.coords.longitude)
+                                            })
+                                        }
+                                        else {
+                                            setFieldValue("lat", '')
+                                            setFieldValue("long", '')
+                                        }
+                                        setLocationChecked(event.target.checked)
+                                    }} />
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Group as={Row}>
+                                <Form.Label column md={3} sm={3} xs={3}> Amount </Form.Label>
+                                <Col md={6} sm={6} xs={6} style={{ padding: "0" }}>
+                                    <Form.Control
+                                        id="amount"
+                                        type="string"
+                                        inputMode="decimal"
+                                        placeholder="Amount"
+                                        value={values.amount}
+                                        onChange={handleChange}
+                                        isInvalid={touched.amount && errors.amount}
+                                    />
+                                    <Form.Control.Feedback type="invalid"> {errors.amount} </Form.Control.Feedback>
+                                </Col>
+                                <Col md={3} sm={3} xs={3}>
+                                    <Form.Control
+                                        id="currency"
+                                        as="select"
+                                        className="mr-sm-2"
+                                        custom
+                                        value={values.currency}
+                                        onChange={handleChange}
+                                        isInvalid={touched.currency && errors.currency}
+                                    >
+                                        <option value="ALL">ALL</option>
+                                        {/* <option value="$">$</option>
+                                        <option value="€">€</option> */}
+                                    </Form.Control>
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Group as={Row} controlId="portfolio">
+                                <Form.Label column md={3} sm={3} xs={3}> Portfolio </Form.Label>
+                                <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
+                                    <Form.Control
+                                        as="select"
+                                        className="mr-sm-2"
+                                        custom
+                                        value={values.portfolio}
+                                        onChange={handleChange}
+                                        isInvalid={touched.portfolio && errors.portfolio}
+                                    >
+                                        <option disabled>Choose portfolio to withdraw ...</option>
+                                        {
+                                            portfolios.map(portfolio =>
+                                                <option
+                                                    value={portfolio.p_id}
+                                                    key={portfolio.p_id}
+                                                >
+                                                    {portfolio.p_name}
+                                                </option>
+                                            )
+                                        }
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid"> {errors.portfolio} </Form.Control.Feedback>
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Group as={Row} controlId="category">
+                                <Form.Label column md={3} sm={3} xs={3}> Category </Form.Label>
+                                <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
+                                    <Form.Control
+                                        as="select"
+                                        className="mr-sm-2"
+                                        custom
+                                        value={values.category}
+                                        onChange={handleChange}
+                                        isInvalid={touched.category && errors.category}
+                                    >
+                                        <option disabled>Choose category of expense ...</option>
+                                        {
+                                            categories.map(category =>
+                                                <option
+                                                    value={category.cat_id}
+                                                    key={category.cat_id}
+                                                >
+                                                    {category.cat_name}
+                                                </option>
+                                            )
+                                        }
+                                    </Form.Control>
+                                    <Form.Control.Feedback type="invalid"> {errors.category} </Form.Control.Feedback>
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Group as={Row} controlId="description">
+                                <Form.Label column md={3} sm={3} xs={3}> Description </Form.Label>
+                                <Col md={9} sm={9} xs={9} style={{ padding: "0px 15px 0px 0px" }}>
+                                    <Form.Control
+                                        type="string"
+                                        placeholder="Description"
+                                        value={values.description}
+                                        onChange={handleChange}
+                                        isInvalid={touched.description && errors.description}
+                                    />
+                                    <Form.Control.Feedback type="invalid"> {errors.description} </Form.Control.Feedback>
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Group as={Container} controlId="long_desc" style={{ padding: "0px" }}>
+                                <Form.Label> Detailed Description </Form.Label>
+                                <Col style={{ padding: "0px 0px 0px 0px" }}>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows="2"
+                                        name="long_desc"
+                                        laceholder="Detailed Description"
+                                        style={{ resize: "none" }}
+                                        value={values.long_desc}
+                                        onChange={handleChange}
+                                        isInvalid={touched.long_desc && errors.long_desc}
+                                    />
+                                    <Form.Control.Feedback type="invalid"> {errors.long_desc} </Form.Control.Feedback>
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Row className="btn-row">
+                                <Button variant="primary" type="submit" form="transaction-form" disabled={isSubmitting}>
+                                    {isSubmitting ?
+                                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                                        :
+                                        <span>
+                                            Finalize
+                                            <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: '-4px' } }}>
+                                                <AiOutlineFileDone />
+                                            </IconContext.Provider>
+                                        </span>
+                                    }
+                                </Button>
+                            </Form.Row>
+                        </Form>
+                    )}
+            </Formik>
+        </Row>
+    )
 }
 
-const mapPropsToState = state => ({
-    username: state.user.username
-})
-
-SpendingForm.propTypes = {
-    username: PropTypes.string.isRequired
-}
-
-export default connect(mapPropsToState, null)(SpendingForm)
+export default SpendingForm

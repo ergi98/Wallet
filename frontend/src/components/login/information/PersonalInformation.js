@@ -102,8 +102,8 @@ function PersonalInformation(props) {
                                     >
                                         <option value="default">Choose</option>
                                         <option value="ALL">ALL</option>
-                                        <option value="Dollar">$</option>
-                                        <option value="Euro">€</option>
+                                        {/* <option value="Dollar">$</option>
+                                        <option value="Euro">€</option> */}
                                     </Form.Control>
                                 </div>
                                 <div>
@@ -211,4 +211,4 @@ function validateDate(value, originalValue) {
         return ''
 }
 
-export default PersonalInformation
+export default React.memo(PersonalInformation)

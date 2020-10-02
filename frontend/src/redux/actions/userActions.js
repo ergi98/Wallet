@@ -9,8 +9,6 @@ import {
 // Axios
 import axios from 'axios'
 
-
-/** TODO: 3 - Handle all user errors here by dispatching new actions */
 export const logIn = (event) => async (dispatch) => {
 
     try {

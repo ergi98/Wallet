@@ -135,8 +135,8 @@ function WalletForm(props) {
                                         isInvalid={touched.currency && errors.currency}
                                     >
                                         <option value="ALL">ALL</option>
-                                        <option value="Dollar">$</option>
-                                        <option value="Euro">€</option>
+                                        {/* <option value="$">$</option>
+                                        <option value="€">€</option> */}
                                     </Form.Control>
                                 </Col>
                             </Form.Group>

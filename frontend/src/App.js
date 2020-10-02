@@ -1,9 +1,8 @@
 import React from 'react'
-import './App.scss';
+import './App.scss'
 
 // Component
 import Router from './components/router/Router'
-import LoadingView from './components/loading-view/LoadingView'
 
 // Redux
 import { Provider } from 'react-redux'
@@ -15,11 +14,11 @@ import { persistor, store } from './redux/store/store'
 function App() {
   return (
     <Provider store= { store } >
-      <PersistGate loading= { <LoadingView /> } persistor={ persistor }>
+      <PersistGate persistor={ persistor }>
         <Router/>
       </PersistGate>
     </Provider>
   );
 }
 
-export default App;
+export default App

@@ -1,26 +1,25 @@
 @import '../../styles/_colors.scss';
 
-.main-container {
+.logo-row {
+    background-image: linear-gradient($black, $charcoal);
+    height: 40vh;
+    display: flex;
 
-    .logo-row {
-        background-image: linear-gradient($black, $charcoal);
-        height: 40vh;
-
-        img {
-            margin: 10vh auto;    
-            width: 100px;
-            height: 100px;
-        }
+    img {
+        margin: 10vh auto;    
+        width: 100px;
+        height: 100px;
     }
+}
+
+.main-container {
 
     .login-row {
         margin: 0 auto 20px auto;
-        width: 95%;
-       
 
         .login-container { 
             position: relative;
-            margin-top: -55px;
+            margin-top: -60px;
             border-radius: 10px;
             background-color: white;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -121,6 +120,15 @@
         
         .heading {
             font-size: 16px;
+        }
+    }
+}
+
+@media only screen and (min-width: 700px) {
+    .logo-row {
+        img {
+            width: 150px;
+            height: 150px
         }
     }
 }

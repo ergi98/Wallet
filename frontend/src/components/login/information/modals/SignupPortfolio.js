@@ -14,6 +14,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import NumberFormat from 'react-number-format'
 
 function SignupPortfolio(props) {
+
     return (
         <Container className="signup-portfolio">
             <Row className="main-row">
@@ -42,4 +43,4 @@ function SignupPortfolio(props) {
     )
 }
 
-export default SignupPortfolio
+export default React.memo(SignupPortfolio)

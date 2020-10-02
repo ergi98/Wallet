@@ -13,7 +13,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import axios from 'axios'
 
 function LoginInformation(props) {
-
+    
     const [usernames, setUsernames] = useState([])
 
     // Establish the validation schema
@@ -43,7 +43,6 @@ function LoginInformation(props) {
         }
     }, [])
 
-    // TODO : VALIDATE THAT THE USERNAME IS UNIQUE
     let initial = {
         username: props.info.username || '',
         password: props.info.password || '',
@@ -144,5 +143,5 @@ function LoginInformation(props) {
     )
 }
 
-export default LoginInformation
+export default React.memo(LoginInformation)
 

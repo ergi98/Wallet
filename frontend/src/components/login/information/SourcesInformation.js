@@ -13,6 +13,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import { nanoid } from 'nanoid'
 
 function SourcesInformation(props) {
+
     const [newSource, setNewSource] = useState('')
     const [srcValid, setSrcValid] = useState(false)
     const [sources, setSources] = useState(
@@ -112,4 +113,4 @@ function SourcesInformation(props) {
     )
 }
 
-export default SourcesInformation
+export default React.memo(SourcesInformation)

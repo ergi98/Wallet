@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './MapModal.scss'
 
 // Leaflet
@@ -12,15 +12,27 @@ function MapModal(props) {
 
     const [position, setPosition] = useState({})
 
-    navigator.geolocation.getCurrentPosition(pos => {
-        setPosition({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude 
+    useEffect(() => {
+        let _isMounted = true
+        _isMounted && navigator.geolocation.getCurrentPosition(pos => {
+            setPosition({
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude 
+            })
         })
-    })
+        return () => {
+            _isMounted = false
+        }
+    }, [])
 
     function handleDrag(event) {
         setPosition(event.target._latlng)
+    }
+
+    function setLocation() {
+        props.setUserLocation("lat", position.lat)
+        props.setUserLocation("long", position.lng)
+        props.closeModal()
     }
 
     return (
@@ -45,7 +57,7 @@ function MapModal(props) {
             </Modal.Body>
             <Modal.Footer className="center-btns">
                 <Button variant="secondary" onClick={() => props.closeModal()}>Cancel</Button>
-                <Button variant="primary" onClick={() => { props.getPinLocation(position); props.closeModal()}}>
+                <Button variant="primary" onClick={setLocation}>
                     Done
                 </Button>
             </Modal.Footer>
