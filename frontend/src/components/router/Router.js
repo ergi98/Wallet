@@ -22,10 +22,10 @@ const SignUp = React.lazy(() => import('../login/SignUp'))
 class Router extends React.Component {
     render() {
         return (
+            <Suspense fallback={<Loading />}>
             <BrowserRouter>
                 <main>
-                    <Switch>
-                        <Suspense fallback={<Loading />}>
+                        <Switch>
                             <Route path="/" exact component={Login} />
                             <Route path="/sign-up" exact component={SignUp} />
                             {
@@ -42,10 +42,10 @@ class Router extends React.Component {
                                     </> :
                                     <Redirect to="/" />
                             }
-                        </Suspense>
-                    </Switch>
+                        </Switch>
                 </main>
             </BrowserRouter>
+            </Suspense>
         )
     }
 }

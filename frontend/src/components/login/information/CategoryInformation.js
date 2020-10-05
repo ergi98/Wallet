@@ -90,7 +90,7 @@ function CategoryInformation(props) {
                     <Form.Control.Feedback type="invalid"> Category already exists! </Form.Control.Feedback> 
                 </Form.Group>
                 <Button variant="primary" className="portfolio-plus-btn" onClick={addCategory}>
-                    <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '-5px', marginTop: '6px' } }}>
+                    <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginLeft: '-6px' } }}>
                         <BiPlus />
                     </IconContext.Provider> 
                 </Button>

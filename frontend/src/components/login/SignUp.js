@@ -83,57 +83,55 @@ function SignUp() {
                 </div>
                 <img src={require('../../assets/logo.svg')} alt="Wallet Logo" />
             </Container>
-            <Container className="main-container">
-                <Row className="login-row">
-                    <Container className="login-container">
-                        {
-                            success ?
-                                <div className="success-div">
-                                    <section>
-                                        <label className="title">Congratulations!</label>
-                                        <label className="subtitle">
-                                            Your account is ready. Please click the button below to authenticate and login.
-                                </label>
-                                    </section>
-                                    <Button variant="primary" onClick={() => window.location.href = '/login'}>
-                                        LOGIN
-                                    <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: "-2px" } }}>
-                                            <RiLoginCircleLine />
-                                        </IconContext.Provider>
-                                    </Button>
-                                </div> : null
-                        }
-                        {
-                            isEditing ?
-                                <Row className="signup-row">
-                                    <div className="stepper">
-                                        <div className={`dot ${activeStep >= 0 ? "active" : ""}`}>1</div>
-                                        <div className={`dot ${activeStep >= 1 ? "active" : ""}`}>2</div>
-                                        <div className={`dot ${activeStep >= 2 ? "active" : ""}`}>3</div>
-                                        <div className={`dot ${activeStep >= 3 ? "active" : ""}`}>4</div>
-                                        <div className={`dot ${activeStep >= 4 ? "active" : ""}`}>5</div>
-                                    </div>
-                                    <Suspense fallback={<Loading/>}>
-                                        {renderForm()}
-                                    </Suspense>
-                                </Row> : null
-                        }
-                        {
-                            error ?
-                                <div className="success-div">
-                                    <section>
-                                        <label className="error">Unsuccessful!</label>
-                                        <label className="subtitle">
-                                            An error occured while trying to register your account. Press the button below to try again.
-                                </label>
-                                    </section>
-                                    <Button variant="primary" onClick={() => window.location.href = '/sign-up'}>
-                                        TRY AGAIN
+            <Container>
+                <Container className="signup-container">
+                    {
+                        success ?
+                            <div className="success-div">
+                                <section>
+                                    <label className="title">Congratulations!</label>
+                                    <label className="subtitle">
+                                        Your account is ready. Please click the button below to authenticate and login.
+                        </label>
+                                </section>
+                                <Button variant="primary" onClick={() => window.location.href = '/login'}>
+                                    LOGIN
+                            <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: "-2px" } }}>
+                                        <RiLoginCircleLine />
+                                    </IconContext.Provider>
                                 </Button>
-                                </div> : null
-                        }
-                    </Container>
-                </Row>
+                            </div> : null
+                    }
+                    {
+                        isEditing ?
+                            <Row className="signup-row">
+                                <div className="stepper">
+                                    <div className={`dot ${activeStep >= 0 ? "active" : ""}`}>1</div>
+                                    <div className={`dot ${activeStep >= 1 ? "active" : ""}`}>2</div>
+                                    <div className={`dot ${activeStep >= 2 ? "active" : ""}`}>3</div>
+                                    <div className={`dot ${activeStep >= 3 ? "active" : ""}`}>4</div>
+                                    <div className={`dot ${activeStep >= 4 ? "active" : ""}`}>5</div>
+                                </div>
+                                <Suspense fallback={<Loading />}>
+                                    {renderForm()}
+                                </Suspense>
+                            </Row> : null
+                    }
+                    {
+                        error ?
+                            <div className="success-div">
+                                <section>
+                                    <label className="error">Unsuccessful!</label>
+                                    <label className="subtitle">
+                                        An error occured while trying to register your account. Press the button below to try again.
+                        </label>
+                                </section>
+                                <Button variant="primary" onClick={() => window.location.href = '/sign-up'}>
+                                    TRY AGAIN
+                        </Button>
+                            </div> : null
+                    }
+                </Container>
             </Container>
         </React.Fragment>
     )

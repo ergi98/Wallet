@@ -1,115 +1,141 @@
 @import '../../styles/colors';
 
-.signup-row {
+.logo-row {
+    background-image: linear-gradient($black, $charcoal);
+    height: 40vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
 
-    .form-row {
-        width: 90%;
-        margin: 1rem 0 0 0;
-
-        .info {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            .section-title {
-                text-align: center;
-                font-size: 23px;
-                font-weight: bold;
-                color: $theme-blue;
-            }
-
-            .section-subtitle {
-                font-weight: 600;
-                color: $text-gray;
-                margin: 0 auto;
-            }
-        }
-
-        .form {
-            .form-group {
-                padding-bottom: 0px;
-
-                .form-label {
-                    margin-bottom: 0;
-                }
-
-                .input-field {
-                    margin-bottom: 0;
-                }
-
-                .invalid-feedback {
-                    margin-bottom: 0px !important;
-                }
-            }
-            
-            .double-field {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 0 !important;
-
-                div {
-                    margin-bottom: 0 !important;
-                }
-
-                div:nth-of-type(1) {
-                    width: 60%;
-                }
-
-                div:nth-of-type(2) {
-                    width: 35%;
-                }
-            }
-        }
-
-       
+    img {
+        margin: 10vh auto;    
+        width: 100px;
+        height: 100px;
     }
 
-    .spinner-signup {
-        margin:  5px 0px !important;
+    .goto-login-btn {
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        .btn {
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+        }
     }
 }
 
-.stepper {
-    display: flex;
-    justify-content: space-evenly;
-    width: 85%;
-    height: 20px;
-    padding: 0.8rem 0 0 0;
+.signup-container { 
+    position: relative;
+    margin-top: -60px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 
-    .dot {
-        background-color: white;
-        border: 2px solid $theme-blue;
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
+    .signup-row {
         display: flex;
-        font-size: 0.9rem;
-        justify-content: center;
-    }
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto 20px auto;
+    
+        .form-row {
+            justify-content: space-around;
+            width: 90%;
+            margin: 1rem 0 0 0;
+    
+            .info {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding: 10px 0px;
 
-    .active {
-        background-color: $theme-blue;
-        color: white;
-        font-weight: 600;
-    }
-}
+                .section-title {
+                    text-align: center;
+                    font-size: 23px;
+                    font-weight: bold;
+                    color: $theme-blue;
+                }
+    
+                .section-subtitle {
+                    font-weight: 600;
+                    color: $text-gray;
+                    margin: 0 auto;
+                }
+            }
+    
+            .form {
+                width: 100%;
+                .form-group {
+                    padding-bottom: 0px;
+    
+                    .form-label {
+                        margin-bottom: 0;
+                    }
+    
+                    .input-field {
+                        margin-bottom: 0;
+                    }
+    
+                    .invalid-feedback {
+                        margin-bottom: 0px !important;
+                    }
+                }
+                
+                .double-field {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 0 !important;
+                    padding-bottom: 10px;
+    
+                    div {
+                        margin-bottom: 0 !important;
+                    }
+    
+                    div:nth-of-type(1) {
+                        width: 60%;
+                    }
+    
+                    div:nth-of-type(2) {
+                        width: 35%;
+                    }
+                }
+            }
+        }
 
-.goto-login-btn {
-    position: absolute;
-    left: 0;
-    top: 0;
-
-    .btn {
-        font-weight: 600;
-        text-decoration: none;
-        color: white;
+        .stepper {
+            display: flex;
+            justify-content: space-evenly;
+            width: 85%;
+            height: 20px;
+            padding: 0.8rem 0 0 0;
+    
+            .dot {
+                background-color: white;
+                border: 2px solid $theme-blue;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                display: flex;
+                font-size: 0.9rem;
+                justify-content: center;
+            }
+    
+            .active {
+                background-color: $theme-blue;
+                color: white;
+                font-weight: 600;
+            }
+        }
+    
+        .spinner-signup {
+            margin:  5px 0px !important;
+        }
     }
 }
 
 .signup-buttons {
     display: flex;
+    justify-content: space-around;
+    padding-bottom: 10px;
     width: 100% !important;
 
     .btn {
@@ -129,6 +155,7 @@
     overflow: auto;
     height: 200px;
     padding: 10px;
+    margin-bottom: 15px;
     background-color: rgb(240, 240, 240);
 
     section:not(:last-child){
@@ -149,6 +176,7 @@
 }
 
 .portfolio-plus-btn {
+    margin-bottom: 20px;
     padding: 0px 12px !important;
     width: 40px !important; 
     height: 40px !important;
@@ -158,11 +186,13 @@
 .add-category {
     width: 100%;
     display: flex;
+    align-items: center;
+    vertical-align: middle;
     justify-content: space-between;
-    margin: 0 !important;
+    margin-bottom: 10px;
 
-    .category-form-group {
-
+    .portfolio-plus-btn {
+        margin-bottom: 0px !important;
     }
 
     .form-label {
