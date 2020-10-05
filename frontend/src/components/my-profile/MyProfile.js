@@ -1,22 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import './MyProfile.scss'
 
-// Components
-import Layout from '../layout/Layout'
-import DeleteModal from './modals/DeleteModal'
-import PasswordModal from './modals/PasswordModal'
-import IncomeSources from './IncomeSources'
-import ExpenseCategories from './ExpenseCategories'
-import InlineLoading from './InlineLoading'
-import SmallLoading from '../home/SmallLoading'
-
 // Bootstrap
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import Image from 'react-bootstrap/Image'
-import Alert from 'react-bootstrap/Alert'
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Col from 'react-bootstrap/esm/Col'
+import Button from 'react-bootstrap/esm/Button'
+import Image from 'react-bootstrap/esm/Image'
+import Alert from 'react-bootstrap/esm/Alert'
 
 // Icons
 import { IconContext } from 'react-icons'
@@ -27,6 +18,17 @@ import axios from 'axios'
 
 // Redux
 import { useSelector } from 'react-redux'
+
+// Components
+import Layout from '../layout/Layout'
+import InlineLoading from './InlineLoading'
+import SmallLoading from '../home/SmallLoading'
+import Loading from '../statistics/income-vs-expense/Loading'
+
+const DeleteModal = React.lazy(() => import('./modals/DeleteModal'))
+const PasswordModal = React.lazy(() => import('./modals/PasswordModal'))
+const IncomeSources = React.lazy(() => import('./IncomeSources'))
+const ExpenseCategories = React.lazy(() => import('./ExpenseCategories'))
 
 function MyProfile() {
 
@@ -151,19 +153,23 @@ function MyProfile() {
                         Change Password
                     </Button>
                 </Container>
-                <ExpenseCategories username={username}/>
-                <IncomeSources username={username} />
+                <Suspense fallback={<Loading/>}><ExpenseCategories username={username}/></Suspense>
+                <Suspense fallback={<Loading/>}><IncomeSources username={username} /></Suspense>
             </Container>
-            <DeleteModal
-                show={deleteModal}
-                onClose={() => setDeleteModal(false)}
-            />
-            <PasswordModal
-                show={passwordModal}
-                onClose={() => setPasswordModal(false)}
-                setPwdSuccess={(value) => setPwdSuccess(value)}
-                setPwdError={(value) => setPwdError(value)}
-            />
+            <Suspense fallback={<Loading/>}>    
+                <DeleteModal
+                    show={deleteModal}
+                    onClose={() => setDeleteModal(false)}
+                />
+            </Suspense>
+            <Suspense fallback={<Loading/>}>    
+                <PasswordModal
+                    show={passwordModal}
+                    onClose={() => setPasswordModal(false)}
+                    setPwdSuccess={(value) => setPwdSuccess(value)}
+                    setPwdError={(value) => setPwdError(value)}
+                />
+            </Suspense>
         </Layout>
     )
 }

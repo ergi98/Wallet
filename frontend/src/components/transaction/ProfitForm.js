@@ -9,13 +9,13 @@ import { Formik } from 'formik'
 import { parse } from "date-fns"
 
 // Bootstrap
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Col from 'react-bootstrap/esm/Col'
+import Form from 'react-bootstrap/esm/Form'
 import Button from 'react-bootstrap/esm/Button'
-import Spinner from 'react-bootstrap/Spinner'
-import Alert from 'react-bootstrap/Alert'
+import Spinner from 'react-bootstrap/esm/Spinner'
+import Alert from 'react-bootstrap/esm/Alert'
 
 // Icons
 import { IconContext } from "react-icons"

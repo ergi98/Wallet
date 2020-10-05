@@ -6,10 +6,10 @@ import DeleteSrcCat from './modals/DeleteSrcCat'
 import Loading from '../statistics/income-vs-expense/Loading'
 
 // Bootstrap
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Button from 'react-bootstrap/Button'
-import Table from 'react-bootstrap/Table'
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Button from 'react-bootstrap/esm/Button'
+import Table from 'react-bootstrap/esm/Table'
 
 // Icons
 import { IconContext } from 'react-icons'

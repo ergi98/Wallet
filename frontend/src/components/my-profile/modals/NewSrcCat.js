@@ -5,13 +5,13 @@ import './NewSrcCat.scss'
 import axios from 'axios'
 
 // Bootstrap
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import Spinner from 'react-bootstrap/Spinner'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Alert from 'react-bootstrap/Alert'
+import Modal from 'react-bootstrap/esm/Modal'
+import Button from 'react-bootstrap/esm/Button'
+import Form from 'react-bootstrap/esm/Form'
+import Spinner from 'react-bootstrap/esm/Spinner'
+import Row from 'react-bootstrap/esm/Row'
+import Col from 'react-bootstrap/esm/Col'
+import Alert from 'react-bootstrap/esm/Alert'
 
 // Form Validation
 import * as yup from "yup"

@@ -4,9 +4,9 @@ import React, { useState } from 'react'
 import axios from 'axios'
 
 // Bootstrap
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
-import Alert from 'react-bootstrap/Alert'
+import Modal from 'react-bootstrap/esm/Modal'
+import Button from 'react-bootstrap/esm/Button'
+import Alert from 'react-bootstrap/esm/Alert'
 
 // Redux
 import { useSelector } from "react-redux"

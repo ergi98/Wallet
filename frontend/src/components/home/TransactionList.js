@@ -10,7 +10,7 @@ import Loading from '../statistics/income-vs-expense/Loading'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
-import Table from 'react-bootstrap/Table'
+import Table from 'react-bootstrap/esm/Table'
 
 // Redux 
 import { connect } from 'react-redux'

@@ -10,13 +10,13 @@ import DeleteModal from './DeleteModal'
 import Loading from '../statistics/income-vs-expense/Loading'
 
 // Bootstrap
-import Container from 'react-bootstrap/Container'
-import Alert from 'react-bootstrap/Alert'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
+import Container from 'react-bootstrap/esm/Container'
+import Alert from 'react-bootstrap/esm/Alert'
+import Row from 'react-bootstrap/esm/Row'
+import Col from 'react-bootstrap/esm/Col'
+import Button from 'react-bootstrap/esm/Button'
+import InputGroup from 'react-bootstrap/esm/InputGroup'
+import FormControl from 'react-bootstrap/esm/FormControl'
 
 // Redux
 import { useSelector } from 'react-redux'

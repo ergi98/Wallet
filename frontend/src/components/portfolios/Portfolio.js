@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import './Portfolio.scss'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
 import Row from 'react-bootstrap/esm/Row'
 import Col from 'react-bootstrap/esm/Col'
-import Button from 'react-bootstrap/Button'
-
-// Components
-import DeletePortfolio from './modals/DeletePortfolio'
+import Button from 'react-bootstrap/esm/Button'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -25,6 +22,10 @@ import axios from 'axios'
 
 // Redirect
 import { useHistory } from 'react-router-dom'
+
+// Components
+import Loading from '../statistics/income-vs-expense/Loading'
+const DeletePortfolio = React.lazy(() => import('./modals/DeletePortfolio'))
 
 function Portfolio(props) {
 
@@ -174,14 +175,15 @@ function Portfolio(props) {
                     </Row>
                 </Container>
             }
-
-            <DeletePortfolio 
-                show={showDeleteModal}
-                portfolio={deletePortfolio}
-                username={username}
-                onClose={closeDelete}
-                setDeleteStatus={props.setDeleteStatus}
-            />
+            <Suspense fallback={<Loading/>}>
+                <DeletePortfolio 
+                    show={showDeleteModal}
+                    portfolio={deletePortfolio}
+                    username={username}
+                    onClose={closeDelete}
+                    setDeleteStatus={props.setDeleteStatus}
+                />
+            </Suspense>
         </Container>
     )
 }

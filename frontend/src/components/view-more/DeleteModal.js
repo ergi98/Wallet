@@ -5,11 +5,11 @@ import './DeleteModal.scss'
 import axios from 'axios'
 
 // Bootstrap
-import Modal from 'react-bootstrap/Modal'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/esm/Modal'
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Col from 'react-bootstrap/esm/Col'
+import Button from 'react-bootstrap/esm/Button'
 
 // Number Format
 import NumberFormat from 'react-number-format'

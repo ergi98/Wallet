@@ -1,17 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import './SignUp.scss'
 
-// Components
-import LoginInformatio from './information/LoginInformation'
-import PersonalInformation from './information/PersonalInformation'
-import PortfolioInformation from './information/PortfolioInformation'
-import CategoryInformation from './information/CategoryInformation'
-import SourcesInformation from './information/SourcesInformation'
-
 // Bootstrap
-import Row from 'react-bootstrap/Row'
-import Button from 'react-bootstrap/Button'
-import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Button from 'react-bootstrap/esm/Button'
+import Container from 'react-bootstrap/esm/Container'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -20,6 +13,14 @@ import { RiLoginCircleLine } from 'react-icons/ri'
 
 // Axios
 import axios from 'axios'
+
+// Components
+import Loading from "../statistics/income-vs-expense/Loading"
+const LoginInformatio = React.lazy(() => import('./information/LoginInformation'))
+const PersonalInformation = React.lazy(() => import('./information/PersonalInformation'))
+const PortfolioInformation = React.lazy(() => import('./information/PortfolioInformation'))
+const CategoryInformation = React.lazy(() => import('./information/CategoryInformation'))
+const SourcesInformation = React.lazy(() => import('./information/SourcesInformation'))
 
 function SignUp() {
 
@@ -112,7 +113,9 @@ function SignUp() {
                                         <div className={`dot ${activeStep >= 3 ? "active" : ""}`}>4</div>
                                         <div className={`dot ${activeStep >= 4 ? "active" : ""}`}>5</div>
                                     </div>
-                                    {renderForm()}
+                                    <Suspense fallback={<Loading/>}>
+                                        {renderForm()}
+                                    </Suspense>
                                 </Row> : null
                         }
                         {

@@ -1,18 +1,19 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import './Home.scss'
 
-// Components
-import Layout from '../layout/Layout'
-import TodayRecap from './TodayRecap'
-import TransactionList from './TransactionList'
-
 // Bootstrap
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/esm/Button'
 import Container from 'react-bootstrap/esm/Container'
 
 // Icons
 import { IconContext } from "react-icons"
 import { RiAddCircleLine } from 'react-icons/ri'
+
+// Components
+import Loading from '../statistics/income-vs-expense/Loading'
+import Layout from '../layout/Layout'
+const TodayRecap = React.lazy(() => import('./TodayRecap'))
+const TransactionList = React.lazy(() => import('./TransactionList'))
 
 class Home extends React.Component {
 
@@ -20,7 +21,7 @@ class Home extends React.Component {
         return (
             <Layout>
                 <Container fluid className="home-container">
-                    <TodayRecap></TodayRecap>
+                    <Suspense fallback={<Loading/>}> <TodayRecap></TodayRecap> </Suspense>
                     <Container className="btn-container">
                         <Button variant="secondary" className="transaction-btn" onClick={() => { window.location = '/expense-transaction' }}>
                             <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-6px' } }}>
@@ -35,7 +36,7 @@ class Home extends React.Component {
                             New Income
                         </Button>
                     </Container>
-                    <TransactionList></TransactionList>
+                    <Suspense fallback={<Loading/>}> <TransactionList></TransactionList> </Suspense>
                 </Container>
             </Layout>
         )

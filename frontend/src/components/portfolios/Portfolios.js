@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense} from 'react'
 import './Portfolios.scss'
 
-// Components
-import Layout from '../layout/Layout'
-import Portfolio from './Portfolio'
-import PortfolioModal from './modals/PortfolioModal'
-import TransferModal from './modals/TransferModal'
-import Loading from '../statistics/income-vs-expense/Loading'
-
 // Bootstrap
-import Container from 'react-bootstrap/Container'
-import Alert from 'react-bootstrap/Alert'
-import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/esm/Container'
+import Alert from 'react-bootstrap/esm/Alert'
+import Button from 'react-bootstrap/esm/Button'
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux'
@@ -23,6 +16,13 @@ import { BiWallet, BiTransfer } from 'react-icons/bi'
 // Actions
 import { getPortfolios, updatePortfolios } from '../../redux/actions/userActions'
 
+// Components
+import Layout from '../layout/Layout'
+import Loading from '../statistics/income-vs-expense/Loading'
+
+const Portfolio = React.lazy(() => import('./Portfolio'))
+const PortfolioModal = React.lazy(() => import('./modals/PortfolioModal'))
+const TransferModal = React.lazy(() => import('./modals/TransferModal'))
 
 function Portfolios() {
 
@@ -188,12 +188,13 @@ function Portfolios() {
                 {
                     portfolios.length >= 1 && !isLoading? 
                         portfolios.map(portfolio => 
-                            <Portfolio 
-                                key={portfolio.p_id} 
-                                portfolio = { portfolio } 
-                                setFavStatus={setFavStatus} 
-                                setDeleteStatus={setDeleteStatus}   
-                            />
+                            <Suspense key={portfolio.p_id} fallback={<Loading/>}>
+                                <Portfolio  
+                                    portfolio = { portfolio } 
+                                    setFavStatus={setFavStatus} 
+                                    setDeleteStatus={setDeleteStatus}   
+                                />
+                            </Suspense>
                         ) 
                         :
                         null
@@ -207,20 +208,25 @@ function Portfolios() {
                 }
                 { isLoading? <Loading/> : null }
             </Container>
-            <PortfolioModal 
-                caller="portfolio"
-                show={showPortfolioModal}
-                username={username}
-                closeModal={closePortfolioModal}
-                setPortfolioStatus={addPortfolioStatus}
-            />
-            <TransferModal
-                show={showPortfolioTransfer}
-                username={username}
-                closeModal={() => setShowPortfolioTransfer(false)}
-                setTransferStatus={setTransferStatus}
-                portfolios = {portfolios}
-            />
+            
+            <Suspense fallback={<Loading/>}>
+                <PortfolioModal 
+                    caller="portfolio"
+                    show={showPortfolioModal}
+                    username={username}
+                    closeModal={closePortfolioModal}
+                    setPortfolioStatus={addPortfolioStatus}
+                />
+            </Suspense>
+            <Suspense fallback={<Loading/>}>
+                <TransferModal
+                    show={showPortfolioTransfer}
+                    username={username}
+                    closeModal={() => setShowPortfolioTransfer(false)}
+                    setTransferStatus={setTransferStatus}
+                    portfolios = {portfolios}
+                />
+            </Suspense>
         </Layout>
     )
 }

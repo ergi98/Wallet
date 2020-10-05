@@ -6,7 +6,7 @@ import Layout from '../layout/Layout'
 import ProfitForm from './ProfitForm'
 
 // Bootstrap
-import Container from 'react-bootstrap/Container'
+import Container from 'react-bootstrap/esm/Container'
 
 function ProfitTransaction() {
     return (

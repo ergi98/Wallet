@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import './PortfolioModal.scss'
 
-// Components
-import WalletForm from '../forms/WalletForm'
-import CardForm from '../forms/CardForm'
-
 // Bootstrap
-import Modal from 'react-bootstrap/Modal'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/esm/Modal'
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Form from 'react-bootstrap/esm/Form'
+
+// Components
+import Loading from '../../statistics/income-vs-expense/Loading'
+const WalletForm = React.lazy(() => import('../forms/WalletForm'))
+const CardForm = React.lazy(() => import('../forms/CardForm'))
 
 function PortfolioModal(props) {
 
@@ -51,13 +52,17 @@ function PortfolioModal(props) {
                     {
                         type === "wallet"?
                         <Row>
-                            <WalletForm closeModal={props.closeModal} caller={props.caller} username={props.username} setStatus={setStatus} setPortfolio={props.setPortfolio}/>
+                            <Suspense fallback={<Loading/>}>
+                                <WalletForm closeModal={props.closeModal} caller={props.caller} username={props.username} setStatus={setStatus} setPortfolio={props.setPortfolio}/>
+                            </Suspense>
                         </Row> : null
                     }
                     {
                         type === "credit card"?
                         <Row>
-                            <CardForm closeModal={props.closeModal} caller={props.caller} username={props.username} setStatus={setStatus} setPortfolio={props.setPortfolio}/>
+                            <Suspense fallback={<Loading/>}>
+                                <CardForm closeModal={props.closeModal} caller={props.caller} username={props.username} setStatus={setStatus} setPortfolio={props.setPortfolio}/>
+                            </Suspense>
                         </Row> : null
                     }
                 </Container>

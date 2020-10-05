@@ -8,11 +8,11 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 
 // Bootstrap
-import Modal from 'react-bootstrap/Modal'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/esm/Modal'
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Button from 'react-bootstrap/esm/Button'
+import Form from 'react-bootstrap/esm/Form'
 
 // Number Format
 import NumberFormat from 'react-number-format'

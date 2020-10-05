@@ -9,7 +9,7 @@ import { IconContext } from "react-icons"
 import { BiPlus } from 'react-icons/bi'
 
 // Bootstrap
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/esm/Button'
 
 function PortfolioInformation(props) {
 

@@ -5,9 +5,9 @@ import * as yup from "yup"
 import { Formik } from 'formik'
 
 // Bootstrap
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Spinner from 'react-bootstrap/Spinner'
+import Form from 'react-bootstrap/esm/Form'
+import Button from 'react-bootstrap/esm/Button'
+import Spinner from 'react-bootstrap/esm/Spinner'
 
 // Date validation
 import { parse, compareAsc } from 'date-fns'

@@ -5,9 +5,9 @@ import './Layout.scss'
 import NavBar from '../navbar/NavBar'
 
 // Bootstrap
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Dropdown from 'react-bootstrap/Dropdown'
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Dropdown from 'react-bootstrap/esm/Dropdown'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -15,7 +15,7 @@ import { RiLogoutCircleLine, RiAccountCircleFill } from 'react-icons/ri'
 
 // Redux 
 import { logOut } from '../../redux/actions/userActions'
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
 
 function Layout(props) {
 

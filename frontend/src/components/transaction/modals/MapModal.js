@@ -5,8 +5,8 @@ import './MapModal.scss'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
 
 // Bootstrap
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/esm/Modal'
+import Button from 'react-bootstrap/esm/Button'
 
 function MapModal(props) {
 

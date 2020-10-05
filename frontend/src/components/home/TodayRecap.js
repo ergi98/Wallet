@@ -9,8 +9,8 @@ import SmallLoading from './SmallLoading'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/esm/Row'
+import Col from 'react-bootstrap/esm/Col'
 
 // Redux 
 import { connect } from 'react-redux'

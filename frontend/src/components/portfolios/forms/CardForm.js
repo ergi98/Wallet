@@ -6,11 +6,11 @@ import * as yup from "yup"
 import { Formik } from 'formik'
 
 // Bootstrap
-import Row from 'react-bootstrap/Row'
-import Form from 'react-bootstrap/Form'
-import Col from 'react-bootstrap/Col'
-import Button from 'react-bootstrap/Button'
-import Spinner from 'react-bootstrap/Spinner'
+import Row from 'react-bootstrap/esm/Row'
+import Form from 'react-bootstrap/esm/Form'
+import Col from 'react-bootstrap/esm/Col'
+import Button from 'react-bootstrap/esm/Button'
+import Spinner from 'react-bootstrap/esm/Spinner'
 
 // NanoID
 import { nanoid } from 'nanoid'

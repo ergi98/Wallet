@@ -2,8 +2,8 @@ import React from 'react'
 import './Card.scss'
 
 // Bootstrap 
-import Container from 'react-bootstrap/Container'
-import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/esm/Container'
+import Button from 'react-bootstrap/esm/Button'
 
 function Card(props) {
     return (

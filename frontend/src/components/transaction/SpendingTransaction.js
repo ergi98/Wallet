@@ -6,7 +6,7 @@ import Layout from '../layout/Layout'
 import SpendingForm from './SpendingForm'
 
 // Bootstrap
-import Container from 'react-bootstrap/Container'
+import Container from 'react-bootstrap/esm/Container'
 
 function SpendingTransaction() {
     return (

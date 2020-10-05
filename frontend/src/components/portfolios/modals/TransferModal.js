@@ -5,9 +5,9 @@ import './TransferModal.scss'
 import axios from 'axios'
 
 // Bootstrap
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/esm/Modal'
+import Button from 'react-bootstrap/esm/Button'
+import Form from 'react-bootstrap/esm/Form'
 
 // Number Format
 import NumberFormat from 'react-number-format'

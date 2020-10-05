@@ -6,12 +6,12 @@ import * as yup from "yup"
 import { Formik } from 'formik'
 
 // Bootstrap
-import Container from 'react-bootstrap/Container'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Row from 'react-bootstrap/Row'
-import Alert from 'react-bootstrap/Alert'
-import Spinner from 'react-bootstrap/Spinner'
+import Container from 'react-bootstrap/esm/Container'
+import Form from 'react-bootstrap/esm/Form'
+import Button from 'react-bootstrap/esm/Button'
+import Row from 'react-bootstrap/esm/Row'
+import Alert from 'react-bootstrap/esm/Alert'
+import Spinner from 'react-bootstrap/esm/Spinner'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -196,4 +196,4 @@ Login.propTypes = {
     logIn: PropTypes.func.isRequired
 }
 
-export default connect(mapStateToProps, { logIn })(Login);
+export default connect(mapStateToProps, { logIn })(Login)

@@ -5,10 +5,10 @@ import './PasswordModal.scss'
 import axios from 'axios'
 
 // Bootstrap
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import Spinner from 'react-bootstrap/Spinner'
+import Modal from 'react-bootstrap/esm/Modal'
+import Button from 'react-bootstrap/esm/Button'
+import Form from 'react-bootstrap/esm/Form'
+import Spinner from 'react-bootstrap/esm/Spinner'
 
 // Form Validation
 import * as yup from "yup"

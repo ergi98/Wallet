@@ -4,8 +4,8 @@ import './NavBar.scss'
 import { NavLink } from 'react-router-dom'
 
 // Bootstrap
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/esm/Navbar'
+import Nav from 'react-bootstrap/esm/Nav'
 
 // Icons 
 import { ImHome } from 'react-icons/im'

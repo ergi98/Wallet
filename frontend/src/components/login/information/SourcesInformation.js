@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
 // Bootstrap
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/esm/Button'
+import Form from 'react-bootstrap/esm/Form'
 
 // Icons
 import { IconContext } from "react-icons"
