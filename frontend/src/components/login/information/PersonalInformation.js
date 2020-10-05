@@ -25,13 +25,13 @@ const schema = yup.object({
 function PersonalInformation(props) {
 
     let initial = {
-        name: props.info.name || '',
-        surname: props.info.surname || '',
-        age: props.info.age || '',
-        gender: props.info.gender || "default",
-        birthday: props.info.birthday || '',
-        profession: props.info.profession || '',
-        pref_curr: props.info.pref_curr || "default"
+        name: props.info.personal?.name || '',
+        surname: props.info.personal?.surname || '',
+        age: props.info.personal?.age || '',
+        gender: props.info.personal?.gender || "default",
+        birthday: props.info.personal?.birthday || '',
+        profession: props.info.personal?.profession || '',
+        pref_curr: props.info.personal?.pref_curr || "default"
     }
 
     function handleSubmit(event) {

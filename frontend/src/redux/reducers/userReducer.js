@@ -29,13 +29,7 @@ export default function(state = initialState, action) {
             }
         case LOG_OUT:
             return {
-                ...state,
-                isAuthenticated: false,
-                username: '',
-                name: '',
-                surname: '',
-                jwt: '',
-                pref_currency: ''
+                state: undefined
             }
         case GET_PORTFOLIOS:
             return {

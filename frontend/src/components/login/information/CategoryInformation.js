@@ -62,7 +62,6 @@ function CategoryInformation(props) {
         setCategories(temp)
     }
 
-    
     function handleSubmit() {
         props.saveInfo({categories: categories})
         props.increment()

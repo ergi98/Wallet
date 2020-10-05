@@ -43,7 +43,7 @@ class TodayRecap extends React.Component {
 
     }
 
-    componentDidMount() {
+    componentDidMount() {   
         this._isMounted = true
         this._isMounted && this.getSpendings(new Date())
     }

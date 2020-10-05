@@ -43,7 +43,8 @@ function WalletForm(props) {
         // Getting the list of the already used names
         function fillUnavailable() {
             let temp = []
-            portfolios.forEach(portfolio =>  temp.push(portfolio.p_name))
+            if(portfolios !== undefined) 
+                portfolios.forEach(portfolio =>  temp.push(portfolio.p_name))
             setUnavailable(temp)
         }
 
