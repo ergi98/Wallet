@@ -4,20 +4,20 @@ import './TransactionList.scss'
 // Axios
 import axios from 'axios'
 
-// Components
-import Card from '../card/Card'
-import Loading from '../statistics/income-vs-expense/Loading'
-
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-import Table from 'react-bootstrap/esm/Table'
-
 // Redux 
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
+// Components
+const Card = React.lazy(() => import('../card/Card'))
+const Loading = React.lazy(() => import('../loaders/Loading'))
+
+// Bootstrap
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Table = React.lazy(() => import('react-bootstrap/esm/Table'))
+
 // Number Format
-import NumberFormat from 'react-number-format'
+const NumberFormat = React.lazy(() => import('react-number-format'))
 
 class TransactionList extends React.Component {
 

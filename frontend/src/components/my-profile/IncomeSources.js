@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
-// Components
-import NewSrcCat from './modals/NewSrcCat'
-import DeleteSrcCat from './modals/DeleteSrcCat'
-import Loading from '../statistics/income-vs-expense/Loading'
-
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
-import Button from 'react-bootstrap/esm/Button'
-import Table from 'react-bootstrap/esm/Table'
+import styles from './ProfileTables.module.scss'
 
 // Icons
 import { IconContext } from 'react-icons'
@@ -17,6 +7,17 @@ import { AiFillDelete, AiOutlinePlusCircle } from 'react-icons/ai'
 
 // Axios
 import axios from 'axios'
+
+// Components
+const Loading = React.lazy(() => import('../loaders/Loading'))
+const NewSrcCat = React.lazy(() => import('./modals/NewSrcCat'))
+const DeleteSrcCat = React.lazy(() => import('./modals/DeleteSrcCat'))
+
+// Bootstrap
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const Table = React.lazy(() => import('react-bootstrap/esm/Table'))
 
 function IncomeSources(props) {
 
@@ -63,9 +64,9 @@ function IncomeSources(props) {
     }, [props.username])
 
     return (
-        <Container className="source-row">
-            <div className="section-title">Income Sources</div>
-            <Row className="table-row">
+        <Container className={styles["source-row"]}>
+            <div className={styles["section-title"]}>Income Sources</div>
+            <Row className={styles["table-row"]}>
                 {
                     sources.length >= 1 && !isLoading? 
                     <Table striped bordered hover size="sm">
@@ -93,15 +94,15 @@ function IncomeSources(props) {
                 }
                 {
                     sources.length < 1 && !isLoading?                    
-                    <div className="no-transactions">
-                        <label className="title-label">You have no income sources.</label><br/>
-                        <label className="sub-label">Click the button below to add an income source. Without income sources you can not record a profit!</label>
+                    <div className={styles["no-transactions"]}>
+                        <label className={styles["title-label"]}>You have no income sources.</label><br/>
+                        <label className={styles["sub-label"]}>Click the button below to add an income source. Without income sources you can not record a profit!</label>
                     </div> : null
                 }
                 { isLoading? <Loading/> : null}
             </Row>
-            <Row className="btn-row">
-                <Button variant="primary" onClick={() => { setSrcModal(true) }}>
+            <Row className={styles["btn-row"]}>
+                <Button className={styles["action-btn"]} variant="primary" onClick={() => { setSrcModal(true) }}>
                     <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginRight: '10px', marginTop: '-4px' } }}>
                         <AiOutlinePlusCircle />
                     </IconContext.Provider>

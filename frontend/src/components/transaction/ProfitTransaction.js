@@ -1,22 +1,26 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import './SpendingTransaction.scss'
 
 // Components
 import Layout from '../layout/Layout'
-import ProfitForm from './ProfitForm'
+import Loading from '../loaders/Loading'
+const ProfitForm = React.lazy(() => import('./ProfitForm'))
 
 // Bootstrap
-import Container from 'react-bootstrap/esm/Container'
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
 
 function ProfitTransaction() {
     return (
         <Layout>
-            <Container className="pad-container">
-                <div className="title">
-                    <h4>Register Profit</h4>
-                </div>
-                <ProfitForm/>
-            </Container>
+            <Suspense fallback={<Loading/>}>
+                <Container className="pad-container">
+                    <div className="title">
+                        <h4>Register Profit</h4>
+                    </div>
+                    <ProfitForm/>
+                </Container>
+            </Suspense>
+           
         </Layout>
     )
 }

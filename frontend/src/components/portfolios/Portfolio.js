@@ -24,7 +24,7 @@ import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
 // Components
-import Loading from '../statistics/income-vs-expense/Loading'
+import Loading from '../loaders/Loading'
 const DeletePortfolio = React.lazy(() => import('./modals/DeletePortfolio'))
 
 function Portfolio(props) {

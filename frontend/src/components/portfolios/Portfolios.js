@@ -18,7 +18,7 @@ import { getPortfolios, updatePortfolios } from '../../redux/actions/userActions
 
 // Components
 import Layout from '../layout/Layout'
-import Loading from '../statistics/income-vs-expense/Loading'
+import Loading from '../loaders/Loading'
 
 const Portfolio = React.lazy(() => import('./Portfolio'))
 const PortfolioModal = React.lazy(() => import('./modals/PortfolioModal'))

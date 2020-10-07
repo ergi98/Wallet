@@ -3,21 +3,21 @@ import './TodayRecap.scss'
 
 import axios from 'axios'
 
-// Components
-import Card from '../card/Card'
-import SmallLoading from './SmallLoading'
-
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
-import Col from 'react-bootstrap/esm/Col'
-
 // Redux 
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
+// Components
+const Card = React.lazy(() => import('../card/Card'))
+const SmallLoading = React.lazy(() => import('../loaders/SmallLoading'))
+
+// Bootstrap
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+
 // Number Format
-import NumberFormat from 'react-number-format'
+const NumberFormat = React.lazy(() => import('react-number-format'))
 
 class TodayRecap extends React.Component {
 

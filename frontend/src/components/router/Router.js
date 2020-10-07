@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 
 // Router
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom"
@@ -8,21 +8,19 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 // Components
-import Loading from '../statistics/income-vs-expense/Loading'
-const Login = React.lazy(() => import('../login/Login'))
-const Home = React.lazy(() => import('../home/Home'))
-const Portfolios = React.lazy(() => import('../portfolios/Portfolios'))
-const Statistics = React.lazy(() => import('../statistics/Statistics'))
-const SpendingTransaction = React.lazy(() => import('../transaction/SpendingTransaction'))
-const ProfitTransaction = React.lazy(() => import('../transaction/ProfitTransaction'))
-const ViewMore = React.lazy(() => import('../view-more/ViewMore'))
-const MyProfile = React.lazy(() => import('../my-profile/MyProfile'))
-const SignUp = React.lazy(() => import('../login/SignUp'))
+import Login from '../login/Login'
+import Home from '../home/Home'
+import Portfolios from '../portfolios/Portfolios'
+import Statistics from '../statistics/Statistics'
+import SpendingTransaction from '../transaction/SpendingTransaction'
+import ProfitTransaction from '../transaction/ProfitTransaction'
+import ViewMore from '../view-more/ViewMore'
+import MyProfile from '../my-profile/MyProfile'
+import SignUp from '../login/SignUp'
 
 class Router extends React.Component {
     render() {
         return (
-            <Suspense fallback={<Loading />}>
             <BrowserRouter>
                 <main>
                         <Switch>
@@ -45,7 +43,6 @@ class Router extends React.Component {
                         </Switch>
                 </main>
             </BrowserRouter>
-            </Suspense>
         )
     }
 }

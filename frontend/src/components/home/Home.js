@@ -1,16 +1,16 @@
 import React, { Suspense } from 'react'
 import './Home.scss'
 
-// Bootstrap
-import Button from 'react-bootstrap/esm/Button'
-import Container from 'react-bootstrap/esm/Container'
-
 // Icons
 import { IconContext } from "react-icons"
 import { RiAddCircleLine } from 'react-icons/ri'
 
+// Bootstrap
+import Button from 'react-bootstrap/esm/Button'
+import Container from 'react-bootstrap/esm/Container'
+
 // Components
-import Loading from '../statistics/income-vs-expense/Loading'
+import Loading from '../loaders/Loading'
 import Layout from '../layout/Layout'
 const TodayRecap = React.lazy(() => import('./TodayRecap'))
 const TransactionList = React.lazy(() => import('./TransactionList'))

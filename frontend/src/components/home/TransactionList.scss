@@ -10,22 +10,13 @@
 
     .list-table {
         .headers-row {
-            th { 
-                padding: 6px 12px 6px 12px !important;
-            }
-           
-        }
+            th {  padding: 6px 12px 6px 12px !important; }
+        }    
+
+        .earning { color: $green; }
+        .spending { color: $red; }
     }
 
-    .earning {
-        color: $green;
-    }
-
-    .spending {
-        color: $red;
-    }
-
-    
     .no-transactions {
         display: flex;
         flex-direction: column;
@@ -40,22 +31,16 @@
             font-weight: bold;
         }
 
-        .sub-label {
-            font-weight: 400;
-        }
+        .sub-label { font-weight: 400; }
     }
 }
 
 @media only screen and (max-height: 700px) {
-    .list-container {
-        height: 120px !important;
-    }
+    .list-container { height: 120px !important; }
 }
 
 @media only screen and (min-height: 800px) {
-    .list-container {
-        height: 300px !important;
-    }
+    .list-container { height: 300px !important; }
 }
 
 @media only screen and (min-height: 900px) {

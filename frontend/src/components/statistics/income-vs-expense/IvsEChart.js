@@ -1,16 +1,18 @@
 import React from 'react'
-import Button from 'react-bootstrap/esm/Button'
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
-
-// Charts
-import { PieChart, Pie, Cell } from 'recharts'
 
 // Redux
 import { useSelector } from 'react-redux'
 
+// Charts
+import { PieChart, Pie, Cell } from 'recharts'
+
+// Bootstrap
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+
 // Number Format
-import NumberFormat from 'react-number-format'
+const NumberFormat = React.lazy(() => import('react-number-format'))
 
 function IvsEChart(props) {
     const colors = [ "#D32A17", "#3C800F" ]

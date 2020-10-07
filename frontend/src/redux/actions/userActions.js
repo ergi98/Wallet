@@ -21,9 +21,11 @@ export const logIn = (event) => async (dispatch) => {
             type: LOG_IN,
             payload: res
         })
+        return { success: true }
     }    
     catch(err) {
-        console.log(err)        
+        console.log(err)    
+        return { success: false }    
     }
 }
 

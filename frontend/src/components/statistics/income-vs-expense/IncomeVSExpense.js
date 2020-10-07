@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import './IncomeVSExpense.scss'
-
-// Components
-import Card from '../../card/Card'
-import IvsEForm from './IvsEForm'
-import IvsEChart from './IvsEChart'
-import Loading from './Loading'
 
 // Redux
 import { useSelector } from "react-redux"
+
+// Components
+import Card from '../../card/Card'
+import Loading from '../../loaders/Loading'
+const IvsEForm = React.lazy(() => import('./IvsEForm'))
+const IvsEChart = React.lazy(() => import('./IvsEChart'))
 
 function IncomeVSExpense() {
 
@@ -25,25 +25,29 @@ function IncomeVSExpense() {
         <Card title="Income vs. Expenses">
             {
                 showForm ?
-                    <IvsEForm
-                        username={username}
-                        setIsLoading={setIsLoading}
-                        setShowForm={setShowForm}
-                        setShowChart={setShowChart}
-                        setStats={setStats}
-                        setRange={setRange}
-                    />
+                    <Suspense fallback={<Loading/>}>
+                          <IvsEForm
+                            username={username}
+                            setIsLoading={setIsLoading}
+                            setShowForm={setShowForm}
+                            setShowChart={setShowChart}
+                            setStats={setStats}
+                            setRange={setRange}
+                        />
+                    </Suspense>
                     :
                     null
             }
             {isLoading ? <Loading /> : null}
             {
                 showChart ? 
-                    <IvsEChart 
-                        data={stats} 
-                        range={range} 
-                        displayForm={() => { setShowForm(true); setShowChart(false)} }
-                    /> 
+                    <Suspense fallback={<Loading/>}>
+                        <IvsEChart 
+                            data={stats} 
+                            range={range} 
+                            displayForm={() => { setShowForm(true); setShowChart(false)} }
+                        /> 
+                    </Suspense>
                     : 
                     null
             }

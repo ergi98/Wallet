@@ -8,15 +8,6 @@ import { Formik } from 'formik'
 // Date Validation
 import { parse } from "date-fns"
 
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
-import Col from 'react-bootstrap/esm/Col'
-import Form from 'react-bootstrap/esm/Form'
-import Button from 'react-bootstrap/esm/Button'
-import Spinner from 'react-bootstrap/esm/Spinner'
-import Alert from 'react-bootstrap/esm/Alert'
-
 // Icons
 import { IconContext } from "react-icons"
 import { AiOutlineFileDone } from 'react-icons/ai'
@@ -30,6 +21,15 @@ import axios from 'axios'
 
 // NanoID
 import { nanoid } from 'nanoid'
+
+// Bootstrap
+import Form from 'react-bootstrap/esm/Form'
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const Spinner = React.lazy(() => import('react-bootstrap/esm/Spinner'))
+const Alert = React.lazy(() => import('react-bootstrap/esm/Alert'))
 
 // Establish the validation schema
 const transaction_schema = yup.object({

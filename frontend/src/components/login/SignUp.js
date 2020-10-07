@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react'
-import './SignUp.scss'
+import './Login.scss'
 
 // Bootstrap
 import Row from 'react-bootstrap/esm/Row'
@@ -15,7 +15,7 @@ import { RiLoginCircleLine } from 'react-icons/ri'
 import axios from 'axios'
 
 // Components
-import Loading from "../statistics/income-vs-expense/Loading"
+import Loading from "../loaders/Loading"
 const LoginInformatio = React.lazy(() => import('./information/LoginInformation'))
 const PersonalInformation = React.lazy(() => import('./information/PersonalInformation'))
 const PortfolioInformation = React.lazy(() => import('./information/PortfolioInformation'))
@@ -87,16 +87,16 @@ function SignUp() {
                 <Container className="signup-container">
                     {
                         success ?
-                            <div className="success-div">
+                            <div className="message-div">
                                 <section>
                                     <label className="title">Congratulations!</label>
                                     <label className="subtitle">
                                         Your account is ready. Please click the button below to authenticate and login.
-                        </label>
+                                    </label>
                                 </section>
                                 <Button variant="primary" onClick={() => window.location.href = '/login'}>
                                     LOGIN
-                            <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: "-2px" } }}>
+                                    <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: "-2px" } }}>
                                         <RiLoginCircleLine />
                                     </IconContext.Provider>
                                 </Button>
@@ -104,7 +104,7 @@ function SignUp() {
                     }
                     {
                         isEditing ?
-                            <Row className="signup-row">
+                            <Row className="information-form-row">
                                 <div className="stepper">
                                     <div className={`dot ${activeStep >= 0 ? "active" : ""}`}>1</div>
                                     <div className={`dot ${activeStep >= 1 ? "active" : ""}`}>2</div>
@@ -119,16 +119,16 @@ function SignUp() {
                     }
                     {
                         error ?
-                            <div className="success-div">
+                            <div className="message-div">
                                 <section>
                                     <label className="error">Unsuccessful!</label>
                                     <label className="subtitle">
                                         An error occured while trying to register your account. Press the button below to try again.
-                        </label>
+                                    </label>
                                 </section>
                                 <Button variant="primary" onClick={() => window.location.href = '/sign-up'}>
                                     TRY AGAIN
-                        </Button>
+                                </Button>
                             </div> : null
                     }
                 </Container>

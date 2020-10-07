@@ -3,11 +3,6 @@
 .amount-container {
     text-align: center;
     padding: 0px 10px;
-    .amount {
-        font-weight: bold;
-        font-size: 26px;
-        color: $black;
-    }
 
     .earnings-col, .spendings-col {
         border: 1px solid $border-light;
@@ -15,26 +10,16 @@
         padding: 0px 20px;
         margin:  0px 10px 0px 10px;
         height: fit-content;
+
         * {
             font-size: 20px;
             display: block;
         }
 
-        .s-tot, .e-tot {
-            font-weight: bold;
-        }
-
-        .comp {
-            color: $text-gray;
-        }
-
-        .s-tot {
-            color: $red;
-        }
-
-        .e-tot {
-            color: $green
-        }
+        .s-tot, .e-tot { font-weight: bold; }
+        .comp { color: $text-gray; }
+        .s-tot { color: $red; }
+        .e-tot { color: $green; }
     }
 
     .total-row {
@@ -44,26 +29,8 @@
         margin: 10px auto 10px auto;
         display: flex;
         justify-content: space-around;
-        * {
-            font-size: 20px;
-        }
 
-        .tot-sum {
-            font-weight: bold;
-        }
-        
-    }
-
-    .cmp {
-        font-size: 20px;
-    }
-
-    .overspend {
-        color: red;
-    }
-    
-
-    .underspend {
-        color: green;
+        * { font-size: 20px; }
+        .tot-sum { font-weight: bold; }
     }
 }

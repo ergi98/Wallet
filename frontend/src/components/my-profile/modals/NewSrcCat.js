@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import './NewSrcCat.scss'
+import './NewModal.scss'
 
 // Axios
 import axios from 'axios'
@@ -77,7 +77,7 @@ function NewSrcCat(props) {
     }
 
     return (
-        <Modal show={props.show} className="newSrcCat-modal" onHide={props.onClose}>
+        <Modal show={props.show} className="new-modal" onHide={props.onClose}>
             <Modal.Header closeButton>
                 <Modal.Title>New {props.type}</Modal.Title>
             </Modal.Header>
@@ -101,7 +101,7 @@ function NewSrcCat(props) {
                         errors,
                         isSubmitting
                     }) => (
-                            <Form noValidate className="newSrcCat-form" onSubmit={handleSubmit}  id="newSrcCat-form">
+                            <Form noValidate className="new-form" onSubmit={handleSubmit}  id="newSrcCat-form">
                                 <Form.Group controlId="name" as={Row}>
                                     <Col xs={4} className="my-col">
                                       <Form.Label className="form-label">{props.type} name: </Form.Label>  

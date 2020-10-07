@@ -6,7 +6,7 @@ import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
 
 // Bootstrap
 import Modal from 'react-bootstrap/esm/Modal'
-import Button from 'react-bootstrap/esm/Button'
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
 
 function MapModal(props) {
 

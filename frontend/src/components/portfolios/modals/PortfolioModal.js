@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/esm/Row'
 import Form from 'react-bootstrap/esm/Form'
 
 // Components
-import Loading from '../../statistics/income-vs-expense/Loading'
+import Loading from '../../loaders/Loading'
 const WalletForm = React.lazy(() => import('../forms/WalletForm'))
 const CardForm = React.lazy(() => import('../forms/CardForm'))
 

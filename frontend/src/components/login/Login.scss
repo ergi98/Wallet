@@ -1,9 +1,23 @@
 @import '../../styles/_colors.scss';
+@import '../../styles/alert';
 
 .logo-row {
     background-image: linear-gradient($black, $charcoal);
     height: 40vh;
     display: flex;
+
+    // For the signup page
+    .goto-login-btn {
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        .btn {
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+        }
+    }
 
     img {
         margin: 10vh auto;    
@@ -12,115 +26,143 @@
     }
 }
 
-.main-container {
+.login-container, .signup-container { 
+    position: relative;
+    margin-top: -60px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 
-    .login-row {
-        margin: 0 auto 20px auto;
+    .login-txt {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        font-size: 23px;
+        font-weight: bold;
+        color: $theme-blue;
+        padding: 10px 10px 10px 10px;
+        border-radius: 10px 10px 0 0;
+    }
 
-        .login-container { 
-            position: relative;
-            margin-top: -60px;
-            border-radius: 10px;
-            background-color: white;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    .form-row {
 
-            .login-txt {
-                width: 100%;
-                margin: 0 auto;
-                text-align: center;
-                font-size: 23px;
-                font-weight: bold;
+        .form {
+            width: 100%;
+    
+            .form-label {
                 color: $theme-blue;
-                padding: 10px 10px 10px 10px;
-                border-radius: 10px 10px 0 0;
+                font-size: 14px;
+                font-weight: bold;
             }
     
-            .form-row {
-    
-                .form {
-                    width: 100%;
-            
-                    .form-label {
-                        color: $theme-blue;
-                        font-size: 14px;
-                        font-weight: bold;
-                    }
-            
-                    .input-field {
-                        padding: 20px;
-                        font-size: 16px;
-                        border-radius: 10px;
-                    }
-        
-                }
+            .input-field {
+                padding: 20px;
+                font-size: 16px;
+                border-radius: 10px;
             }
-        
-            .btn-row {
-                width: 100%;
-                margin: auto;
-                text-align: center;
-                padding-bottom: 15px;
-                
-        
-                .login-btn {
-                    margin: auto;
-                    width: 85%;
-                    font-size: 12px;
-                    padding: 15px 0px 15px 0px;
-                    border-radius: 20px;
-                    font-weight: bold;
-                }
 
-                .icon {
-                    margin-left:10px;
-                    transform: scale(1.5);
-
-                }
-            }
         }
     }
 
-    .forgot-row {
-        margin: auto;
-        width: fit-content;
-        color: $light-blue;
-        padding-bottom: 10px;
-    }
-
-    .signup-row {
-        margin: auto;
+    .btn-row {
+        width: 100% !important;
+        text-align: center;
+        padding-bottom: 15px;
         
-        * {
-            margin-bottom: 10px;
-        }
 
-        button {
+        .login-btn {
             margin: auto;
-            width: 80%;
-            font-size: 14px;
+            width: 95%;
+            font-size: 12px;
+            padding: 15px;
             border-radius: 20px;
             font-weight: bold;
         }
+    }
 
-        .email-btn {
-            padding: 10px 0px 10px 0px;
+    // For the Signup Page
+    .message-div {
+        padding: 1rem;
+        text-align: center;
+
+        section {
+            text-align: center;
+
+            .title {
+                font-weight: bold;
+                color: $theme-blue;
+                font-size: 1.6rem;
+                width: 100%;
+            }
+
+            .error {
+                font-weight: bold;
+                color: $red;
+                font-size: 1.6rem;
+                width: 100%;
+            }
+
+            .subtitle {
+                color: $text-gray;
+                font-weight: 600;
+            }
         }
-        
-        .btn-icon {
-            margin: 0px 10px 0px 0px;
+
+        .btn { margin-top: 2rem; }
+    }
+
+    .information-form-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto 20px auto;
+
+        .stepper {
+            display: flex;
+            justify-content: space-evenly;
+            width: 85%;
+            height: 20px;
+            padding: 0.8rem 0 0 0;
+    
+            .dot {
+                background-color: white;
+                border: 2px solid $theme-blue;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                display: flex;
+                font-size: 0.9rem;
+                justify-content: center;
+            }
+    
+            .active {
+                background-color: $theme-blue;
+                color: white;
+                font-weight: 600;
+            }
         }
     }
+}
+
+.forgot-row {
+    margin: auto;
+    width: fit-content;
+    color: $light-blue;
+    padding-bottom: 10px;
+}
+
+.signup-row {
+    margin: auto;
     
-    .alert {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        display: block;
-        
-        .heading {
-            font-size: 16px;
-        }
+    * { margin-bottom: 10px; }
+
+    .email-btn {
+        margin: auto;
+        width: 80%;
+        font-size: 14px;
+        border-radius: 20px;
+        font-weight: bold;
+        padding: 10px 0px 10px 0px;
     }
 }
 

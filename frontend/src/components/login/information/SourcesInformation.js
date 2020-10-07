@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './Information.scss'
 
 // Bootstrap
 import Button from 'react-bootstrap/esm/Button'

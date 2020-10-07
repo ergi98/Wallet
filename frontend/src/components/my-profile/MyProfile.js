@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react'
-import './MyProfile.scss'
+import styles from './MyProfile.module.scss'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
@@ -21,9 +21,9 @@ import { useSelector } from 'react-redux'
 
 // Components
 import Layout from '../layout/Layout'
-import InlineLoading from './InlineLoading'
-import SmallLoading from '../home/SmallLoading'
-import Loading from '../statistics/income-vs-expense/Loading'
+import InlineLoading from '../loaders/InlineLoading'
+import SmallLoading from '../loaders/SmallLoading'
+import Loading from '../loaders/Loading'
 
 const DeleteModal = React.lazy(() => import('./modals/DeleteModal'))
 const PasswordModal = React.lazy(() => import('./modals/PasswordModal'))
@@ -70,86 +70,86 @@ function MyProfile() {
 
     return (
         <Layout>
-            <Container className="profile-container">
+            <Container className={styles["profile-container"]}>
                 {/** Password alerts */}
-                <Alert show={pwdSuccess} variant="success" className="alert">
-                    <Alert.Heading className="heading">Password Change</Alert.Heading>
+                <Alert show={pwdSuccess} variant="success" className={styles["alert"]}>
+                    <Alert.Heading className={styles["heading"]}>Password Change</Alert.Heading>
                     Your password was successfully changed!
                 </Alert>
-                <Alert show={pwdError} variant="danger" className="alert">
-                    <Alert.Heading className="heading">Password Change</Alert.Heading>
+                <Alert show={pwdError} variant="danger" className={styles["alert"]}>
+                    <Alert.Heading className={styles["heading"]}>Password Change</Alert.Heading>
                     A problem occured while trying to change your password.
                 </Alert>
-                <Container className="image-row">
-                    <Button variant="link" className="delete-acc-btn" onClick={() => setDeleteModal(true)}>
+                <Container className={styles["image-row"]}>
+                    <Button variant="link" className={styles["delete-acc-btn"]} onClick={() => setDeleteModal(true)}>
                         <IconContext.Provider value={{ size: "30", style: { verticalAlign: 'middle', marginTop: '-6px' } }}>
                             <AiFillDelete />
                         </IconContext.Provider>
                     </Button>
-                    <Row>
+                    <Row className={styles["center-row"]}>
                         <Button variant="link">
-                            <Image src={require("../../assets/no-avatar.png")} roundedCircle className="profile-img" />
+                            <Image src={require("../../assets/no-avatar.png")} roundedCircle className={styles["profile-img"]} />
                         </Button>
                     </Row>
-                    <Row>
-                        { isLoading? <SmallLoading/> : <label className="name">{user?.personal?.name} {user?.personal?.surname}</label> }
+                    <Row className={styles["center-row"]}>
+                        { isLoading? <SmallLoading/> : <label className={styles["name"]}>{user?.personal?.name} {user?.personal?.surname}</label> }
                     </Row>
-                    <Row>
-                        { isLoading? null : <label className="occupation">{user?.personal?.profession}</label> }
+                    <Row className={styles["center-row"]}>
+                        { isLoading? null : <label className={styles["occupation"]}>{user?.personal?.profession}</label> }
                     </Row>
                 </Container>
-                <Row className="personal-row">
-                    <div className="section-title">Personal Information</div>
-                    <Col className="left-col" >
+                <Row className={styles["personal-row"]}>
+                    <div className={styles["section-title"]}>Personal Information</div>
+                    <Col>
                         <Row>
-                            <label className="desc">Name:</label>
-                            { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.name}</label> }
+                            <label className={styles["desc"]}>Name:</label>
+                            { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.name}</label> }
                         </Row>
                         <Row>
-                            <label className="desc">Age:</label>
-                            { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.age}</label> }
+                            <label className={styles["desc"]}>Age:</label>
+                            { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.age}</label> }
                         </Row>
                         <Row>
-                            <label className="desc">Gender:</label>
+                            <label className={styles["desc"]}>Gender:</label>
                             { 
                                 isLoading? 
-                                    <label className="value"><InlineLoading/></label> :
-                                    <label className="value">
+                                    <label className={styles["value"]}><InlineLoading/></label> :
+                                    <label className={styles["value"]}>
                                         {user?.personal?.gender === "M" ? "Male" : "Female"}
                                     </label>
                             }
                         </Row>
                     </Col>
-                    <Col className="right-col">
+                    <Col>
                         <Row>
-                            <label className="desc">Surname:</label>
-                            { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.surname}</label> }
+                            <label className={styles["desc"]}>Surname:</label>
+                            { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.surname}</label> }
                         </Row>
                         <Row>
-                            <label className="desc">Birthday:</label>
-                            { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.birthday}</label> }
+                            <label className={styles["desc"]}>Birthday:</label>
+                            { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.birthday}</label> }
                         </Row>
                     </Col>
-                    <Container className="profession">
-                        <label className="desc">Profession</label>
-                        { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.personal?.profession}</label> }
+                    <Container className={styles["profession"]}>
+                        <label className={styles["desc"]}>Profession</label>
+                        { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.profession}</label> }
                     </Container>
                 </Row>
-                <Container className="general-container">
-                    <div className="section-title">General Information</div>
+                <Container className={styles["general-container"]}>
+                    <div  className={styles["section-title"]}>General Information</div>
                     <Row>
-                        <label className="desc">Username:</label>
-                        { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.username}</label> }
+                        <label className={styles["desc"]}>Username:</label>
+                        { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.username}</label> }
                     </Row>
                     <Row>
-                        <label className="desc">Password:</label>
-                        { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">********</label> }
+                        <label className={styles["desc"]}>Password:</label>
+                        { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>********</label> }
                     </Row>
                     <Row>
-                        <label className="desc">Joined:</label>
-                        { isLoading? <label className="value"><InlineLoading/></label> : <label className="value">{user?.createdAt}</label> }
+                        <label className={styles["desc"]}>Joined:</label>
+                        { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.createdAt}</label> }
                     </Row>
-                    <Button variant="primary" className="action-btn" onClick={() => setPasswordModal(true)}>
+                    <Button variant="primary" className={styles["action-btn"]} onClick={() => setPasswordModal(true)}>
                         Change Password
                     </Button>
                 </Container>

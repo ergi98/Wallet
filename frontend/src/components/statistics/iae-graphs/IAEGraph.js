@@ -1,7 +1,4 @@
 import React from 'react'
-import Button from 'react-bootstrap/esm/Button'
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
 
 // Charts
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
@@ -11,6 +8,11 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 // Number Format
 // import NumberFormat from 'react-number-format'
+
+// Bootstrap
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
 
 function IAEGraph(props) {
 

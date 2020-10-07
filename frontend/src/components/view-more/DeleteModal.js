@@ -6,13 +6,13 @@ import axios from 'axios'
 
 // Bootstrap
 import Modal from 'react-bootstrap/esm/Modal'
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
-import Col from 'react-bootstrap/esm/Col'
-import Button from 'react-bootstrap/esm/Button'
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
 
 // Number Format
-import NumberFormat from 'react-number-format'
+const NumberFormat = React.lazy(() => import('react-number-format'))
 
 function DeleteModal(props) {
 

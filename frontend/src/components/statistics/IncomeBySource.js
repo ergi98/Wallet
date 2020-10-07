@@ -4,26 +4,26 @@ import './IncomeBySource.scss'
 // Axios
 import axios from 'axios'
 
-// Components
-import Card from '../card/Card'
-import Loading from './income-vs-expense/Loading'
-
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-
-// Material UI
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-
 // Redux
 import { useSelector } from 'react-redux'
 
+// Components
+const Card = React.lazy(() => import('../card/Card'))
+const Loading = React.lazy(() => import('../loaders/Loading'))
+
+// Bootstrap
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+
+// Material UI
+const Table = React.lazy(() => import('@material-ui/core/Table'))
+const TableBody = React.lazy(() => import('@material-ui/core/TableBody'))
+const TableCell = React.lazy(() => import('@material-ui/core/TableCell'))
+const TableContainer = React.lazy(() => import('@material-ui/core/TableContainer'))
+const TableHead = React.lazy(() => import('@material-ui/core/TableHead'))
+const TableRow = React.lazy(() => import('@material-ui/core/TableRow'))
+
 // Number Format
-import NumberFormat from 'react-number-format'
+const NumberFormat = React.lazy(() => import('react-number-format'))
 
 function IncomeBySource() {
 

@@ -5,13 +5,6 @@ import './CardForm.scss'
 import * as yup from "yup"
 import { Formik } from 'formik'
 
-// Bootstrap
-import Row from 'react-bootstrap/esm/Row'
-import Form from 'react-bootstrap/esm/Form'
-import Col from 'react-bootstrap/esm/Col'
-import Button from 'react-bootstrap/esm/Button'
-import Spinner from 'react-bootstrap/esm/Spinner'
-
 // NanoID
 import { nanoid } from 'nanoid'
 
@@ -21,6 +14,13 @@ import axios from 'axios'
 // Icons
 import { IconContext } from "react-icons"
 import { BiWallet } from 'react-icons/bi'
+
+// Bootstrap
+import Form from 'react-bootstrap/esm/Form'
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const Spinner = React.lazy(() => import('react-bootstrap/esm/Spinner'))
 
 const card_schema = yup.object({
     p_name: yup.string().required("Name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),

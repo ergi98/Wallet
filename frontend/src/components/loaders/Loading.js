@@ -1,5 +1,5 @@
 import React from 'react'
-import './IncomeVSExpense.scss'
+import './Loaders.scss'
 
 // Bootstrap
 import Spinner from 'react-bootstrap/esm/Spinner'

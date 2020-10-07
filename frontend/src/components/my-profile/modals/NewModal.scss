@@ -1,8 +1,8 @@
 @import '../../../styles/colors';
 
-.password-modal {
+.new-modal {
 
-    .pswd-form {
+    .new-form {
         .btn-row {
             .psw-btn {
                 width: 100%;
@@ -16,6 +16,11 @@
 
     .col {
         padding-left: 0px;
+    }
+
+    .my-col {
+        line-height: 2;
+        padding: 25px 0px 25px 0px;
     }
 
     .center-btns {

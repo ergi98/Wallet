@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/esm/Row'
 
 // Components
 import Layout from '../layout/Layout'
-import Loading from '../statistics/income-vs-expense/Loading'
+import Loading from '../loaders/Loading'
 
 const ExpenseByCategory = React.lazy(() => import('./ExpenseByCategory'))
 const IncomeBySource = React.lazy(() => import('./IncomeBySource'))
@@ -18,18 +18,12 @@ function Statistics() {
     return (
         <Layout>
             <Container fluid className="statistics-container">
-                <Row>
-                    <Suspense fallback={<Loading/>}><ExpenseByCategory/></Suspense>
-                </Row>
-                <Row>
-                    <Suspense fallback={<Loading/>}><IncomeBySource/></Suspense>
-                </Row>
-                <Row>
-                    <Suspense fallback={<Loading/>}><IncomeVSExpense/></Suspense>
-                </Row>
-                <Row>
-                    <Suspense fallback={<Loading/>}><IAEMain/></Suspense>
-                </Row>
+                <Suspense fallback={<Loading/>}>
+                    <Row><ExpenseByCategory/></Row>
+                    <Row><IncomeBySource/></Row>
+                    <Row><IncomeVSExpense/></Row>
+                    <Row><IAEMain/></Row>
+                </Suspense>
             </Container>
         </Layout>
     )

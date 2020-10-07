@@ -14,19 +14,7 @@ function DeletePortfolio(props) {
     const [agree, setAgree] = useState(false)
 
     async function deleteProfile() {
-        // try {
-        //     await axios.post('/users/delete-portfolio', { 
-        //         username: props.username, 
-        //         delete_id: props.portfolio.p_id, 
-        //         transfer_amnt: props.portfolio.amount.$numberDecimal,
-        //         transfer_id: selectedPortfolio 
-        //     })
-        //     props.setDeleteStatus("success")
-        //     props.onClose()
-        // }
-        // catch(err) {
-        //     props.setDeleteStatus("error")
-        // }
+        // todo
     }
 
     return (

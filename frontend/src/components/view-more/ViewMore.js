@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import './ViewMore.scss'
 
 // Axios
@@ -7,7 +7,7 @@ import axios from 'axios'
 // Components 
 import Layout from '../layout/Layout'
 import DeleteModal from './DeleteModal'
-import Loading from '../statistics/income-vs-expense/Loading'
+import Loading from '../loaders/Loading'
 
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
@@ -174,6 +174,7 @@ function ViewMore({ match })  {
                             <FormControl
                                 placeholder="Date"
                                 aria-label="Date"
+                                inputMode="search"
                                 value={displayedDate}
                                 onChange={validateDate}
                                 onBlur={updateTransactions}
@@ -255,14 +256,17 @@ function ViewMore({ match })  {
                 }
                 { isLoading? <Loading/> : null}
             </Container>
-            <DeleteModal 
-                show={showDeleteModal} 
-                transaction={deleteTransaction}
-                date={date}
-                username={username}
-                onClose={closeDelete}
-                deleteStatus={deleteStatus}
-            />
+            <Suspense fallback={<Loading/>}>
+                <DeleteModal 
+                    show={showDeleteModal} 
+                    transaction={deleteTransaction}
+                    date={date}
+                    username={username}
+                    onClose={closeDelete}
+                    deleteStatus={deleteStatus}
+                />
+            </Suspense>
+         
         </Layout>
     )
 }

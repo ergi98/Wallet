@@ -61,19 +61,17 @@ class Login extends React.Component {
             isSubmitting: true
         })
         // Call the login function in userActions.js
-        this._isMounted && this.props.logIn(event)
-            // If successful redirect
-            .then(() => {
-                window.location.href = '/home'
+        let res = this._isMounted && await this.props.logIn(event)
+
+        if (res.success === true)
+            window.location.href = '/home'
+        else {
+            this._isMounted && this.setState({
+                showAlert: true,
+                isSubmitting: false
             })
-            // If not display error alert
-            .catch(() => {
-                this._isMounted && this.setState({
-                    showAlert: true,
-                    isSubmitting: false
-                })
-                setTimeout(() => { this._isMounted && this.setState({ showAlert: false }) }, 2500)
-            })
+            setTimeout(() => { this._isMounted && this.setState({ showAlert: false }) }, 2500)
+        }
     }
 
     goToSignUp() {
@@ -90,84 +88,82 @@ class Login extends React.Component {
                     </Alert>
                     <img src={require('../../assets/logo.svg')} alt="Wallet Logo" />
                 </Container>
-                <Container className="main-container">
-                    <Row className="login-row">
-                        <Container className="login-container">
-                            <Row>
-                                <label className="login-txt">Welcome to Wallet</label>
-                            </Row>
-                            <Row className="form-row">
-                                <Formik
-                                    validationSchema={schema}
-                                    onSubmit={this.handleSubmit}
-                                    initialValues={{
-                                        username: '',
-                                        password: ''
-                                    }}
-                                >
-                                    {({
-                                        handleSubmit,
-                                        handleChange,
-                                        values,
-                                        touched,
-                                        errors
-                                    }) => (
-                                            <Form noValidate className="form" onSubmit={handleSubmit}>
-                                                <Form.Group controlId="username">
-                                                    <Form.Label className="form-label">Username</Form.Label>
-                                                    <Form.Control
-                                                        className="input-field"
-                                                        type="text"
-                                                        value={values.username}
-                                                        placeholder="Enter Username"
-                                                        onChange={handleChange}
-                                                        isInvalid={touched.username && errors.username}
-                                                    />
-                                                    <Form.Control.Feedback type="invalid"> {errors.username} </Form.Control.Feedback>
-                                                </Form.Group>
+                <Container>
+                    <Container className="login-container">
+                        <Row>
+                            <label className="login-txt">Welcome to Wallet</label>
+                        </Row>
+                        <Row className="form-row">
+                            <Formik
+                                validationSchema={schema}
+                                onSubmit={this.handleSubmit}
+                                initialValues={{
+                                    username: '',
+                                    password: ''
+                                }}
+                            >
+                                {({
+                                    handleSubmit,
+                                    handleChange,
+                                    values,
+                                    touched,
+                                    errors
+                                }) => (
+                                        <Form noValidate className="form" onSubmit={handleSubmit}>
+                                            <Form.Group controlId="username">
+                                                <Form.Label className="form-label">Username</Form.Label>
+                                                <Form.Control
+                                                    className="input-field"
+                                                    type="text"
+                                                    value={values.username}
+                                                    placeholder="Enter Username"
+                                                    onChange={handleChange}
+                                                    isInvalid={touched.username && errors.username}
+                                                />
+                                                <Form.Control.Feedback type="invalid"> {errors.username} </Form.Control.Feedback>
+                                            </Form.Group>
 
-                                                <Form.Group controlId="password">
-                                                    <Form.Label className="form-label">Password</Form.Label>
-                                                    <Form.Control
-                                                        className="input-field"
-                                                        type="password"
-                                                        placeholder="Enter Password"
-                                                        onChange={handleChange}
-                                                        value={values.password}
-                                                        isInvalid={touched.password && errors.password}
-                                                    />
-                                                    <Form.Control.Feedback type="invalid"> {errors.password} </Form.Control.Feedback>
-                                                </Form.Group>
-                                                <Form.Row className="btn-row">
-                                                    {!this.state.isSubmitting ?
-                                                        <Button
-                                                            variant="primary"
-                                                            type="submit"
-                                                            className="login-btn"
-                                                            disabled={this.state.isSubmitting}
-                                                        >
-                                                            LOGIN
+                                            <Form.Group controlId="password">
+                                                <Form.Label className="form-label">Password</Form.Label>
+                                                <Form.Control
+                                                    className="input-field"
+                                                    type="password"
+                                                    placeholder="Enter Password"
+                                                    onChange={handleChange}
+                                                    value={values.password}
+                                                    isInvalid={touched.password && errors.password}
+                                                />
+                                                <Form.Control.Feedback type="invalid"> {errors.password} </Form.Control.Feedback>
+                                            </Form.Group>
+                                            <Form.Row className="btn-row">
+                                                {!this.state.isSubmitting ?
+                                                    <Button
+                                                        variant="primary"
+                                                        type="submit"
+                                                        className="login-btn"
+                                                        disabled={this.state.isSubmitting}
+                                                    >
+                                                        LOGIN
                                                         <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px' } }}>
-                                                                <RiLoginCircleLine />
-                                                            </IconContext.Provider>
-                                                        </Button> :
-                                                        <Button variant="primary" className="login-btn" disabled={this.state.isSubmitting}>
-                                                            <Spinner
-                                                                as="span"
-                                                                animation="border"
-                                                                size="md"
-                                                                role="status"
-                                                                aria-hidden="true"
-                                                            />
-                                                        </Button>
-                                                    }
-                                                </Form.Row>
-                                            </Form>
-                                        )}
-                                </Formik>
-                            </Row>
-                        </Container>
-                    </Row>
+                                                            <RiLoginCircleLine />
+                                                        </IconContext.Provider>
+                                                    </Button> :
+                                                    <Button variant="primary" className="login-btn" disabled={this.state.isSubmitting}>
+                                                        <Spinner
+                                                            as="span"
+                                                            animation="border"
+                                                            size="md"
+                                                            role="status"
+                                                            aria-hidden="true"
+                                                        />
+                                                    </Button>
+                                                }
+                                            </Form.Row>
+                                        </Form>
+                                    )}
+                            </Formik>
+                        </Row>
+                    </Container>
 
                     <Row className="forgot-row">
                         <Button variant="link" className="btn-link">Forgot Password?</Button>
@@ -179,8 +175,8 @@ class Login extends React.Component {
                             <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginRight: '15px' } }}>
                                 <FcBusinessman />
                             </IconContext.Provider>
-                        Create an account
-                    </Button>
+                            Create an account
+                        </Button>
                     </Row>
                 </Container>
             </React.Fragment>

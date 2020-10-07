@@ -8,11 +8,11 @@ import axios from 'axios'
 import { parse, compareAsc } from 'date-fns'
 
 // Bootstrap
-import Button from 'react-bootstrap/esm/Button'
 import Form from 'react-bootstrap/esm/Form'
-import Row from 'react-bootstrap/esm/Row'
-import Col from 'react-bootstrap/esm/Col'
-import Container from 'react-bootstrap/esm/Container'
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
 
 function IvsEForm(props) {
 

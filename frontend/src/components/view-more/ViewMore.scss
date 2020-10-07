@@ -1,18 +1,11 @@
 @import '../../styles/colors';
+@import '../../styles/alert';
 
 .view-more_container {
     position: relative;
     overflow: auto;
     height: 90vh;
-
-    .alert {
-        width: 100%;
-        position: fixed;
-        left: 50%;
-        transform: translate(-50%, 0);
-        z-index: 9999;
-    }
-
+    
     .date-row {
         background-color: #FFFFFF;
         position: sticky;

@@ -1,4 +1,5 @@
 import React from 'react'
+import './Information.scss'
 
 // Form Validation
 import * as yup from "yup"

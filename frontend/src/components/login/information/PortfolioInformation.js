@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './Information.scss'
 
 // Components
 import PortfolioModal from '../../portfolios/modals/PortfolioModal'

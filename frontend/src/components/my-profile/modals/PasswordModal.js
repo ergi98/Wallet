@@ -1,14 +1,8 @@
 import React from 'react'
-import './PasswordModal.scss'
+import './NewModal.scss'
 
 // Axios
 import axios from 'axios'
-
-// Bootstrap
-import Modal from 'react-bootstrap/esm/Modal'
-import Button from 'react-bootstrap/esm/Button'
-import Form from 'react-bootstrap/esm/Form'
-import Spinner from 'react-bootstrap/esm/Spinner'
 
 // Form Validation
 import * as yup from "yup"
@@ -16,6 +10,12 @@ import { Formik } from 'formik'
 
 // Redux
 import { useSelector } from "react-redux"
+
+// Bootstrap
+import Modal from 'react-bootstrap/esm/Modal'
+import Button from 'react-bootstrap/esm/Button'
+import Form from 'react-bootstrap/esm/Form'
+import Spinner from 'react-bootstrap/esm/Spinner'
 
 function PasswordModal(props) {
 
@@ -45,7 +45,7 @@ function PasswordModal(props) {
     }
 
     return (
-        <Modal show={props.show} className="password-modal" onHide={props.onClose}>
+        <Modal show={props.show} className="new-modal" onHide={props.onClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Change Password</Modal.Title>
             </Modal.Header>
@@ -67,7 +67,7 @@ function PasswordModal(props) {
                         errors,
                         isSubmitting
                     }) => (
-                            <Form noValidate className="pswd-form" onSubmit={handleSubmit}  id="pswd-form">
+                            <Form noValidate className="new-form" onSubmit={handleSubmit}  id="pswd-form">
                                 <Form.Group controlId="old_pass">
                                     <Form.Label className="form-label">Current Password</Form.Label>
                                     <Form.Control

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import './Information.scss'
 
 // Form Validation
 import * as yup from "yup"

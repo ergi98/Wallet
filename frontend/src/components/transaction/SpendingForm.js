@@ -7,18 +7,6 @@ import axios from 'axios'
 // NanoID
 import { nanoid } from 'nanoid'
 
-// Components
-import MapModal from './modals/MapModal'
-
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
-import Col from 'react-bootstrap/esm/Col'
-import Form from 'react-bootstrap/esm/Form'
-import Button from 'react-bootstrap/esm/Button'
-import Spinner from 'react-bootstrap/esm/Spinner'
-import Alert from 'react-bootstrap/esm/Alert'
-
 // Icons
 import { IconContext } from "react-icons"
 import { FaMapMarkedAlt } from 'react-icons/fa'
@@ -34,6 +22,18 @@ import { parse } from "date-fns"
 
 // Redux 
 import { useSelector } from 'react-redux'
+
+// Bootstrap
+import Form from 'react-bootstrap/esm/Form'
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const Spinner = React.lazy(() => import('react-bootstrap/esm/Spinner'))
+const Alert = React.lazy(() => import('react-bootstrap/esm/Alert'))
+
+// Components
+const MapModal = React.lazy(() => import('./modals/MapModal'))
 
 // Establish the validation schema
 const transaction_schema = yup.object({
