@@ -24,11 +24,11 @@ const Spinner = React.lazy(() => import('react-bootstrap/esm/Spinner'))
 
 const card_schema = yup.object({
     p_name: yup.string().required("Name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),
-    amount: yup.string().required("Amount is required!").matches(/(^[1-9]+[,.]{0,1}[0-9]+$)|(^[0]{1}[,.][0-9]+$)/, { message: "Only numbers and dots or commas allowed!"}),
+    amount: yup.string().required("Amount is required!").matches(/(^[1-9]{1}[0-9]*[,.]{0,1}[0-9]*$)|(^[0]{1}[,.][0-9]+$)/, { message: "Only numbers and dots or commas allowed!"}),
     currency: yup.string().required(),
     bank: yup.string().required("Bank is required!").matches(/^[a-zA-Z0-9\s]+$/, { message:  "Only spaces and alphanumeric characters!" }),
     card_no: yup.string().required("Card number is required!").matches(/^[0-9]{4}[\s][0-9]{4}[\s][0-9]{4}[\s][0-9]{4}$/, { message: "Format is xxxx xxxx xxxx xxxx!"}),
-    valid_m: yup.number().required("Required!").max(12, "LEss than 12").min(1, "More than 1"),
+    valid_m: yup.number().required("Required!").max(12, "Less than 12").min(1, "More than 1"),
     valid_y: yup.number().required("Required!"),
     card_holder: yup.string().required("Card holder required!").matches(/^[a-zA-Z\s]+$/, { message: "Only spaces and alphanumeric characters!"}),
     cvc: yup.string().required().length(3) // no space

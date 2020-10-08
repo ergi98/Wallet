@@ -34,7 +34,7 @@ function WalletForm(props) {
     const wallet_schema = yup.object({
         p_name: yup.string().required("Portfolio name is required!").matches(/^[a-zA-Z0-9\s]+$/, { message: "Only spaces and alphanumberic characters!" }).notOneOf(unavailable, "Name already used!"),
         currency: yup.string().required(),
-        amount: yup.string().required("Amount is required!").matches(/(^[1-9]+[,.]{0,1}[0-9]+$)|(^[0]{1}[,.][0-9]+$)/, { message: "Only numbers and dots or commas allowed!" })
+        amount: yup.string().required("Amount is required!").matches(/(^[1-9]{1}[0-9]*[,.]{0,1}[0-9]*$)|(^[0]{1}[,.][0-9]+$)/, { message: "Only numbers and dots or commas allowed!"})
     })
 
     useEffect(() => {

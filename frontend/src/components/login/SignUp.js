@@ -112,7 +112,7 @@ function SignUp() {
                                     <div className={`dot ${activeStep >= 3 ? "active" : ""}`}>4</div>
                                     <div className={`dot ${activeStep >= 4 ? "active" : ""}`}>5</div>
                                 </div>
-                                <Suspense fallback={<Loading />}>
+                                <Suspense fallback={<div style={{paddingTop:"0.8rem"}}><Loading /></div>}>
                                     {renderForm()}
                                 </Suspense>
                             </Row> : null

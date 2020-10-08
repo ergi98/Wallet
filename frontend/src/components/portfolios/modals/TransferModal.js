@@ -68,7 +68,7 @@ function TransferModal(props) {
 
     function validateTransfer() {
 
-        let regex = new RegExp(/(^[1-9]+[,.]{0,1}[0-9]+$)|(^[0]{1}[,.][0-9]+$)/)
+        let regex = new RegExp(/(^[1-9]{1}[0-9]*[,.]{0,1}[0-9]*$)|(^[0]{1}[,.][0-9]+$)/)
 
         let amnt = amount.replace(',', '.')
 

@@ -3,7 +3,7 @@ import './Information.scss'
 
 // Components
 import PortfolioModal from '../../portfolios/modals/PortfolioModal'
-import SignupPortfolio from './modals/SignupPortfolio'
+import SignupPortfolio from './portfolio/SignupPortfolio'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -18,15 +18,16 @@ function PortfolioInformation(props) {
     const [portfolios, setPortfolios] = useState(props.info.portfolios || [])
 
     function setPortfolio(portfolio) {
-        let temp = portfolios
-        temp.unshift(portfolio)
-        setPortfolios(temp)
+        setPortfolios(prevState => {
+            prevState.unshift(portfolio)
+            return prevState
+        })
     }
 
     function deletePortfolio(portfolio) {
-        let temp = portfolios
-        temp = temp.filter(tmp => { return tmp.p_id !== portfolio.p_id  })
-        setPortfolios(temp)
+        setPortfolios(prevState => {
+            return prevState.filter(tmp => { return tmp.p_id !== portfolio.p_id  })
+        })
     }
 
     function handleSubmit() {
