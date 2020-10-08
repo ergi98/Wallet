@@ -185,20 +185,21 @@ function Portfolios() {
                         </IconContext.Provider> 
                     </Button>
                 </div>
-                {
-                    portfolios.length >= 1 && !isLoading? 
-                        portfolios.map(portfolio => 
-                            <Suspense key={portfolio.p_id} fallback={<Loading/>}>
+                <Suspense fallback={<Loading/>}>
+                    {
+                        portfolios.length >= 1 && !isLoading? 
+                            portfolios.map(portfolio => 
                                 <Portfolio  
+                                    key={portfolio.p_id}
                                     portfolio = { portfolio } 
                                     setFavStatus={setFavStatus} 
                                     setDeleteStatus={setDeleteStatus}   
                                 />
-                            </Suspense>
-                        ) 
-                        :
-                        null
-                }
+                            ) 
+                            :
+                            null
+                    }
+                </Suspense>
                 {
                     portfolios.length < 1 && !isLoading?
                     <div className="no-transactions">
@@ -209,7 +210,7 @@ function Portfolios() {
                 { isLoading? <Loading/> : null }
             </Container>
             
-            <Suspense fallback={<Loading/>}>
+            <Suspense fallback={""}>
                 <PortfolioModal 
                     caller="portfolio"
                     show={showPortfolioModal}
@@ -218,7 +219,7 @@ function Portfolios() {
                     setPortfolioStatus={addPortfolioStatus}
                 />
             </Suspense>
-            <Suspense fallback={<Loading/>}>
+            <Suspense fallback={""}>
                 <TransferModal
                     show={showPortfolioTransfer}
                     username={username}

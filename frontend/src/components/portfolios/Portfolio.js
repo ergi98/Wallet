@@ -1,18 +1,9 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState } from 'react'
 import './Portfolio.scss'
-
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
-import Col from 'react-bootstrap/esm/Col'
-import Button from 'react-bootstrap/esm/Button'
 
 // Icons
 import { IconContext } from "react-icons"
 import { AiOutlineStar, AiFillStar, AiOutlineUnorderedList, AiFillDelete } from 'react-icons/ai'
-
-// Number Format
-import NumberFormat from 'react-number-format'
 
 // Redux
 import { useSelector } from 'react-redux'
@@ -23,8 +14,16 @@ import axios from 'axios'
 // Redirect
 import { useHistory } from 'react-router-dom'
 
+// Bootstrap
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+
+// Number Format
+const NumberFormat = React.lazy(() => import('react-number-format'))
+
 // Components
-import Loading from '../loaders/Loading'
 const DeletePortfolio = React.lazy(() => import('./modals/DeletePortfolio'))
 
 function Portfolio(props) {
@@ -175,15 +174,13 @@ function Portfolio(props) {
                     </Row>
                 </Container>
             }
-            <Suspense fallback={<Loading/>}>
-                <DeletePortfolio 
-                    show={showDeleteModal}
-                    portfolio={deletePortfolio}
-                    username={username}
-                    onClose={closeDelete}
-                    setDeleteStatus={props.setDeleteStatus}
-                />
-            </Suspense>
+            <DeletePortfolio 
+                show={showDeleteModal}
+                portfolio={deletePortfolio}
+                username={username}
+                onClose={closeDelete}
+                setDeleteStatus={props.setDeleteStatus}
+            />
         </Container>
     )
 }
