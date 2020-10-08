@@ -50,25 +50,13 @@
             "name": "Register a profit",
             "short_name": "Profit",
             "description": "Register a profit",
-            "url": "/today?source=pwa",
-            "icons": [
-                {
-                    "src": "/images/today.png",
-                    "sizes": "192x192"
-                }
-            ]
+            "url": "/profit-transaction"
         },
         {
             "name": "Register an expense",
             "short_name": "Expense",
             "description": "View weather information for tomorrow",
-            "url": "/tomorrow?source=pwa",
-            "icons": [
-                {
-                    "src": "/images/tomorrow.png",
-                    "sizes": "192x192"
-                }
-            ]
+            "url": "/expense-transaction"
         }
     ]
 }
