@@ -15,7 +15,7 @@ const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
 const NumberFormat = React.lazy(() => import('react-number-format'))
 
 function IvsEChart(props) {
-    const colors = [ "#D32A17", "#3C800F" ]
+    const colors = [ "#3C800F", "#D32A17" ]
     const currency = useSelector((state) => state.user.pref_currency)
 
     const renderCustomizedLabel = ( entry ) => {

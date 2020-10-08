@@ -56,8 +56,8 @@
 }
 
 .custom-range {
-    color: black;
-    font-weight: 600;
+    color: $text-gray;
+    font-weight: bold;
     padding-top: 10px;
 }
 
@@ -65,8 +65,8 @@
     margin: 0 auto;
     width: 95%;
     height: 1px;
-    background:#717171;
-    border-bottom:1px solid $border-light;
+    color: $text-gray;
+    border-bottom: 2px solid $text-gray;
 }
 
 @media only screen and (max-width: 800px) {
