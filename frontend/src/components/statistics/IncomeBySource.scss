@@ -39,14 +39,6 @@
     
 }
 
-@media only screen and (max-height: 700px) {
-    .scrollable-container {
-      .scrollable-table {
-            height: 120px !important;
-        }  
-    }
-}
-
 @media only screen and (min-height: 800px) {
     .scrollable-container {
         .scrollable-table {

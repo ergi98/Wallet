@@ -30,6 +30,8 @@ function IncomeSources(props) {
 
     async function getUserSources(username) {
         try {
+            
+            console.log("Income Sources")
             let res = await axios.post('/users/user-sources', { username })
 
             if (res.data.result.length > 0)

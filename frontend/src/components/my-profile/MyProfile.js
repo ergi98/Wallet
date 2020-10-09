@@ -32,7 +32,6 @@ const ExpenseCategories = React.lazy(() => import('./ExpenseCategories'))
 
 function MyProfile() {
 
-
     const username = useSelector((state) => state.user.username)
 
     const [user, setUser] = useState([])
