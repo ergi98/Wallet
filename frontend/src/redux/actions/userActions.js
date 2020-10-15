@@ -2,6 +2,7 @@
 import { 
     LOG_IN, 
     LOG_OUT, 
+    UPDATE_USER_AUTH,
     GET_PORTFOLIOS,
     UPDATE_PORTFOLIOS,
 } from '../actions/types'
@@ -30,7 +31,6 @@ export const logIn = (event) => async (dispatch) => {
 }
 
 export const logOut = (event) => async (dispatch) => {
-
     try {    
         
         let res = await axios.post('/users/logout', { username: event.username })
@@ -42,6 +42,13 @@ export const logOut = (event) => async (dispatch) => {
     catch(err) {
         console.log(err)        
     }
+}
+
+export const updateUserAuth = (event) => async (dispatch) => {
+    dispatch({
+        type: UPDATE_USER_AUTH,
+        payload: event
+    })
 }
 
 export const getPortfolios = (event) => async (dispatch) => {

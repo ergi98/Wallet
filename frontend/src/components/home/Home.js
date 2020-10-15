@@ -16,7 +16,6 @@ const TodayRecap = React.lazy(() => import('./TodayRecap'))
 const TransactionList = React.lazy(() => import('./TransactionList'))
 
 class Home extends React.Component {
-
     render() {
         return (
             <Layout>

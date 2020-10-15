@@ -46,7 +46,7 @@ class Login extends React.Component {
 
     componentDidMount() {
         this._isMounted = true
-        // If the user is already authenticated redirect
+        // // If the user is already authenticated redirect
         if (this.props.isAuthenticated)
             window.location.href = '/home'
     }
