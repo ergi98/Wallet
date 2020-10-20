@@ -5,6 +5,7 @@ import './TransactionList.scss'
 import axios from 'axios'
 
 // Redux 
+import { logOut } from '../../redux/actions/userActions'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -44,7 +45,7 @@ class TransactionList extends React.Component {
 
     async getTransactions(date) {
         try {
-            let res = await axios.post('/transactions/list', { username: this.props.username, date })
+            let res = await axios.post('/transactions/list', { username: this.props.username, date }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
 
             let transactions = res.data.result.length === 0? [] : res.data.result[0].transactions 
 
@@ -55,7 +56,10 @@ class TransactionList extends React.Component {
             
         }
         catch(err){
-            console.log(err)
+            // If no token is present logout
+            if(err.message.includes('403')) {
+                this.props.logOut()
+            }
         }
     }
 
@@ -126,11 +130,14 @@ class TransactionList extends React.Component {
 
 
 const mapPropsToState = state => ({
-    username: state.user.username
+    username: state.user.username,
+    jwt: state.user.jwt
 })
 
 TransactionList.propTypes = {
+    jwt: PropTypes.string.isRequired,
+    logOut: PropTypes.func.isRequired,
     username: PropTypes.string.isRequired
 }
 
-export default connect(mapPropsToState, null)(TransactionList)
+export default connect(mapPropsToState, { logOut })(TransactionList)

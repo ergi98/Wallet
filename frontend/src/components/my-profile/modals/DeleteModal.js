@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import './DeleteModal.scss'
 
-// Axios
-// import axios from 'axios'
-
 // Bootstrap
 import Modal from 'react-bootstrap/esm/Modal'
 import Button from 'react-bootstrap/esm/Button'

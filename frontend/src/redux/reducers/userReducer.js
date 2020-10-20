@@ -3,8 +3,7 @@ import {
     LOG_IN, 
     LOG_OUT, 
     GET_PORTFOLIOS, 
-    UPDATE_PORTFOLIOS ,
-    UPDATE_USER_AUTH
+    UPDATE_PORTFOLIOS
 } from '../actions/types'
 
 const initialState = {
@@ -37,11 +36,6 @@ export default function(state = initialState, action) {
                 surname: '',
                 jwt: '',
                 pref_currency: ''
-            }
-        case UPDATE_USER_AUTH:
-            return {
-                ...state,
-                isAuthenticated: action.payload
             }
         case GET_PORTFOLIOS:
             return {

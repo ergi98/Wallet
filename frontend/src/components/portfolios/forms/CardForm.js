@@ -8,6 +8,10 @@ import { Formik } from 'formik'
 // NanoID
 import { nanoid } from 'nanoid'
 
+// Redux
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 // Axios
 import axios from 'axios'
 
@@ -36,18 +40,25 @@ const card_schema = yup.object({
 
 function CardForm(props) {
 
+    const dispatch = useDispatch()
+    const jwt = useSelector((state) => state.user.jwt)
+    
     async function addPortfolio(event) {
-
+    
         let portfolio = {...event}
         portfolio.amount = portfolio.amount.replace(',', '.')
 
         if(props.caller==="portfolio") {
             try {
-                await axios.post('users/add-portfolio', { username: props.username, portfolio})
+                await axios.post('users/add-portfolio', { username: props.username, portfolio}, { headers: { Authorization: `Bearer ${jwt}`}})
                 props.setStatus("success", portfolio)
             }
             catch(err) {
-                props.setStatus("error")
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else
+                    props.setStatus("error")
             }  
         }
         else {

@@ -5,7 +5,8 @@ import './DeletePortfolio.scss'
 import axios from 'axios'
 
 // Redux
-import { useSelector } from 'react-redux'
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Bootstrap
 import Modal from 'react-bootstrap/esm/Modal'
@@ -19,10 +20,13 @@ import NumberFormat from 'react-number-format'
 
 function DeletePortfolio(props) {
 
+    const dispatch = useDispatch()
+    
+    const jwt = useSelector((state) => state.user.jwt)
+    const portfolios = useSelector((state) => state.user.portfolios)
+
     const [transferSelected, setTransferSelected] = useState(false)
     const [selectedPortfolio, setSelectedPortfolio] = useState("default")
-    
-    const portfolios = useSelector((state) => state.user.portfolios)
 
     async function deletePortfolio() {
         try {
@@ -31,12 +35,17 @@ function DeletePortfolio(props) {
                 delete_id: props.portfolio.p_id, 
                 transfer_amnt: props.portfolio.amount.$numberDecimal,
                 transfer_id: selectedPortfolio 
-            })
+            },
+            { headers: { Authorization: `Bearer ${jwt}`}})
             props.onClose()
             props.setDeleteStatus("success", props.portfolio, selectedPortfolio)
         }
         catch(err) {
-            props.setDeleteStatus("error")
+            // If no token is present logout
+            if(err.message.includes('403'))
+                dispatch(logOut())
+            else
+                props.setDeleteStatus("error")
         }
     }
 

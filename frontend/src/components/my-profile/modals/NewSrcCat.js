@@ -18,13 +18,17 @@ import * as yup from "yup"
 import { Formik } from 'formik'
 
 // Redux
-import { useSelector } from "react-redux"
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // NanoID
 import { nanoid } from 'nanoid'
 
 function NewSrcCat(props) {
 
+    const dispatch = useDispatch()
+    
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
     const [catSrcError, setCatSrcError] = useState(false)
 
@@ -44,14 +48,19 @@ function NewSrcCat(props) {
                     last_spent: null
                 }
 
-                await axios.post('/users/new-category', { username, category })
+                await axios.post('/users/new-category', { username, category }, { headers: { Authorization: `Bearer ${jwt}`}})
 
                 props.addCatSrc(category)
                 props.onClose()
             }
             catch(err) {
-                setCatSrcError(true)
-                setTimeout(() => { setCatSrcError(false) }, 2500)
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else {
+                    setCatSrcError(true)
+                    setTimeout(() => { setCatSrcError(false) }, 2500)
+                }
             }
         }
         else if(props.type === "Source") {
@@ -64,14 +73,19 @@ function NewSrcCat(props) {
                     last_earned: null
                 }
     
-                await axios.post('/users/new-source', { username, source })
+                await axios.post('/users/new-source', { username, source }, { headers: { Authorization: `Bearer ${jwt}`}})
                 
                 props.addCatSrc(source)
                 props.onClose()
             }
             catch(err) {
-                setCatSrcError(true)
-                setTimeout(() => { setCatSrcError(false) }, 2500)
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else {
+                    setCatSrcError(true)
+                    setTimeout(() => { setCatSrcError(false) }, 2500)
+                }
             }
         }
     }

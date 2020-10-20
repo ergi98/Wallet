@@ -1,5 +1,4 @@
 let users
-let sessions
 
 const mongodb = require('mongodb')
 
@@ -8,12 +7,11 @@ class UsersDAO {
   ObjectID = require('mongodb').ObjectID
 
   static async injectDB(conn) {
-    if (users && sessions) {
+    if (users) {
       return
     }
     try {
       users = await conn.db(process.env.MONOG_NS).collection("users")
-      sessions = await conn.db(process.env.MONOG_NS).collection("sessions")
     } catch (e) {
       console.error(`Unable to establish collection handles in userDAO: ${e}`)
     }
@@ -29,8 +27,6 @@ class UsersDAO {
 
       for(let i = 0; i < userInfo.sources.length; i++)
         userInfo.sources[i].amount_earned = mongodb.Decimal128.fromString(userInfo.sources[i].amount_earned.toString())
-
-      console.log(userInfo)
       
       await users.insertOne(userInfo, { w: "majority" })
       return { success: true }
@@ -61,7 +57,6 @@ class UsersDAO {
       return await users.aggregate(pipeline).toArray()
     }
     catch(e) {
-      console.log(`Error occurred while getting used usernames, ${e}`)
       return { error: e }
     }
   }
@@ -84,41 +79,6 @@ class UsersDAO {
     return await users.aggregate(pipeline).toArray()
   }
 
-  static async loginUser(username, jwt) {
-    try {
-      await sessions.updateOne(
-        { username },
-        { $set: { jwt } },
-        { upsert: true }
-      )
-      return { success: true }
-    }
-    catch (e) {
-      console.log(`Error occurred while logging in user, ${e}`)
-      return { error: e }
-    }
-  }
-
-  static async getUserSession(username) {
-    try {
-      return sessions.findOne({ username })
-    } catch (e) {
-      console.error(`Error occurred while retrieving user session, ${e}`)
-      return { error: e }
-    }
-  }
-
-  static async logoutUser(username) {
-    try {
-      await sessions.deleteOne({ username })
-      return { success: true }
-    }
-    catch (e) {
-      console.log(`Error occurred while logging out user, ${e}`)
-      return { error: e }
-    }
-  }
-
   static async updatePassword(username, password) {
     try {
       await users.updateOne(
@@ -127,7 +87,6 @@ class UsersDAO {
       )
     }
     catch (e) {
-      console.log(`Error occured while updating password, ${e}`)
       return { error: e }
     }
 
@@ -136,11 +95,9 @@ class UsersDAO {
   static async deleteUser(username) {
     try {
       await users.deleteOne({ username })
-      await sessions.deleteOne({ username })
-      if (!(await this.getUser(username)) && !(await this.getUserSession(username))) {
+      if (!(await this.getUser(username))) {
         return { success: true }
       } else {
-        console.error(`Deletion unsuccessful`)
         return { error: `Deletion unsuccessful` }
       }
     } catch (e) {

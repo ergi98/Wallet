@@ -6,7 +6,8 @@ import { IconContext } from "react-icons"
 import { AiOutlineStar, AiFillStar, AiOutlineUnorderedList, AiFillDelete } from 'react-icons/ai'
 
 // Redux
-import { useSelector } from 'react-redux'
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Axios
 import axios from 'axios'
@@ -28,8 +29,11 @@ const DeletePortfolio = React.lazy(() => import('./modals/DeletePortfolio'))
 
 function Portfolio(props) {
 
-    
+    const dispatch = useDispatch()
+
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
+    
     const history = useHistory()
 
     const [showDeleteModal, setShowDelete] = useState(false)
@@ -42,11 +46,15 @@ function Portfolio(props) {
             portfolio.favourite = true
 
         try {
-            await axios.post('/users/change-portfolio-fav', { username, portfolio })
+            await axios.post('/users/change-portfolio-fav', { username, portfolio }, { headers: { Authorization: `Bearer ${jwt}`}})
             props.setFavStatus("success", portfolio)
         }
         catch(err) {
-            props.setFavStatus("error")
+            // If no token is present logout
+            if(err.message.includes('403'))
+                dispatch(logOut())
+            else
+                props.setFavStatus("error")
         }
     }
 

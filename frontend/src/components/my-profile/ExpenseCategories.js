@@ -8,6 +8,10 @@ import { AiFillDelete, AiOutlinePlusCircle } from 'react-icons/ai'
 // Axios
 import axios from 'axios'
 
+// Redux
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 // Components
 const Loading = React.lazy(() => import('../loaders/Loading'))
 const NewSrcCat = React.lazy(() => import('./modals/NewSrcCat'))
@@ -21,27 +25,14 @@ const Table = React.lazy(() => import('react-bootstrap/esm/Table'))
 
 function ExpenseCategories(props) {
 
-    const [categories, setCategories] = useState([])
+    const dispatch = useDispatch()
+    const jwt = useSelector((state) => state.user.jwt)
 
+    const [categories, setCategories] = useState([])
     const [catModal, setCatModal] = useState(false)
 
     const [deleteCatModal, setDeleteCatModal] = useState({ state: false, category: {} })
-
     const [isLoading, setIsLoading] = useState(true)
-
-    async function getUserCategories(username) {
-        try {
-            let res = await axios.post('/users/user-categories', { username })
-
-            if (res.data.result.length > 0)
-                setCategories(res.data.result[0].categories)
-            setIsLoading(false)
-        }
-        catch (err) {
-            console.log(err)
-            setIsLoading(false)
-        }
-    }
 
     function addCat(category) {
         let newCategories = categories
@@ -57,11 +48,29 @@ function ExpenseCategories(props) {
     
     useEffect(() => {
         let _isMounted = true
+
+        async function getUserCategories(username) {
+            try {
+                let res = await axios.post('/users/user-categories', { username }, { headers: { Authorization: `Bearer ${jwt}`}})
+    
+                if (res.data.result.length > 0)
+                    setCategories(res.data.result[0].categories)
+                setIsLoading(false)
+            }
+            catch (err) {
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else
+                    setIsLoading(false)
+            }
+        }
+
         _isMounted && getUserCategories(props.username)
         return () => {
             _isMounted = false
         }
-    }, [props.username])
+    }, [props.username, jwt, dispatch])
 
     return (
         <Container  className={styles["category-row"]}>

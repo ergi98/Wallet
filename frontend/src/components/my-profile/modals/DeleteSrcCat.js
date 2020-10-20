@@ -9,36 +9,50 @@ import Button from 'react-bootstrap/esm/Button'
 import Alert from 'react-bootstrap/esm/Alert'
 
 // Redux
-import { useSelector } from "react-redux"
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from "react-redux"
 
 function NewSrcCat(props) {
 
+    const dispatch = useDispatch()
+
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
     const [deleteSrcCatError, setDeleteSrcCatError] = useState(false)
 
     async function deleteSrcCat() {
         if(props.type === "Category") {
             try {
-                await axios.post('/users/delete-category', { username, category_id: props.item.cat_id })
+                await axios.post('/users/delete-category', { username, category_id: props.item.cat_id }, { headers: { Authorization: `Bearer ${jwt}`}})
 
                 props.deleteCatSrc(props.item)    
                 props.onClose()
             }
             catch(err) {
-                setDeleteSrcCatError(true)
-                setTimeout(() => { setDeleteSrcCatError(false) }, 2500)
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else {
+                    setDeleteSrcCatError(true)
+                    setTimeout(() => { setDeleteSrcCatError(false) }, 2500)
+                }
             }
         }
         else if(props.type === "Source") {
             try {
-                await axios.post('/users/delete-source', { username, source_id: props.item.source_id })
+                await axios.post('/users/delete-source', { username, source_id: props.item.source_id }, { headers: { Authorization: `Bearer ${jwt}`}})
                 
                 props.deleteCatSrc(props.item)
                 props.onClose()
             }
             catch(err) {
-                setDeleteSrcCatError(true)
-                setTimeout(() => { setDeleteSrcCatError(false) }, 2500)
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else {
+                    setDeleteSrcCatError(true)
+                    setTimeout(() => { setDeleteSrcCatError(false) }, 2500)
+                }
             }
         }
     }

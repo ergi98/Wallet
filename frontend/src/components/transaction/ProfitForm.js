@@ -13,6 +13,7 @@ import { IconContext } from "react-icons"
 import { AiOutlineFileDone } from 'react-icons/ai'
 
 // Redux 
+import { logOut } from '../../redux/actions/userActions'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -69,7 +70,6 @@ class ProfitForm extends Component {
             portfolios: [],
             displayError: false,
             displaySuccess: false
-
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -86,7 +86,7 @@ class ProfitForm extends Component {
 
     async getValues() {
         try {
-            let res = await axios.post('/users/populate-transactions', { username: this.props.username }) 
+            let res = await axios.post('/users/populate-transactions', { username: this.props.username }, { headers: { Authorization: `Bearer ${this.props.jwt}`}}) 
 
             if (res.data.result.length > 0) {
                 let { sources, portfolios } = res.data.result[0]
@@ -98,7 +98,9 @@ class ProfitForm extends Component {
             }
         }
         catch(err) {
-            console.log(err)
+            // If no token is present logout
+            if(err.message.includes('403'))
+                this.props.logOut()
         }
     }
 
@@ -127,26 +129,34 @@ class ProfitForm extends Component {
                 username: this.props.username,
                 date: event.date,
                 transaction
-            })
+            }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
+
             this._isMounted && this.setState({
                 displaySuccess: true
             })
+
             setTimeout(() => {
                 this._isMounted && this.setState({
                     displaySuccess: false
                 })
             }, 2500);
+
             resetForm({})
         }
-        catch(error) {
-            this._isMounted && this.setState({
-                displayError: true
-            })
-            setTimeout(() => {
+        catch(err) {
+            // If no token is present logout
+            if(err.message.includes('403'))
+                this.props.logOut()
+            else {
                 this._isMounted && this.setState({
-                    displayError: false
+                    displayError: true
                 })
-            }, 2500);
+                setTimeout(() => {
+                    this._isMounted && this.setState({
+                        displayError: false
+                    })
+                }, 2500)
+            }
         }
     }
 
@@ -154,11 +164,9 @@ class ProfitForm extends Component {
         return (
             <Row className="form-row">
                 <Alert show={this.state.displaySuccess} variant="success" className="alert" as="Row">
-                    <Alert.Heading className="heading">Transaction Succeeded</Alert.Heading>
                     Successfully register transaction!
                     </Alert>
                 <Alert show={this.state.displayError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Transaction Failed</Alert.Heading>
                     The transaction you are trying to register did not go through!
                 </Alert>
                 <Formik
@@ -406,11 +414,14 @@ class ProfitForm extends Component {
 }
 
 const mapPropsToState = state => ({
-    username: state.user.username
+    username: state.user.username,
+    jwt: state.user.jwt
 })
 
 ProfitForm.propTypes = {
+    logOut: PropTypes.func.isRequired,
+    jwt: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired
 }
 
-export default connect(mapPropsToState, null)(ProfitForm)
+export default connect(mapPropsToState, { logOut })(ProfitForm)

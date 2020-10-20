@@ -4,6 +4,10 @@ import './SpendingForm.scss'
 // Axios
 import axios from 'axios'
 
+// Redux
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 // NanoID
 import { nanoid } from 'nanoid'
 
@@ -19,9 +23,6 @@ import { Formik } from 'formik'
 
 // Date Validation
 import { parse } from "date-fns"
-
-// Redux 
-import { useSelector } from 'react-redux'
 
 // Bootstrap
 import Form from 'react-bootstrap/esm/Form'
@@ -62,6 +63,9 @@ function parseDate(value, originalValue) {
 
 function SpendingForm() {
 
+    const dispatch = useDispatch()
+
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
 
     const [dateChecked, setDateChecked] = useState(false)
@@ -80,7 +84,7 @@ function SpendingForm() {
 
         async function getValues() {
             try {
-                let res = await axios.post('/users/populate-transactions', { username })
+                let res = await axios.post('/users/populate-transactions', { username }, { headers: { Authorization: `Bearer ${jwt}`}})
 
                 if (res.data.result.length > 0) {
                     let { categories, portfolios } = res.data.result[0]
@@ -90,7 +94,9 @@ function SpendingForm() {
                 }
             }
             catch (err) {
-                console.log(err)
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
             }
         }
 
@@ -98,7 +104,7 @@ function SpendingForm() {
         return () => {
             _isMounted = false
         }
-    }, [username])
+    }, [username, jwt, dispatch])
 
     async function handleSubmit(event, { resetForm }) {
         if (event.hours < 10)
@@ -129,15 +135,20 @@ function SpendingForm() {
                 username,
                 date: event.date,
                 transaction
-            })
+            }, { headers: { Authorization: `Bearer ${jwt}`}})
 
             setDisplaySuccess(true)
             setTimeout(() => { setDisplaySuccess(false) }, 2500)
             resetForm({})
         }
-        catch (error) {
-            setDisplayError(true)
-            setTimeout(() => { setDisplayError(false) }, 2500)
+        catch (err) {
+            // If no token is present logout
+            if(err.message.includes('403'))
+                dispatch(logOut())
+            else {
+                setDisplayError(true)
+                setTimeout(() => { setDisplayError(false) }, 2500)
+            }
         }
     }
 

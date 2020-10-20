@@ -5,11 +5,7 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 
 // Redux
 import { connect } from 'react-redux'
-import { updateUserAuth } from '../../redux/actions/userActions'
 import PropTypes from 'prop-types'
-
-// Axios
-import axios from 'axios'
 
 // Components
 import Login from '../login/Login'
@@ -23,26 +19,6 @@ import MyProfile from '../my-profile/MyProfile'
 import SignUp from '../login/SignUp'
 
 class Router extends React.Component {
-
-    async validateToken() {
-        try {
-            let res = await axios.post('/users/session', { username: this.props.username })
-            if(res.data.session.jwt === this.props.jwt) {
-                this.props.updateUserAuth(true)
-            }
-            else {
-                this.props.updateUserAuth(false)
-            }
-        }
-        catch (err) {
-            this.props.updateUserAuth(false)
-        }
-    }
-
-    componentDidMount() {
-        this.validateToken()
-    }
-
     render() {
         return (
             <BrowserRouter>
@@ -72,15 +48,11 @@ class Router extends React.Component {
 }
 
 let mapStateToProps = state => ({
-    jwt: state.user.jwt,
-    username: state.user.username,
     isAuthenticated: state.user.isAuthenticated
 })
 
 Router.propTypes = {
-    jwt: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    updateUserAuth: PropTypes.func.isRequired
+    isAuthenticated: PropTypes.bool.isRequired
 }
   
-export default connect(mapStateToProps, { updateUserAuth })(Router)
+export default connect(mapStateToProps, null)(Router)

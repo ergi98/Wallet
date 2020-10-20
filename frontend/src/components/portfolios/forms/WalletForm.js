@@ -12,7 +12,8 @@ import { nanoid } from 'nanoid'
 import axios from 'axios'
 
 // Redux
-import { useSelector } from 'react-redux'
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -27,8 +28,10 @@ const Spinner = React.lazy(() => import('react-bootstrap/esm/Spinner'))
 
 function WalletForm(props) {
 
+    const dispatch = useDispatch()
+    
+    const jwt = useSelector((state) => state.user.jwt)
     const portfolios = useSelector((state) => state.user.portfolios)
-
     const [unavailable, setUnavailable] = useState([])
 
     const wallet_schema = yup.object({
@@ -64,11 +67,15 @@ function WalletForm(props) {
 
         if (props.caller === "portfolio") {
             try {
-                await axios.post('users/add-portfolio', { username: props.username, portfolio })
+                await axios.post('users/add-portfolio', { username: props.username, portfolio }, { headers: { Authorization: `Bearer ${jwt}`}})
                 props.setStatus("success", portfolio)
             }
             catch (err) {
-                props.setStatus("error")
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else
+                    props.setStatus("error")
             }
         }
         else {

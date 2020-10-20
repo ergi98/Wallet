@@ -27,6 +27,7 @@ const TransferModal = React.lazy(() => import('./modals/TransferModal'))
 function Portfolios() {
 
     const username = useSelector((state) => state.user.username)
+    const jwt = useSelector((state) => state.user.jwt)
     const dispatch = useDispatch()
 
     const [portfolios, setPortfolios] = useState([])
@@ -44,14 +45,14 @@ function Portfolios() {
     useEffect(() => {
         let _isMounted = true
 
-        _isMounted && dispatch(getPortfolios({ username })).then(res => { setPortfolios(res); setIsLoading(false)})
+        _isMounted && dispatch(getPortfolios({ username, jwt })).then(res => { setPortfolios(res); setIsLoading(false)})
 
         return () => {
             // Clean up the subscription
             _isMounted = false
         };
         
-    }, [username, dispatch])
+    }, [username, jwt, dispatch])
 
     function closePortfolioModal() {
         setPortfolioModal(false)

@@ -4,6 +4,7 @@ import './TodayRecap.scss'
 import axios from 'axios'
 
 // Redux 
+import { logOut } from '../../redux/actions/userActions'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -58,39 +59,48 @@ class TodayRecap extends React.Component {
         let today = date.toLocaleDateString('en-GB')
         let yesterday = new Date(date.setDate(date.getDate() - 1)).toLocaleDateString('en-GB')
 
-        // Get the yesterday and today spendings amounts
-        let t_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: today })
-        let y_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: yesterday })
-        let amnt_res = await axios.post("users/available-amount", { username: this.props.username })
+        
+        try {
+            // Get the yesterday and today spendings amounts
+            let t_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: today }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
+            let y_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: yesterday }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
+            let amnt_res = await axios.post("users/available-amount", { username: this.props.username }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
 
-        let t_spendings = 0, y_spendings = 0, t_earnings = 0, y_earnings = 0, amount = 0, s_comp = 0, e_comp = 0
+            let t_spendings = 0, y_spendings = 0, t_earnings = 0, y_earnings = 0, amount = 0, s_comp = 0, e_comp = 0
 
-        // Save the amounts into local variables
-        if (t_res.data.result.length > 0) {
-            t_spendings = t_res.data.result[0].spendings.$numberDecimal
-            t_earnings = t_res.data.result[0].earnings.$numberDecimal
-        }
-        if (y_res.data.result.length > 0) {
-            y_spendings = y_res.data.result[0].spendings.$numberDecimal
-            y_earnings = y_res.data.result[0].earnings.$numberDecimal
-        }
-        if(amnt_res.data.result.length > 0)
-            amount = amnt_res.data.result[0].amount.$numberDecimal
+            // Save the amounts into local variables
+            if (t_res.data.result.length > 0) {
+                t_spendings = t_res.data.result[0].spendings.$numberDecimal
+                t_earnings = t_res.data.result[0].earnings.$numberDecimal
+            }
+            if (y_res.data.result.length > 0) {
+                y_spendings = y_res.data.result[0].spendings.$numberDecimal
+                y_earnings = y_res.data.result[0].earnings.$numberDecimal
+            }
+            if(amnt_res.data.result.length > 0)
+                amount = amnt_res.data.result[0].amount.$numberDecimal
 
-        y_spendings === "0" ? s_comp = 0 : s_comp = (((-1*t_spendings) - (-1*y_spendings)) / y_spendings * -100).toFixed(0)
-        y_earnings === "0" ? e_comp = 0 : e_comp = ((t_earnings - y_earnings) / y_earnings * 100).toFixed(0)
+            y_spendings === "0" ? s_comp = 0 : s_comp = (((-1*t_spendings) - (-1*y_spendings)) / y_spendings * -100).toFixed(0)
+            y_earnings === "0" ? e_comp = 0 : e_comp = ((t_earnings - y_earnings) / y_earnings * 100).toFixed(0)
 
             // Update the state
             this._isMounted && this.setState({
-            today_spendings: t_spendings,
-            yesterday_spendings: y_spendings,
-            today_earnings: t_earnings,
-            yesterday_earnings: y_earnings,
-            amount: amount,
-            e_comp,
-            s_comp,
-            isLoading: false
-        })
+                today_spendings: t_spendings,
+                yesterday_spendings: y_spendings,
+                today_earnings: t_earnings,
+                yesterday_earnings: y_earnings,
+                amount: amount,
+                e_comp,
+                s_comp,
+                isLoading: false
+            })
+        }
+        catch(err) {
+            // If no token is present logout
+            if(err.message.includes('403')) {
+                this.props.logOut()
+            }
+        }
     }
 
     render() {
@@ -161,12 +171,15 @@ class TodayRecap extends React.Component {
 
 const mapPropsToState = state => ({
     currency: state.user.pref_currency,
-    username: state.user.username
+    username: state.user.username,
+    jwt: state.user.jwt
 })
 
 TodayRecap.propTypes = {
+    logOut: PropTypes.func.isRequired,
     currency: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired
+    username: PropTypes.string.isRequired,
+    jwt: PropTypes.string.isRequired
 }
 
-export default connect(mapPropsToState, null)(TodayRecap)
+export default connect(mapPropsToState, { logOut })(TodayRecap)

@@ -9,7 +9,8 @@ import * as yup from "yup"
 import { Formik } from 'formik'
 
 // Redux
-import { useSelector } from "react-redux"
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Bootstrap
 import Modal from 'react-bootstrap/esm/Modal'
@@ -18,8 +19,12 @@ import Form from 'react-bootstrap/esm/Form'
 import Spinner from 'react-bootstrap/esm/Spinner'
 
 function PasswordModal(props) {
+    
+    const dispatch = useDispatch()
 
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
+    
     // Establish the validation schema
     const pwd_schema = yup.object({
         old_pass: yup.string().required("Old password is required!").min(4, "Password must be more than 4 characters!").max(15, "Password can't be more than 15 characters!"),
@@ -29,18 +34,27 @@ function PasswordModal(props) {
 
     async function updatePassword(event) {
         try {
-            await axios.post('/users/change-password', {
-                username,
-                old_pass: event.old_pass,
-                new_pass: event.new_password
-            })
+            await axios.post(
+                '/users/change-password', 
+                {
+                    username,
+                    old_pass: event.old_pass,
+                    new_pass: event.new_password
+                },
+                { headers: { Authorization: `Bearer ${jwt}`}}
+            )
             props.setPwdSuccess(true)
             setTimeout(() => { props.setPwdSuccess(false) }, 2500)
             props.onClose()
         }
         catch(err) {
-            props.setPwdError(true)
-            setTimeout(() => { props.setPwdError(false) }, 2500)
+            // If no token is present logout
+            if(err.message.includes('403'))
+                dispatch(logOut())
+            else {
+                props.setPwdError(true)
+                setTimeout(() => { props.setPwdError(false) }, 2500)
+            }
         }
     }
 

@@ -3,6 +3,10 @@ import React, { useState } from 'react'
 // Axios
 import axios from 'axios'
 
+// Redux
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 // Date validation
 import { parse, compareAsc } from 'date-fns'
 
@@ -14,6 +18,9 @@ const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
 const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
 
 function IAEFrom(props) {
+
+    const dispatch = useDispatch()
+    const jwt = useSelector((state) => state.user.jwt)
 
     const [type, setType] = useState('default')
     const [period, setPeriod] = useState('default')
@@ -69,31 +76,48 @@ function IAEFrom(props) {
     }
 
     async function getData(start, finish) {
-        // Hide the date form
-        props.setShowForm(false)
-        // Display the loading screen
-        props.setIsLoading(true)
-        let res = await axios.post('/transactions/transaction-chart', {
-            username: props.username,
-            type: type,
-            start_date: start,
-            end_date: finish
-        })
+        try {
+            // Hide the date form
+            props.setShowForm(false)
+            // Display the loading screen
+            props.setIsLoading(true)
+            let res = await axios.post('/transactions/transaction-chart', {
+                username: props.username,
+                type: type,
+                start_date: start,
+                end_date: finish
+            }, { headers: { Authorization: `Bearer ${jwt}`}})
 
-        res.data.result.forEach(result => {
-            if(result.earnings)
-                result.earnings = 1*result.earnings.$numberDecimal
-            if(result.spendings)
-                result.spendings = -1*result.spendings.$numberDecimal
-        })
+            // Do the API call
+            res.data.result.forEach(result => {
+                if(result.earnings)
+                    result.earnings = 1*result.earnings.$numberDecimal
+                if(result.spendings)
+                    result.spendings = -1*result.spendings.$numberDecimal
+            })
 
-        props.setStats([res.data.result])
-        props.setChartType(type)
-        props.setRange({ start, finish })
-        // Hide the loading screen
-        props.setIsLoading(false)
-        // Display the charts
-        props.setShowGraph(true)
+            // Set chart data
+            props.setStats([res.data.result])
+            // Set chart type
+            props.setChartType(type)
+            // Set the range
+            props.setRange({ start, finish })
+            // Hide the loading screen
+            props.setIsLoading(false)
+            // Display the charts
+            props.setShowGraph(true)
+        }
+        catch (err) {
+            // If no token is present logout
+            if(err.message.includes('403'))
+                dispatch(logOut())
+            else {
+                // Hide the loading screen
+                props.setIsLoading(false)
+                // Dispaly form on error
+                props.setShowForm(true)
+            }
+        }
     }
 
     function generateChart() {

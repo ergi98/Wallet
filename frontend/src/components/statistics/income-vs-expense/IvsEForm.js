@@ -4,6 +4,10 @@ import './IncomeVSExpense.scss'
 // Axios
 import axios from 'axios'
 
+// Redux
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 // Date validation
 import { parse, compareAsc } from 'date-fns'
 
@@ -15,6 +19,9 @@ const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
 const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
 
 function IvsEForm(props) {
+
+    const dispatch = useDispatch()
+    const jwt = useSelector((state) => state.user.jwt)
 
     const [period, setPeriod] = useState('default')
 
@@ -69,26 +76,40 @@ function IvsEForm(props) {
     }
 
     async function getData(start, finish) {
-        // Hide the date form
-        props.setShowForm(false)
-        // Display the loading screen
-        props.setIsLoading(true)
-        let res = await axios.post('/transactions/income-vs-expense', {
-            username: props.username,
-            start_date: start,
-            end_date: finish
+        try {
+            // Hide the date form
+            props.setShowForm(false)
+            // Display the loading screen
+            props.setIsLoading(true)
+            let res = await axios.post('/transactions/income-vs-expense', {
+                username: props.username,
+                start_date: start,
+                end_date: finish
 
-        })
-        props.setStats([
-            { value: 1*res.data.result[0].earn_amnt.$numberDecimal, name: "Earnings" },
-            { value: -1*res.data.result[0].spend_amnt.$numberDecimal, name: "Spendings" }
-        ])
+            }, { headers: { Authorization: `Bearer ${jwt}`}})
 
-        props.setRange({ start, finish })
-        // Hide the loading screen
-        props.setIsLoading(false)
-        // Display the charts
-        props.setShowChart(true)
+            props.setStats([
+                { value: 1*res.data.result[0].earn_amnt.$numberDecimal, name: "Earnings" },
+                { value: -1*res.data.result[0].spend_amnt.$numberDecimal, name: "Spendings" }
+            ])
+
+            props.setRange({ start, finish })
+            // Hide the loading screen
+            props.setIsLoading(false)
+            // Display the charts
+            props.setShowChart(true)
+        }
+        catch(err) {
+            // If no token is present logout
+            if(err.message.includes('403'))
+                dispatch(logOut())
+            else {
+                // Hide the loading screen
+                props.setIsLoading(false)
+                // Show date form
+                props.setShowForm(true)
+            }
+        }
     }
 
     function generateChart() {

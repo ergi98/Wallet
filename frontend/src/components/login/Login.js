@@ -63,6 +63,8 @@ class Login extends React.Component {
         // Call the login function in userActions.js
         let res = this._isMounted && await this.props.logIn(event)
 
+        console.log(res)
+        
         if (res.success === true)
             window.location.href = '/home'
         else {

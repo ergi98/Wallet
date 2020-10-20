@@ -17,7 +17,8 @@ import { AiFillDelete } from 'react-icons/ai'
 import axios from 'axios'
 
 // Redux
-import { useSelector } from 'react-redux'
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Components
 import Layout from '../layout/Layout'
@@ -32,6 +33,8 @@ const ExpenseCategories = React.lazy(() => import('./ExpenseCategories'))
 
 function MyProfile() {
 
+    const dispatch = useDispatch()
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
 
     const [user, setUser] = useState([])
@@ -49,23 +52,27 @@ function MyProfile() {
         
         async function getUserData(username) {
             try {
-                let res = await axios.post('/users/user-data', { username })
+                let res = await axios.post('/users/user-data', { username }, { headers: { Authorization: `Bearer ${jwt}`}})
 
                 if (res.data.result.length > 0)
                     setUser(res.data.result[0])
                 setIsLoading(false)
             }
             catch (err) {
-                console.log(err)
-                setIsLoading(false)
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else
+                    setIsLoading(false)
             }
         }
 
         _isMounted && getUserData(username)
+
         return () => {
             _isMounted = false
         }
-    }, [username])
+    }, [username, jwt, dispatch])
 
     return (
         <Layout>

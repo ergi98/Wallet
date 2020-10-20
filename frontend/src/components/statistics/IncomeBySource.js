@@ -5,7 +5,8 @@ import './IncomeBySource.scss'
 import axios from 'axios'
 
 // Redux
-import { useSelector } from 'react-redux'
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Components
 const Card = React.lazy(() => import('../card/Card'))
@@ -27,6 +28,9 @@ const NumberFormat = React.lazy(() => import('react-number-format'))
 
 function IncomeBySource() {
 
+    const dispatch = useDispatch()
+
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
     const pref_currency = useSelector((state) => state.user.pref_currency)
 
@@ -38,7 +42,7 @@ function IncomeBySource() {
 
         async function getIncome() {
             try {
-                let res = await axios.post('/users/user-sources', { username })
+                let res = await axios.post('/users/user-sources', { username }, { headers: { Authorization: `Bearer ${jwt}`}})
 
                 if (res.data.result.length > 0) {
                     res.data.result[0].sources.sort((a, b) => {
@@ -53,8 +57,11 @@ function IncomeBySource() {
                 setLoading(false)
             }
             catch (err) {
-                setLoading(false)
-                console.log(err)
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else
+                    setLoading(false)
             }
         }
 
@@ -63,7 +70,7 @@ function IncomeBySource() {
         return () => {
             _isMounted = false
         }
-    }, [username])
+    }, [username, jwt, dispatch])
 
     return (
         <Card title="Income By Source" className="income-card">

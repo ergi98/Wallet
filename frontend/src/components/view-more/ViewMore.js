@@ -19,7 +19,8 @@ import InputGroup from 'react-bootstrap/esm/InputGroup'
 import FormControl from 'react-bootstrap/esm/FormControl'
 
 // Redux
-import { useSelector } from 'react-redux'
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Icons
 import { IconContext } from "react-icons"
@@ -33,6 +34,9 @@ import { parse, compareAsc } from 'date-fns'
 
 function ViewMore({ match })  {
 
+    const dispatch = useDispatch()
+
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
 
     const [date, setDate] = useState(new Date())
@@ -55,7 +59,7 @@ function ViewMore({ match })  {
         
         async function getTransactions(username, date) {
             try {    
-                let res = await axios.post('/transactions/list', { username, date, portfolio: match.params.pid})
+                let res = await axios.post('/transactions/list', { username, date, portfolio: match.params.pid}, { headers: { Authorization: `Bearer ${jwt}`}})
 
                 if(res.status === 200 && res.data.result.length > 0) {
                     let { transactions } = res.data.result[0]
@@ -67,11 +71,16 @@ function ViewMore({ match })  {
                 }
             }
             catch(err) {
-                _isMounted && setError(true)
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else {
+                    _isMounted && setError(true)
 
-                setTimeout(() => {
-                    _isMounted && setError(false)
-                }, 2500);
+                    setTimeout(() => {
+                        _isMounted && setError(false)
+                    }, 2500);
+                }
             }
             finally {
                 _isMounted && setIsLoading(false)
@@ -83,7 +92,7 @@ function ViewMore({ match })  {
         return () => {
             _isMounted = false
         }
-    }, [username, date, match])
+    }, [username, date, match, jwt, dispatch])
 
     function validateDate(event) {
         let regex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/)

@@ -1,8 +1,7 @@
 // Actions
 import { 
     LOG_IN, 
-    LOG_OUT, 
-    UPDATE_USER_AUTH,
+    LOG_OUT,
     GET_PORTFOLIOS,
     UPDATE_PORTFOLIOS,
 } from '../actions/types'
@@ -11,7 +10,6 @@ import {
 import axios from 'axios'
 
 export const logIn = (event) => async (dispatch) => {
-
     try {
         let res = await axios.post(`/users/login`, {
             username: event.username,
@@ -25,35 +23,23 @@ export const logIn = (event) => async (dispatch) => {
         return { success: true }
     }    
     catch(err) {
-        console.log(err)    
         return { success: false }    
     }
 }
 
-export const logOut = (event) => async (dispatch) => {
-    try {    
-        
-        let res = await axios.post('/users/logout', { username: event.username })
-        dispatch({
-            type: LOG_OUT,
-            payload: res
-        })
-    }   
-    catch(err) {
-        console.log(err)        
-    }
-}
-
-export const updateUserAuth = (event) => async (dispatch) => {
+export const logOut = () => (dispatch) => {  
     dispatch({
-        type: UPDATE_USER_AUTH,
-        payload: event
+        type: LOG_OUT
     })
 }
 
 export const getPortfolios = (event) => async (dispatch) => {
     try {
-        let res = await axios.post('/users/portfolios', { username: event.username })
+        let res = await axios.post(
+            '/users/portfolios', 
+            { username: event.username },
+            { headers: { Authorization: `Bearer ${event.jwt}`}}
+        )
 
         if(res.data.result.length > 0) {
             dispatch({
@@ -71,8 +57,14 @@ export const getPortfolios = (event) => async (dispatch) => {
             return []
         }
     }
-    catch(err) {
-        console.log(err)        
+    catch(err) { 
+        // If no token is present logout
+        if(err.message.includes('403')) {
+            dispatch({
+                type: LOG_OUT
+            })
+        }
+        return { success: false, err }   
     }
 }
 

@@ -4,6 +4,10 @@ import './DeleteModal.scss'
 // Axios
 import axios from 'axios'
 
+// Redux
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 // Bootstrap
 import Modal from 'react-bootstrap/esm/Modal'
 const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
@@ -16,17 +20,23 @@ const NumberFormat = React.lazy(() => import('react-number-format'))
 
 function DeleteModal(props) {
 
+    const dispatch = useDispatch()
+    const jwt = useSelector((state) => state.user.jwt)
     
     async function deleteTransaction(username, date, transaction) {
 
         transaction.amount = transaction.amount.$numberDecimal
 
         try {
-            await axios.post('/transactions/delete-transaction', { username, date, transaction })
+            await axios.post('/transactions/delete-transaction', { username, date, transaction }, { headers: { Authorization: `Bearer ${jwt}`}})
             props.deleteStatus("success", transaction)
         }
         catch(err) {
-            props.deleteStatus("error")
+            // If no token is present logout
+            if(err.message.includes('403'))
+                dispatch(logOut())
+            else
+                props.deleteStatus("error")
         }
 
         props.onClose()

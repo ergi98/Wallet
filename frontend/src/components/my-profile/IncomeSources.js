@@ -8,6 +8,10 @@ import { AiFillDelete, AiOutlinePlusCircle } from 'react-icons/ai'
 // Axios
 import axios from 'axios'
 
+// Redux
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 // Components
 const Loading = React.lazy(() => import('../loaders/Loading'))
 const NewSrcCat = React.lazy(() => import('./modals/NewSrcCat'))
@@ -21,28 +25,15 @@ const Table = React.lazy(() => import('react-bootstrap/esm/Table'))
 
 function IncomeSources(props) {
 
+    const dispatch = useDispatch()
+    const jwt = useSelector((state) => state.user.jwt)
+
     const [sources, setSources] = useState([])
 
     const [srcModal, setSrcModal] = useState(false)
     const [deleteSrcModal, setDeleteSrcModal] = useState({ state: false, source: {} })
 
     const [isLoading, setIsLoading] = useState(true)
-
-    async function getUserSources(username) {
-        try {
-            
-            console.log("Income Sources")
-            let res = await axios.post('/users/user-sources', { username })
-
-            if (res.data.result.length > 0)
-                setSources(res.data.result[0].sources)
-            setIsLoading(false)
-        }
-        catch (err) {
-            console.log(err)
-            setIsLoading(false)
-        }
-    }
 
     function addSrc(source) {
         let newSources = sources
@@ -59,11 +50,30 @@ function IncomeSources(props) {
     
     useEffect(() => {
         let _isMounted = true
+
+        async function getUserSources(username) {
+            try {
+                let res = await axios.post('/users/user-sources', { username }, { headers: { Authorization: `Bearer ${jwt}`}})
+    
+                if (res.data.result.length > 0)
+                    setSources(res.data.result[0].sources)
+                setIsLoading(false)
+            }
+            catch (err) {
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else
+                 setIsLoading(false)
+            }
+        }
+
         _isMounted && getUserSources(props.username)
+        
         return () => {
             _isMounted = false
         }
-    }, [props.username])
+    }, [props.username, jwt, dispatch])
 
     return (
         <Container className={styles["source-row"]}>

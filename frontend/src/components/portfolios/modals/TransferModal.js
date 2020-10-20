@@ -4,6 +4,10 @@ import './TransferModal.scss'
 // Axios
 import axios from 'axios'
 
+// Redux
+import { logOut } from '../../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
+
 // Bootstrap
 import Modal from 'react-bootstrap/esm/Modal'
 import Button from 'react-bootstrap/esm/Button'
@@ -13,6 +17,9 @@ import Form from 'react-bootstrap/esm/Form'
 import NumberFormat from 'react-number-format'
 
 function TransferModal(props) {
+
+    const dispatch = useDispatch()
+    const jwt = useSelector((state) => state.user.jwt)
 
     const [from, setFrom] = useState('default')
     const [to, setTo] = useState('default')
@@ -57,12 +64,16 @@ function TransferModal(props) {
                 from,
                 to,
                 amount: amount.replace(',', '.'),
-            })
+            }, { headers: { Authorization: `Bearer ${jwt}`}})
             props.setTransferStatus("success", from, to, amount.replace(',', '.'))
             props.closeModal()
         }
         catch (err) {
-            props.setTransferStatus("error")
+            // If no token is present logout
+            if(err.message.includes('403'))
+                dispatch(logOut())
+            else
+                props.setTransferStatus("error")
         }
     }
 

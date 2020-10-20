@@ -31,7 +31,6 @@ function LoginInformation(props) {
             setUsernames(temp)
         }
         catch(err){
-            console.log(err)
         }
     }
 

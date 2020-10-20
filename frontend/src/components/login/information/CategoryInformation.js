@@ -15,8 +15,6 @@ import { nanoid } from 'nanoid'
 
 function CategoryInformation(props) {
 
-    console.log("CategoryInformation")
-
     const [newCategory, setNewCategory] = useState('')
     const [catValid, setCatValid] = useState(false)
     const [categories, setCategories] = useState(

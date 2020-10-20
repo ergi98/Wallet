@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 // Redux
-import { useSelector } from 'react-redux'
+import { logOut } from '../../redux/actions/userActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Components
 const Card = React.lazy(() => import('../card/Card'))
@@ -26,41 +27,48 @@ const NumberFormat = React.lazy(() => import('react-number-format'))
 
 function ExpenseByCategory() {
 
+    const dispatch = useDispatch()
+
+    const jwt = useSelector((state) => state.user.jwt)
     const username = useSelector((state) => state.user.username)
     const pref_currency = useSelector((state) => state.user.pref_currency)
 
     const [expenses, setExpenses] = useState([])
     const [loading, setLoading] = useState(true)
 
-    async function getExpenses(username) {
-        try {
-            let res = await axios.post('/users/user-categories', { username })
-
-            if (res.data.result.length > 0) {
-                res.data.result[0].categories.sort((a, b) => {
-                    if (a.amnt_spent.$numberDecimal > b.amnt_spent.$numberDecimal)
-                        return 1
-                    if (a.amnt_spent.$numberDecimal < b.amnt_spent.$numberDecimal)
-                        return -1
-                    return 0
-                })
-                setExpenses(res.data.result[0].categories)
-            }
-            setLoading(false)
-        }
-        catch (err) {
-            setLoading(false)
-            console.log(err)
-        }
-    }
-
     useEffect(() => {
         let _isMounted = true
+
+        async function getExpenses(username) {
+            try {
+                let res = await axios.post('/users/user-categories', { username }, { headers: { Authorization: `Bearer ${jwt}`}})
+    
+                if (res.data.result.length > 0) {
+                    res.data.result[0].categories.sort((a, b) => {
+                        if (a.amnt_spent.$numberDecimal > b.amnt_spent.$numberDecimal)
+                            return 1
+                        if (a.amnt_spent.$numberDecimal < b.amnt_spent.$numberDecimal)
+                            return -1
+                        return 0
+                    })
+                    setExpenses(res.data.result[0].categories)
+                }
+                setLoading(false)
+            }
+            catch (err) {
+                // If no token is present logout
+                if(err.message.includes('403'))
+                    dispatch(logOut())
+                else
+                    setLoading(false)
+            }
+        }
+
         _isMounted && getExpenses(username)
         return () => {
             _isMounted = false
         }
-    }, [username])
+    }, [username, jwt, dispatch])
 
     return (
 

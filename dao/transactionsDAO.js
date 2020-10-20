@@ -41,7 +41,6 @@ class TransactionsDAO {
       return await res.toArray()
     }
     catch (e) {
-      console.log(`Error occurred while getting user spendings, ${e}`)
       return { error: e }
     }
   }
@@ -70,7 +69,6 @@ class TransactionsDAO {
       return res.toArray()
     }
     catch (e) {
-      console.log(`Error occurred while getting user transactions, ${e}`)
       return { error: e }
     }
   }
@@ -138,7 +136,6 @@ class TransactionsDAO {
       }, transactionOptions)
     }
     catch (e) {
-      console.log(`Error occurred while getting user transactions, ${e}`)
       return { error: e }
     }
     finally {
@@ -182,7 +179,6 @@ class TransactionsDAO {
       }, transactionOptions)
     }
     catch (e) {
-      console.log(`Error occurred while deleting user transaction, ${e}`)
       return { error: e }
     }
     finally {
@@ -219,7 +215,6 @@ class TransactionsDAO {
       return res.toArray()
     }
     catch (e) {
-      console.log(`Error occurred while generating income expense chart, ${e}`)
       return { error: e }
     }
   }
@@ -242,7 +237,6 @@ class TransactionsDAO {
       return res.toArray()
     }
     catch (e) {
-      console.log(`Error occurred while generating transaction chart, ${e}`)
       return { error: e }
     }
   }
