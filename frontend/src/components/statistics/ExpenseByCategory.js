@@ -43,11 +43,12 @@ function ExpenseByCategory() {
             try {
                 let res = await axios.post('/users/user-categories', { username }, { headers: { Authorization: `Bearer ${jwt}`}})
     
+                console.log(res.data.result)
                 if (res.data.result.length > 0) {
                     res.data.result[0].categories.sort((a, b) => {
-                        if (a.amnt_spent.$numberDecimal > b.amnt_spent.$numberDecimal)
+                        if (parseFloat(a.amnt_spent.$numberDecimal) > parseFloat(b.amnt_spent.$numberDecimal))
                             return 1
-                        if (a.amnt_spent.$numberDecimal < b.amnt_spent.$numberDecimal)
+                        if (parseFloat(a.amnt_spent.$numberDecimal) < parseFloat(b.amnt_spent.$numberDecimal))
                             return -1
                         return 0
                     })

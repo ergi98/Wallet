@@ -46,9 +46,9 @@ function IncomeBySource() {
 
                 if (res.data.result.length > 0) {
                     res.data.result[0].sources.sort((a, b) => {
-                        if (a.amount_earned.$numberDecimal > b.amount_earned.$numberDecimal)
+                        if (parseFloat(a.amount_earned.$numberDecimal) > parseFloat(b.amount_earned.$numberDecimal))
                             return -1
-                        if (a.amount_earned.$numberDecimal < b.amount_earned.$numberDecimal)
+                        if (parseFloat(a.amount_earned.$numberDecimal) < parseFloat(b.amount_earned.$numberDecimal))
                             return 1
                         return 0
                     })
