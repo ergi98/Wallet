@@ -20,8 +20,6 @@ import NumberFormat from 'react-number-format'
 
 function DeleteModal(props) {
 
-    console.log('here')
-
     const dispatch = useDispatch()
     const jwt = useSelector((state) => state.user.jwt)
     

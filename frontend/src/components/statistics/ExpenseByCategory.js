@@ -42,8 +42,7 @@ function ExpenseByCategory() {
         async function getExpenses(username) {
             try {
                 let res = await axios.post('/users/user-categories', { username }, { headers: { Authorization: `Bearer ${jwt}`}})
-    
-                console.log(res.data.result)
+ 
                 if (res.data.result.length > 0) {
                     res.data.result[0].categories.sort((a, b) => {
                         if (parseFloat(a.amnt_spent.$numberDecimal) > parseFloat(b.amnt_spent.$numberDecimal))
