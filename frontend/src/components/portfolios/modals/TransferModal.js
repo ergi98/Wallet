@@ -67,6 +67,10 @@ function TransferModal(props) {
             }, { headers: { Authorization: `Bearer ${jwt}`}})
             props.setTransferStatus("success", from, to, amount.replace(',', '.'))
             props.closeModal()
+            // Reseting
+            setFrom('default')
+            setTo('default')
+            setAmount('')
         }
         catch (err) {
             // If no token is present logout

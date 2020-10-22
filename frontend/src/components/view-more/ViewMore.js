@@ -4,11 +4,6 @@ import './ViewMore.scss'
 // Axios
 import axios from 'axios'
 
-// Components 
-import Layout from '../layout/Layout'
-import DeleteModal from './DeleteModal'
-import Loading from '../loaders/Loading'
-
 // Bootstrap
 import Container from 'react-bootstrap/esm/Container'
 import Alert from 'react-bootstrap/esm/Alert'
@@ -31,6 +26,11 @@ import NumberFormat from 'react-number-format'
 
 // Date validation
 import { parse, compareAsc } from 'date-fns'
+
+// Components 
+import Layout from '../layout/Layout'
+import Loading from '../loaders/Loading'
+const DeleteModal = React.lazy(() => import('./DeleteModal'))
 
 function ViewMore({ match })  {
 
@@ -275,7 +275,6 @@ function ViewMore({ match })  {
                     deleteStatus={deleteStatus}
                 />
             </Suspense>
-         
         </Layout>
     )
 }

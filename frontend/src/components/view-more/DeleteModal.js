@@ -10,15 +10,17 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // Bootstrap
 import Modal from 'react-bootstrap/esm/Modal'
-const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
-const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
-const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
-const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Col from 'react-bootstrap/esm/Col'
+import Button from 'react-bootstrap/esm/Button'
 
 // Number Format
-const NumberFormat = React.lazy(() => import('react-number-format'))
+import NumberFormat from 'react-number-format'
 
 function DeleteModal(props) {
+
+    console.log('here')
 
     const dispatch = useDispatch()
     const jwt = useSelector((state) => state.user.jwt)
@@ -85,7 +87,6 @@ function DeleteModal(props) {
                     <Button variant="secondary" onClick={props.onClose}>Cancel</Button>
                     <Button variant="danger" onClick={() => deleteTransaction(props.username, props.date.toLocaleDateString('en-GB'), props.transaction)}>Delete</Button>
             </Modal.Footer>
-
         </Modal>
     )
 }
