@@ -12,8 +12,6 @@ import Layout from '../layout/Layout'
 import Loading from '../loaders/Loading'
 import Login from '../login/Login'
 import SignUp from '../login/SignUp'
-// const Login = React.lazy(() => import('../login/Login'))
-// const SignUp = React.lazy(() => import('../login/SignUp'))
 const Home = React.lazy(() => import('../home/Home'))
 const Portfolios = React.lazy(() => import('../portfolios/Portfolios'))
 const Statistics = React.lazy(() => import('../statistics/Statistics'))

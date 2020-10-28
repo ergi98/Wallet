@@ -5,6 +5,8 @@ const transactionRouter = require('./routes/transactions.route')
 const MongoClient = require('mongodb')
 const UsersDAO = require('./dao/usersDAO')
 const transactionsDAO = require('./dao/transactionsDAO')
+var compress = require('brotli/compress')
+var decompress = require('brotli/decompress')
 
 const path = require('path')
 
@@ -23,13 +25,17 @@ app.use('/transactions', transactionRouter)
 
 // Serve our static assets if in production
 if(process.env.NODE_ENV === "production") {
+
+    console.log(express.static('frontend/build'))
+
     app.use(express.static('frontend/build'))
 
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+        console.log('HERE I SEND')
+        console.log(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
     })
 }
-
 
 // Connection to MongoDB
 MongoClient.connect(
