@@ -32,16 +32,14 @@ class Router extends React.Component {
                                     this.props.isAuthenticated ?
                                         <>
                                             <Layout>
-                                                <Suspense fallback={<Loading/>}>
-                                                    <Route path="/home" exact component={Home} />
-                                                    <Route path="/portfolios" exact component={Portfolios} />
-                                                    <Route path="/portfolios/transactions/:pid" exact component={ViewMore} />
-                                                    <Route path="/statistics" exact component={Statistics} />
-                                                    <Route path="/my-profile" exact component={MyProfile} />
-                                                    <Route path="/view-more" exact component={ViewMore} />
-                                                    <Route path="/expense-transaction" exact component={SpendingTransaction} />
-                                                    <Route path="/profit-transaction" exact component={ProfitTransaction} /> 
-                                                </Suspense>
+                                                <Suspense fallback={<Loading/>}><Route path="/home" exact component={Home}/></Suspense>
+                                                <Suspense fallback={<Loading/>}><Route path="/portfolios" exact component={Portfolios}/> </Suspense>
+                                                <Suspense fallback={<Loading/>}><Route path="/portfolios/transactions/:pid" exact component={ViewMore}/> </Suspense>
+                                                <Suspense fallback={<Loading/>}><Route path="/statistics" exact component={Statistics}/> </Suspense>
+                                                <Suspense fallback={<Loading/>}><Route path="/my-profile" exact component={MyProfile}/> </Suspense>
+                                                <Suspense fallback={<Loading/>}><Route path="/view-more" exact component={ViewMore}/> </Suspense>
+                                                <Suspense fallback={<Loading/>}><Route path="/expense-transaction" exact component={SpendingTransaction}/> </Suspense>
+                                                <Suspense fallback={<Loading/>}><Route path="/profit-transaction" exact component={ProfitTransaction}/> </Suspense> 
                                             </Layout>
                                         </> 
                                         :
