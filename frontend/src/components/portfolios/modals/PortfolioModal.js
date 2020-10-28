@@ -51,19 +51,27 @@ function PortfolioModal(props) {
                     </Form.Group>
                     {
                         type === "wallet"?
-                        <Row>
                             <Suspense fallback={<Loading/>}>
-                                <WalletForm closeModal={props.closeModal} caller={props.caller} username={props.username} setStatus={setStatus} setPortfolio={props.setPortfolio}/>
-                            </Suspense>
-                        </Row> : null
+                                <WalletForm 
+                                    closeModal={props.closeModal} 
+                                    caller={props.caller}
+                                    username={props.username}
+                                    setStatus={setStatus}
+                                    setPortfolio={props.setPortfolio}    
+                                />
+                            </Suspense> : null
                     }
                     {
                         type === "credit card"?
-                        <Row>
                             <Suspense fallback={<Loading/>}>
-                                <CardForm closeModal={props.closeModal} caller={props.caller} username={props.username} setStatus={setStatus} setPortfolio={props.setPortfolio}/>
-                            </Suspense>
-                        </Row> : null
+                                <CardForm 
+                                    closeModal={props.closeModal} 
+                                    caller={props.caller} 
+                                    username={props.username} 
+                                    setStatus={setStatus} 
+                                    setPortfolio={props.setPortfolio}
+                                />
+                            </Suspense>: null
                     }
                 </Container>
             </Modal.Body>

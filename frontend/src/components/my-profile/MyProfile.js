@@ -1,13 +1,5 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './MyProfile.module.scss'
-
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-import Row from 'react-bootstrap/esm/Row'
-import Col from 'react-bootstrap/esm/Col'
-import Button from 'react-bootstrap/esm/Button'
-import Image from 'react-bootstrap/esm/Image'
-import Alert from 'react-bootstrap/esm/Alert'
 
 // Icons
 import { IconContext } from 'react-icons'
@@ -20,12 +12,15 @@ import axios from 'axios'
 import { logOut } from '../../redux/actions/userActions'
 import { useDispatch, useSelector } from 'react-redux'
 
-// Components
-import Layout from '../layout/Layout'
-import InlineLoading from '../loaders/InlineLoading'
-import SmallLoading from '../loaders/SmallLoading'
-import Loading from '../loaders/Loading'
+// Bootstrap
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const Image = React.lazy(() => import('react-bootstrap/esm/Image'))
+const Alert = React.lazy(() => import('react-bootstrap/esm/Alert'))
 
+// Components
 const DeleteModal = React.lazy(() => import('./modals/DeleteModal'))
 const PasswordModal = React.lazy(() => import('./modals/PasswordModal'))
 const IncomeSources = React.lazy(() => import('./IncomeSources'))
@@ -45,8 +40,6 @@ function MyProfile() {
     const [pwdSuccess, setPwdSuccess] = useState(false)
     const [pwdError, setPwdError] = useState(false)
 
-    const [isLoading, setIsLoading] = useState(true)
-
     useEffect(() => {
         let _isMounted = true
         
@@ -56,14 +49,11 @@ function MyProfile() {
 
                 if (res.data.result.length > 0)
                     setUser(res.data.result[0])
-                setIsLoading(false)
             }
             catch (err) {
                 // If no token is present logout
                 if(err.message.includes('403'))
                     dispatch(logOut())
-                else
-                    setIsLoading(false)
             }
         }
 
@@ -75,15 +65,13 @@ function MyProfile() {
     }, [username, jwt, dispatch])
 
     return (
-        <Layout>
+        <React.Fragment>
             <Container className={styles["profile-container"]}>
                 {/** Password alerts */}
                 <Alert show={pwdSuccess} variant="success" className={styles["alert"]}>
-                    <Alert.Heading className={styles["heading"]}>Password Change</Alert.Heading>
                     Your password was successfully changed!
                 </Alert>
                 <Alert show={pwdError} variant="danger" className={styles["alert"]}>
-                    <Alert.Heading className={styles["heading"]}>Password Change</Alert.Heading>
                     A problem occured while trying to change your password.
                 </Alert>
                 <Container className={styles["image-row"]}>
@@ -98,10 +86,10 @@ function MyProfile() {
                         </Button>
                     </Row>
                     <Row className={styles["center-row"]}>
-                        { isLoading? <SmallLoading/> : <label className={styles["name"]}>{user?.personal?.name} {user?.personal?.surname}</label> }
+                        <label className={styles["name"]}>{user?.personal?.name} {user?.personal?.surname}</label>
                     </Row>
                     <Row className={styles["center-row"]}>
-                        { isLoading? null : <label className={styles["occupation"]}>{user?.personal?.profession}</label> }
+                        <label className={styles["occupation"]}>{user?.personal?.profession}</label>
                     </Row>
                 </Container>
                 <Row className={styles["personal-row"]}>
@@ -109,74 +97,66 @@ function MyProfile() {
                     <Col>
                         <Row>
                             <label className={styles["desc"]}>Name:</label>
-                            { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.name}</label> }
+                            <label className={styles["value"]}>{user?.personal?.name}</label>
                         </Row>
                         <Row>
                             <label className={styles["desc"]}>Age:</label>
-                            { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.age}</label> }
+                            <label className={styles["value"]}>{user?.personal?.age}</label>
                         </Row>
                         <Row>
                             <label className={styles["desc"]}>Gender:</label>
-                            { 
-                                isLoading? 
-                                    <label className={styles["value"]}><InlineLoading/></label> :
-                                    <label className={styles["value"]}>
-                                        {user?.personal?.gender === "M" ? "Male" : "Female"}
-                                    </label>
-                            }
+                            <label className={styles["value"]}>
+                                {user?.personal?.gender === "M" ? "Male" : "Female"}
+                            </label>
                         </Row>
                     </Col>
                     <Col>
                         <Row>
                             <label className={styles["desc"]}>Surname:</label>
-                            { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.surname}</label> }
+                            <label className={styles["value"]}>{user?.personal?.surname}</label>
                         </Row>
                         <Row>
                             <label className={styles["desc"]}>Birthday:</label>
-                            { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.birthday}</label> }
+                            <label className={styles["value"]}>{user?.personal?.birthday}</label>
                         </Row>
                     </Col>
                     <Container className={styles["profession"]}>
                         <label className={styles["desc"]}>Profession</label>
-                        { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.personal?.profession}</label> }
+                        <label className={styles["value"]}>{user?.personal?.profession}</label>
                     </Container>
                 </Row>
                 <Container className={styles["general-container"]}>
                     <div  className={styles["section-title"]}>General Information</div>
                     <Row>
                         <label className={styles["desc"]}>Username:</label>
-                        { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.username}</label> }
+                        <label className={styles["value"]}>{user?.username}</label>
                     </Row>
                     <Row>
                         <label className={styles["desc"]}>Password:</label>
-                        { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>********</label> }
+                        <label className={styles["value"]}>********</label>
                     </Row>
                     <Row>
                         <label className={styles["desc"]}>Joined:</label>
-                        { isLoading? <label className={styles["value"]}><InlineLoading/></label> : <label className={styles["value"]}>{user?.createdAt}</label> }
+                        <label className={styles["value"]}>{user?.createdAt}</label>
                     </Row>
                     <Button variant="primary" className={styles["action-btn"]} onClick={() => setPasswordModal(true)}>
                         Change Password
                     </Button>
                 </Container>
-                <Suspense fallback={<Loading/>}><ExpenseCategories username={username}/></Suspense>
-                <Suspense fallback={<Loading/>}><IncomeSources username={username} /></Suspense>
-            </Container>
-            <Suspense fallback={<Loading/>}>    
+                <ExpenseCategories username={username}/>
+                <IncomeSources username={username} />
+            </Container>    
                 <DeleteModal
                     show={deleteModal}
                     onClose={() => setDeleteModal(false)}
-                />
-            </Suspense>
-            <Suspense fallback={<Loading/>}>    
+                /> 
                 <PasswordModal
                     show={passwordModal}
                     onClose={() => setPasswordModal(false)}
                     setPwdSuccess={(value) => setPwdSuccess(value)}
                     setPwdError={(value) => setPwdError(value)}
                 />
-            </Suspense>
-        </Layout>
+        </React.Fragment>
     )
 }
 

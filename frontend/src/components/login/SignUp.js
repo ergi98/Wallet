@@ -73,7 +73,7 @@ function SignUp() {
                 <div className="goto-login-btn">
                     {
                         !success ?
-                            <Button variant="link" onClick={() => window.location.href = '/login'}>
+                            <Button variant="link" onClick={() => window.location.href = '/'}>
                                 <IconContext.Provider value={{ size: "25", style: { color: "white", verticalAlign: 'middle', marginRight: '5px', marginTop: '-3px' } }}>
                                     <IoMdArrowRoundBack />
                                 </IconContext.Provider>
@@ -94,7 +94,7 @@ function SignUp() {
                                         Your account is ready. Please click the button below to authenticate and login.
                                     </label>
                                 </section>
-                                <Button variant="primary" onClick={() => window.location.href = '/login'}>
+                                <Button variant="primary" onClick={() => window.location.href = '/'}>
                                     LOGIN
                                     <IconContext.Provider value={{ size: "20", style: { verticalAlign: 'middle', marginLeft: '10px', marginTop: "-2px" } }}>
                                         <RiLoginCircleLine />

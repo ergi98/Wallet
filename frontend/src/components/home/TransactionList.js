@@ -10,8 +10,8 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 // Components
+import Loading from '../loaders/Loading'
 const Card = React.lazy(() => import('../card/Card'))
-const Loading = React.lazy(() => import('../loaders/Loading'))
 
 // Bootstrap
 const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
@@ -45,7 +45,10 @@ class TransactionList extends React.Component {
 
     async getTransactions(date) {
         try {
-            let res = await axios.post('/transactions/list', { username: this.props.username, date }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
+            let res = await axios.post('/transactions/list', 
+                { username: this.props.username, date }, 
+                { headers: { Authorization: `Bearer ${this.props.jwt}`}
+            })
 
             let transactions = res.data.result.length === 0? [] : res.data.result[0].transactions 
 

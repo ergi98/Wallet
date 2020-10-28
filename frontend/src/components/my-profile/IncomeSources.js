@@ -13,7 +13,6 @@ import { logOut } from '../../redux/actions/userActions'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Components
-const Loading = React.lazy(() => import('../loaders/Loading'))
 const NewSrcCat = React.lazy(() => import('./modals/NewSrcCat'))
 const DeleteSrcCat = React.lazy(() => import('./modals/DeleteSrcCat'))
 
@@ -32,8 +31,6 @@ function IncomeSources(props) {
 
     const [srcModal, setSrcModal] = useState(false)
     const [deleteSrcModal, setDeleteSrcModal] = useState({ state: false, source: {} })
-
-    const [isLoading, setIsLoading] = useState(true)
 
     function addSrc(source) {
         let newSources = sources
@@ -57,14 +54,11 @@ function IncomeSources(props) {
     
                 if (res.data.result.length > 0)
                     setSources(res.data.result[0].sources)
-                setIsLoading(false)
             }
             catch (err) {
                 // If no token is present logout
                 if(err.message.includes('403'))
                     dispatch(logOut())
-                else
-                 setIsLoading(false)
             }
         }
 
@@ -80,38 +74,35 @@ function IncomeSources(props) {
             <div className={styles["section-title"]}>Income Sources</div>
             <Row className={styles["table-row"]}>
                 {
-                    sources.length >= 1 && !isLoading? 
-                    <Table striped bordered hover size="sm">
-                        <thead>
-                            <tr><th>#</th><th colSpan="2">Source</th></tr>
-                        </thead>
-                        <tbody>
-                            {
-                                sources.map((source, index) =>
-                                    <tr key={source.source_id}>
-                                        <td>{index + 1}</td>
-                                        <td>{source.source_name}</td>
-                                        <td style={{ textAlign: "center" }}>
-                                            <Button variant="link" onClick={() => { setDeleteSrcModal({status: true, source: source })} }>
-                                                <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginTop: '-6px' } }}>
-                                                    <AiFillDelete />
-                                                </IconContext.Provider>
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </Table> : null
+                    sources.length >= 1? 
+                        <Table striped bordered hover size="sm">
+                            <thead>
+                                <tr><th>#</th><th colSpan="2">Source</th></tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    sources.map((source, index) =>
+                                        <tr key={source.source_id}>
+                                            <td>{index + 1}</td>
+                                            <td>{source.source_name}</td>
+                                            <td style={{ textAlign: "center" }}>
+                                                <Button variant="link" onClick={() => { setDeleteSrcModal({status: true, source: source })} }>
+                                                    <IconContext.Provider value={{ size: "25", style: { verticalAlign: 'middle', marginTop: '-6px' } }}>
+                                                        <AiFillDelete />
+                                                    </IconContext.Provider>
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+                        </Table> 
+                        :                   
+                        <div className={styles["no-transactions"]}>
+                            <label className={styles["title-label"]}>You have no income sources.</label><br/>
+                            <label className={styles["sub-label"]}>Click the button below to add an income source. Without income sources you can not record a profit!</label>
+                        </div>
                 }
-                {
-                    sources.length < 1 && !isLoading?                    
-                    <div className={styles["no-transactions"]}>
-                        <label className={styles["title-label"]}>You have no income sources.</label><br/>
-                        <label className={styles["sub-label"]}>Click the button below to add an income source. Without income sources you can not record a profit!</label>
-                    </div> : null
-                }
-                { isLoading? <Loading/> : null}
             </Row>
             <Row className={styles["btn-row"]}>
                 <Button className={styles["action-btn"]} variant="primary" onClick={() => { setSrcModal(true) }}>

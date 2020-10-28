@@ -1,17 +1,8 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect } from 'react'
 import './ViewMore.scss'
 
 // Axios
 import axios from 'axios'
-
-// Bootstrap
-import Container from 'react-bootstrap/esm/Container'
-import Alert from 'react-bootstrap/esm/Alert'
-import Row from 'react-bootstrap/esm/Row'
-import Col from 'react-bootstrap/esm/Col'
-import Button from 'react-bootstrap/esm/Button'
-import InputGroup from 'react-bootstrap/esm/InputGroup'
-import FormControl from 'react-bootstrap/esm/FormControl'
 
 // Redux
 import { logOut } from '../../redux/actions/userActions'
@@ -27,10 +18,18 @@ import NumberFormat from 'react-number-format'
 // Date validation
 import { parse, compareAsc } from 'date-fns'
 
-// Components 
-import Layout from '../layout/Layout'
+// Components
 import Loading from '../loaders/Loading'
 const DeleteModal = React.lazy(() => import('./DeleteModal'))
+
+// Bootstrap
+const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
+const Alert = React.lazy(() => import('react-bootstrap/esm/Alert'))
+const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
+const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
+const InputGroup = React.lazy(() => import('react-bootstrap/esm/InputGroup'))
+const FormControl = React.lazy(() => import('react-bootstrap/esm/FormControl'))
 
 function ViewMore({ match })  {
 
@@ -158,16 +157,14 @@ function ViewMore({ match })  {
     }
 
     return (
-        <Layout>
+        <React.Fragment>
             <Container fluid className="view-more_container">
                 {/** Transaction List Errors */}
                 <Alert show={displayError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Display Transactions</Alert.Heading>
                     An error occured while trying to get this user transactions.
                 </Alert>
                 {/** Delete Transaction Errors */}
                 <Alert show={showDeleteError} variant="danger" className="alert" as="Row">
-                    <Alert.Heading className="heading">Delete Transaction</Alert.Heading>
                     An error occured while trying to delete this transaction.
                 </Alert>
                 <Row className="date-row">
@@ -265,17 +262,15 @@ function ViewMore({ match })  {
                 }
                 { isLoading? <Loading/> : null}
             </Container>
-            <Suspense fallback={<Loading/>}>
-                <DeleteModal 
-                    show={showDeleteModal} 
-                    transaction={deleteTransaction}
-                    date={date}
-                    username={username}
-                    onClose={closeDelete}
-                    deleteStatus={deleteStatus}
-                />
-            </Suspense>
-        </Layout>
+            <DeleteModal 
+                show={showDeleteModal} 
+                transaction={deleteTransaction}
+                date={date}
+                username={username}
+                onClose={closeDelete}
+                deleteStatus={deleteStatus}
+            />
+        </React.Fragment>
     )
 }
 

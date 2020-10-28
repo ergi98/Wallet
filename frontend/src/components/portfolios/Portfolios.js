@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense} from 'react'
+import React, { useState, useEffect } from 'react'
 import './Portfolios.scss'
 
 // Bootstrap
@@ -17,9 +17,7 @@ import { BiWallet, BiTransfer } from 'react-icons/bi'
 import { getPortfolios, updatePortfolios } from '../../redux/actions/userActions'
 
 // Components
-import Layout from '../layout/Layout'
 import Loading from '../loaders/Loading'
-
 const Portfolio = React.lazy(() => import('./Portfolio'))
 const PortfolioModal = React.lazy(() => import('./modals/PortfolioModal'))
 const TransferModal = React.lazy(() => import('./modals/TransferModal'))
@@ -158,7 +156,7 @@ function Portfolios() {
     }
 
     return (
-        <Layout>
+        <React.Fragment>
             <Container fluid className="portfolio_container">
                 <Alert show={showPortfolioError} variant="danger" className="alert" as="Row">
                     An error occured while trying to add this portfolio.
@@ -186,21 +184,19 @@ function Portfolios() {
                         </IconContext.Provider> 
                     </Button>
                 </div>
-                <Suspense fallback={<Loading/>}>
-                    {
-                        portfolios.length >= 1 && !isLoading? 
-                            portfolios.map(portfolio => 
-                                <Portfolio  
-                                    key={portfolio.p_id}
-                                    portfolio = { portfolio } 
-                                    setFavStatus={setFavStatus} 
-                                    setDeleteStatus={setDeleteStatus}   
-                                />
-                            ) 
-                            :
-                            null
-                    }
-                </Suspense>
+                {
+                    portfolios.length >= 1 && !isLoading? 
+                        portfolios.map(portfolio => 
+                            <Portfolio  
+                                key={portfolio.p_id}
+                                portfolio = { portfolio } 
+                                setFavStatus={setFavStatus} 
+                                setDeleteStatus={setDeleteStatus}   
+                            />
+                        ) 
+                        :
+                        null
+                }
                 {
                     portfolios.length < 1 && !isLoading?
                     <div className="no-transactions">
@@ -210,26 +206,21 @@ function Portfolios() {
                 }
                 { isLoading? <Loading/> : null }
             </Container>
-            
-            <Suspense fallback={""}>
-                <PortfolioModal 
-                    caller="portfolio"
-                    show={showPortfolioModal}
-                    username={username}
-                    closeModal={closePortfolioModal}
-                    setPortfolioStatus={addPortfolioStatus}
-                />
-            </Suspense>
-            <Suspense fallback={""}>
-                <TransferModal
-                    show={showPortfolioTransfer}
-                    username={username}
-                    closeModal={() => setShowPortfolioTransfer(false)}
-                    setTransferStatus={setTransferStatus}
-                    portfolios = {portfolios}
-                />
-            </Suspense>
-        </Layout>
+            <PortfolioModal 
+                caller="portfolio"
+                show={showPortfolioModal}
+                username={username}
+                closeModal={closePortfolioModal}
+                setPortfolioStatus={addPortfolioStatus}
+            />
+            <TransferModal
+                show={showPortfolioTransfer}
+                username={username}
+                closeModal={() => setShowPortfolioTransfer(false)}
+                setTransferStatus={setTransferStatus}
+                portfolios = {portfolios}
+            />
+        </React.Fragment>
     )
 }
 

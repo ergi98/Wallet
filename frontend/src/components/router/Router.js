@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 
 // Router
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
@@ -8,15 +8,19 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 // Components
+import Layout from '../layout/Layout'
+import Loading from '../loaders/Loading'
 import Login from '../login/Login'
-import Home from '../home/Home'
-import Portfolios from '../portfolios/Portfolios'
-import Statistics from '../statistics/Statistics'
-import SpendingTransaction from '../transaction/SpendingTransaction'
-import ProfitTransaction from '../transaction/ProfitTransaction'
-import ViewMore from '../view-more/ViewMore'
-import MyProfile from '../my-profile/MyProfile'
 import SignUp from '../login/SignUp'
+// const Login = React.lazy(() => import('../login/Login'))
+// const SignUp = React.lazy(() => import('../login/SignUp'))
+const Home = React.lazy(() => import('../home/Home'))
+const Portfolios = React.lazy(() => import('../portfolios/Portfolios'))
+const Statistics = React.lazy(() => import('../statistics/Statistics'))
+const SpendingTransaction = React.lazy(() => import('../transaction/SpendingTransaction'))
+const ProfitTransaction = React.lazy(() => import('../transaction/ProfitTransaction'))
+const ViewMore = React.lazy(() => import('../view-more/ViewMore'))
+const MyProfile = React.lazy(() => import('../my-profile/MyProfile'))
 
 class Router extends React.Component {
     render() {
@@ -24,22 +28,27 @@ class Router extends React.Component {
             <BrowserRouter>
                 <main>
                         <Switch>
-                            <Route path="/" exact component={Login} />
-                            <Route path="/sign-up" exact component={SignUp} />
-                            {
-                                this.props.isAuthenticated ?
-                                    <>
-                                        <Route path="/home" exact component={Home} />
-                                        <Route path="/portfolios" exact component={Portfolios} />
-                                        <Route path="/portfolios/transactions/:pid" exact component={ViewMore} />
-                                        <Route path="/statistics" exact component={Statistics} />
-                                        <Route path="/my-profile" exact component={MyProfile} />
-                                        <Route path="/view-more" exact component={ViewMore} />
-                                        <Route path="/expense-transaction" exact component={SpendingTransaction} />
-                                        <Route path="/profit-transaction" exact component={ProfitTransaction} />
-                                    </> :
-                                    <Redirect to="/" />
-                            }
+                                <Route path="/" exact component={Login} />
+                                <Route path="/sign-up" exact component={SignUp} />
+                                {
+                                    this.props.isAuthenticated ?
+                                        <>
+                                            <Layout>
+                                                <Suspense fallback={<Loading/>}>
+                                                    <Route path="/home" exact component={Home} />
+                                                    <Route path="/portfolios" exact component={Portfolios} />
+                                                    <Route path="/portfolios/transactions/:pid" exact component={ViewMore} />
+                                                    <Route path="/statistics" exact component={Statistics} />
+                                                    <Route path="/my-profile" exact component={MyProfile} />
+                                                    <Route path="/view-more" exact component={ViewMore} />
+                                                    <Route path="/expense-transaction" exact component={SpendingTransaction} />
+                                                    <Route path="/profit-transaction" exact component={ProfitTransaction} /> 
+                                                </Suspense>
+                                            </Layout>
+                                        </> 
+                                        :
+                                        <Redirect to="/" />
+                                }
                         </Switch>
                 </main>
             </BrowserRouter>

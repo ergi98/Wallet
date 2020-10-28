@@ -238,8 +238,6 @@ function CardForm(props) {
                         </Form>
                     )
             }
-
-
         </Formik>
     )
 }
