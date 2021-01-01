@@ -14,7 +14,7 @@ import Spinner from 'react-bootstrap/esm/Spinner'
 import axios from 'axios'
 
 function LoginInformation(props) {
-    
+
     const [usernames, setUsernames] = useState([])
 
     // Establish the validation schema
@@ -30,7 +30,7 @@ function LoginInformation(props) {
             let temp = res.data.result.map(res => { return res.username })
             setUsernames(temp)
         }
-        catch(err){
+        catch (err) {
         }
     }
 
@@ -55,9 +55,15 @@ function LoginInformation(props) {
         props.saveInfo({
             username: event.username,
             password: event.password,
-            createdAt: date.toLocaleDateString("en-GB")
+            createdAt: transformDate(date.toLocaleDateString("en-GB"))
         })
         props.increment()
+    }
+
+    // Sets date in YYYY/MM/DD format for accurate querying
+    function transformDate(date) {
+        const pieces = date.split('/')
+        return `${pieces[2]}/${pieces[1]}/${pieces[0]}`
     }
 
     return (
@@ -70,74 +76,74 @@ function LoginInformation(props) {
                 enableReinitialize
                 validationSchema={schema}
                 onSubmit={handleSubmit}
-                initialValues={ initial }
+                initialValues={initial}
             >
                 {({
                     handleSubmit,
                     handleChange,
                     isSubmitting,
-                    values, 
+                    values,
                     touched,
                     errors
                 }) => (
-                        <Form noValidate className="form" onSubmit={handleSubmit}>
-                            <Form.Group controlId="username">
-                                <Form.Label className="form-label">Username</Form.Label>
-                                <Form.Control
-                                    className="input-field"
-                                    type="text"
-                                    value={values.username}
-                                    placeholder="Enter Username"
-                                    onChange={handleChange}
-                                    isInvalid={touched.username && errors.username}
-                                />
-                                <Form.Control.Feedback type="invalid"> {errors.username} </Form.Control.Feedback>
-                            </Form.Group>
+                    <Form noValidate className="form" onSubmit={handleSubmit}>
+                        <Form.Group controlId="username">
+                            <Form.Label className="form-label">Username</Form.Label>
+                            <Form.Control
+                                className="input-field"
+                                type="text"
+                                value={values.username}
+                                placeholder="Enter Username"
+                                onChange={handleChange}
+                                isInvalid={touched.username && errors.username}
+                            />
+                            <Form.Control.Feedback type="invalid"> {errors.username} </Form.Control.Feedback>
+                        </Form.Group>
 
-                            <Form.Group controlId="password">
-                                <Form.Label className="form-label">Password</Form.Label>
-                                <Form.Control
-                                    className="input-field"
-                                    type="password"
-                                    placeholder="Enter Password"
-                                    onChange={handleChange}
-                                    value={values.password}
-                                    isInvalid={touched.password && errors.password}
-                                />
-                                <Form.Control.Feedback type="invalid"> {errors.password} </Form.Control.Feedback>
-                            </Form.Group>
+                        <Form.Group controlId="password">
+                            <Form.Label className="form-label">Password</Form.Label>
+                            <Form.Control
+                                className="input-field"
+                                type="password"
+                                placeholder="Enter Password"
+                                onChange={handleChange}
+                                value={values.password}
+                                isInvalid={touched.password && errors.password}
+                            />
+                            <Form.Control.Feedback type="invalid"> {errors.password} </Form.Control.Feedback>
+                        </Form.Group>
 
-                            <Form.Group controlId="confirm">
-                                <Form.Label className="form-label">Confirm Password</Form.Label>
-                                <Form.Control
-                                    className="input-field"
-                                    type="password"
-                                    value={values.confirm}
-                                    placeholder="Confirm password"
-                                    onChange={handleChange}
-                                    isInvalid={touched.confirm && errors.confirm}
-                                />
-                                <Form.Control.Feedback type="invalid"> {errors.confirm} </Form.Control.Feedback>
-                            </Form.Group>
+                        <Form.Group controlId="confirm">
+                            <Form.Label className="form-label">Confirm Password</Form.Label>
+                            <Form.Control
+                                className="input-field"
+                                type="password"
+                                value={values.confirm}
+                                placeholder="Confirm password"
+                                onChange={handleChange}
+                                isInvalid={touched.confirm && errors.confirm}
+                            />
+                            <Form.Control.Feedback type="invalid"> {errors.confirm} </Form.Control.Feedback>
+                        </Form.Group>
 
 
-                            <Form.Row className="signup-buttons">
-                                {!isSubmitting ?
-                                    <Button
-                                        variant="primary"
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                    >
-                                        Next
+                        <Form.Row className="signup-buttons">
+                            {!isSubmitting ?
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                >
+                                    Next
                                     </Button>
-                                    :
-                                    <Button variant="primary" className="login-btn" disabled={isSubmitting}>
-                                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="spinner-signup" />
-                                    </Button>
-                                }
-                            </Form.Row>
-                        </Form>
-                    )}
+                                :
+                                <Button variant="primary" className="login-btn" disabled={isSubmitting}>
+                                    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="spinner-signup" />
+                                </Button>
+                            }
+                        </Form.Row>
+                    </Form>
+                )}
             </Formik>
         </div>
     )

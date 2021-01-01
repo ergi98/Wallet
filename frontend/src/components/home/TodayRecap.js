@@ -1,185 +1,159 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './TodayRecap.scss'
 
 import axios from 'axios'
 
 // Redux 
+import { useDispatch, useSelector } from "react-redux"
 import { logOut } from '../../redux/actions/userActions'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-
-// Components
-const Card = React.lazy(() => import('../card/Card'))
-const SmallLoading = React.lazy(() => import('../loaders/SmallLoading'))
 
 // Bootstrap
-const Container = React.lazy(() => import('react-bootstrap/esm/Container'))
-const Row = React.lazy(() => import('react-bootstrap/esm/Row'))
-const Col = React.lazy(() => import('react-bootstrap/esm/Col'))
+import Container from 'react-bootstrap/esm/Container'
+import Row from 'react-bootstrap/esm/Row'
+import Col from 'react-bootstrap/esm/Col'
 
 // Number Format
-const NumberFormat = React.lazy(() => import('react-number-format'))
+import NumberFormat from 'react-number-format'
 
-class TodayRecap extends React.Component {
+// Components
+import Card from '../card/Card'
+import SmallLoading from '../loaders/SmallLoading'
 
-    constructor() {
-        super()
+function TodayRecap() {
 
-        /**
-         * Variable used to prevent memory leaks
-         * Used to cancel any subscriptions active 
-         * when user leaves this page
-         */
-        this._isMounted = false
+    const dispatch = useDispatch()
 
-        this.state = {
-            today_spendings: 0,
-            yesterday_spendings: 0,
-            today_earnings: 0,
-            yesterday_earnings: 0,
-            s_comp: 0,
-            e_comp: 0,
-            isLoading: true
+    const currency = useSelector((state) => state.user.pref_currency)
+    const username = useSelector((state) => state.user.username)
+    const jwt = useSelector((state) => state.user.jwt)
+
+    const [tSpendings, setTSpendings] = useState("0")
+    const [tEarnings, setTEarnings] = useState("0")
+
+    const [ySpendings, setYSpendings] = useState("0")
+    const [yEarnings, setYEarnings] = useState("0")
+
+    const [amount, setAmount] = useState("0")
+
+    const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        let _isMounted = true
+        
+        async function getSpendings(date) {
+            // Parse the dates in the correct database format
+            let today = transformDate(date.toLocaleDateString('en-GB'))
+            let yesterday = transformDate(new Date(date.setDate(date.getDate() - 1)).toLocaleDateString('en-GB'))
+
+            
+            try {
+                // Get the yesterday and today spendings amounts
+                let tRes = await axios.post("/transactions/daily-recap", { username, date: today }, { headers: { Authorization: `Bearer ${jwt}`}})
+                let yRes = await axios.post("/transactions/daily-recap", { username, date: yesterday }, { headers: { Authorization: `Bearer ${jwt}`}})
+                let amntRes = await axios.post("users/available-amount", { username }, { headers: { Authorization: `Bearer ${jwt}`}})
+                
+                // Save the amounts into local var
+                if (tRes.data.result.length > 0) {
+                    setTEarnings(tRes.data.result[0].earnings.$numberDecimal)
+                    setTSpendings(tRes.data.result[0].spendings.$numberDecimal)   
+                }
+                if (yRes.data.result.length > 0) {
+                    setYEarnings(yRes.data.result[0].earnings.$numberDecimal)
+                    setYSpendings(yRes.data.result[0].spendings.$numberDecimal)
+                }
+                if(amntRes.data.result.length > 0)
+                    setAmount(amntRes.data.result[0].amount.$numberDecimal)
+
+                // Update the state
+                setIsLoading(false)
+            }
+            catch(err) {
+                setIsLoading(false)
+                // If no token is present logout
+                if(err.message.includes('403')) {
+                    dispatch(logOut())
+                }
+            }
         }
 
-    }
-
-    componentDidMount() {
-        this._isMounted = true
-        this._isMounted && this.getSpendings(new Date())
-    }
-
-    // Unsubscribe from all active subscriptions
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
-    async getSpendings(date) {
-        // Parse the dates in the correct database format
-        let today = date.toLocaleDateString('en-GB')
-        let yesterday = new Date(date.setDate(date.getDate() - 1)).toLocaleDateString('en-GB')
+        _isMounted && getSpendings(new Date())
 
         
-        try {
-            // Get the yesterday and today spendings amounts
-            let t_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: today }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
-            let y_res = await axios.post("/transactions/daily-recap", { username: this.props.username, date: yesterday }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
-            let amnt_res = await axios.post("users/available-amount", { username: this.props.username }, { headers: { Authorization: `Bearer ${this.props.jwt}`}})
+        return () => { _isMounted = false }
+    }, [dispatch, jwt, username])
 
-            let t_spendings = 0, y_spendings = 0, t_earnings = 0, y_earnings = 0, amount = 0, s_comp = 0, e_comp = 0
-
-            // Save the amounts into local variables
-            if (t_res.data.result.length > 0) {
-                t_spendings = t_res.data.result[0].spendings.$numberDecimal
-                t_earnings = t_res.data.result[0].earnings.$numberDecimal
-            }
-            if (y_res.data.result.length > 0) {
-                y_spendings = y_res.data.result[0].spendings.$numberDecimal
-                y_earnings = y_res.data.result[0].earnings.$numberDecimal
-            }
-            if(amnt_res.data.result.length > 0)
-                amount = amnt_res.data.result[0].amount.$numberDecimal
-
-            y_spendings === "0" ? s_comp = 0 : s_comp = (((-1*t_spendings) - (-1*y_spendings)) / y_spendings * -100).toFixed(0)
-            y_earnings === "0" ? e_comp = 0 : e_comp = ((t_earnings - y_earnings) / y_earnings * 100).toFixed(0)
-
-            // Update the state
-            this._isMounted && this.setState({
-                today_spendings: t_spendings,
-                yesterday_spendings: y_spendings,
-                today_earnings: t_earnings,
-                yesterday_earnings: y_earnings,
-                amount: amount,
-                e_comp,
-                s_comp,
-                isLoading: false
-            })
-        }
-        catch(err) {
-            // If no token is present logout
-            if(err.message.includes('403')) {
-                this.props.logOut()
-            }
-        }
+    // Sets date in YYYY/MM/DD format for accurate querying
+    function transformDate(date) {
+        const pieces = date.split('/')
+        return `${pieces[2]}/${pieces[1]}/${pieces[0]}`
     }
 
-    render() {
-        return (
-            <Card title={new Date().toDateString()}>
-                <Container className="amount-container">
-                    <Row>
-                        <Col className="spendings-col">
-                            <span>Spendings</span>
-                            <span className="s-tot">
-                                {
-                                    this.state.isLoading?
-                                        <SmallLoading/>
-                                        :
-                                        <NumberFormat 
-                                            value={this.state.today_spendings} 
-                                            displayType={'text'} 
-                                            thousandSeparator={true} 
-                                            prefix={' ' + this.props.currency + ' ' } 
-                                        /> 
-                                }
-                            </span>
-                            <span className="comp">
-                                {this.state.s_comp}%
-                            </span>
-                        </Col>
-                        <Col className="earnings-col">
-                            <span>Earnings</span>
-                            <span className="e-tot">
-                                {
-                                    this.state.isLoading?
-                                        <SmallLoading/>
-                                        :
-                                        <NumberFormat 
-                                            value={this.state.today_earnings}
-                                            displayType={'text'} 
-                                            thousandSeparator={true} 
-                                            prefix={this.props.currency + ' ' } 
-                                        />
-                                }
-                            </span>
-                            <span className="comp">
-                                {this.state.e_comp}%
-                            </span>
-                        </Col>
-                    </Row>
-                    <Row className="total-row">
-                        <span>Available Amount: </span>
-                        <span className="tot-sum">
+    return (
+        <Card title={new Date().toDateString()}>
+            <Container className="amount-container">
+                <Row>
+                    <Col className="spendings-col">
+                        <span>Spendings</span>
+                        <span className="s-tot">
                             {
-                                this.state.isLoading?
+                                isLoading?
                                     <SmallLoading/>
                                     :
                                     <NumberFormat 
-                                        value={this.state.amount}
+                                        value={tSpendings} 
                                         displayType={'text'} 
                                         thousandSeparator={true} 
-                                        prefix={this.props.currency + ' ' } 
+                                        prefix={' ' + currency + ' ' } 
+                                    /> 
+                            }
+                        </span>
+                        <span className="comp">
+                            {
+                                ySpendings === "0" ? 0 : (((-1*parseFloat(tSpendings)) - (-1*parseFloat(ySpendings))) / parseFloat(ySpendings) * -100).toFixed(0)
+                            }%
+                        </span>
+                    </Col>
+                    <Col className="earnings-col">
+                        <span>Earnings</span>
+                        <span className="e-tot">
+                            {
+                                isLoading?
+                                    <SmallLoading/>
+                                    :
+                                    <NumberFormat 
+                                        value={tEarnings}
+                                        displayType={'text'} 
+                                        thousandSeparator={true} 
+                                        prefix={currency + ' ' } 
                                     />
                             }
                         </span>
-                    </Row>
-                </Container>
-            </Card>
-        )
-    }
+                        <span className="comp">
+                            {
+                                yEarnings === "0" ? 0 : ((parseFloat(tEarnings) - parseFloat(yEarnings)) / parseFloat(yEarnings) * 100).toFixed(0)
+                            }%
+                        </span>
+                    </Col>
+                </Row>
+                <Row className="total-row">
+                    <span>Available Amount: </span>
+                    <span className="tot-sum">
+                        {
+                            isLoading?
+                                <SmallLoading/>
+                                :
+                                <NumberFormat 
+                                    value={amount}
+                                    displayType={'text'} 
+                                    thousandSeparator={true} 
+                                    prefix={currency + ' ' } 
+                                />
+                        }
+                    </span>
+                </Row>
+            </Container>
+        </Card>
+    )
 }
 
-const mapPropsToState = state => ({
-    currency: state.user.pref_currency,
-    username: state.user.username,
-    jwt: state.user.jwt
-})
-
-TodayRecap.propTypes = {
-    logOut: PropTypes.func.isRequired,
-    currency: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    jwt: PropTypes.string.isRequired
-}
-
-export default connect(mapPropsToState, { logOut })(TodayRecap)
+export default TodayRecap

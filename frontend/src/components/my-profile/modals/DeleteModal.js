@@ -11,7 +11,7 @@ function DeletePortfolio(props) {
     const [agree, setAgree] = useState(false)
 
     async function deleteProfile() {
-        // todo
+        console.log("I don't work :)")
     }
 
     return (

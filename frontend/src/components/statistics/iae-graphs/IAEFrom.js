@@ -63,16 +63,16 @@ function IAEFrom(props) {
         if (match) {
             // Check if the date is the right format
             let parsedDate = parse(date, 'dd/MM/yyyy', new Date())
-            
+
             // If the date is the right format
             if (parsedDate.toJSON !== null) {
-                period === "startPeriod"? setInvalidStart(false) : setInvalidFinish(false)
+                period === "startPeriod" ? setInvalidStart(false) : setInvalidFinish(false)
             }
             else
-                period === "startPeriod"? setInvalidStart(true) : setInvalidFinish(true)
+                period === "startPeriod" ? setInvalidStart(true) : setInvalidFinish(true)
         }
         else
-            period === "startPeriod"? setInvalidStart(true) : setInvalidFinish(true)
+            period === "startPeriod" ? setInvalidStart(true) : setInvalidFinish(true)
     }
 
     async function getData(start, finish) {
@@ -81,19 +81,20 @@ function IAEFrom(props) {
             props.setShowForm(false)
             // Display the loading screen
             props.setIsLoading(true)
+
             let res = await axios.post('/transactions/transaction-chart', {
                 username: props.username,
                 type: type,
-                start_date: start,
-                end_date: finish
-            }, { headers: { Authorization: `Bearer ${jwt}`}})
+                start_date: transformDate(start),
+                end_date: transformDate(finish)
+            }, { headers: { Authorization: `Bearer ${jwt}` } })
 
             // Do the API call
             res.data.result.forEach(result => {
-                if(result.earnings)
-                    result.earnings = 1*result.earnings.$numberDecimal
-                if(result.spendings)
-                    result.spendings = -1*result.spendings.$numberDecimal
+                if (result.earnings)
+                    result.earnings = 1 * result.earnings.$numberDecimal
+                if (result.spendings)
+                    result.spendings = -1 * result.spendings.$numberDecimal
             })
 
             // Set chart data
@@ -109,7 +110,7 @@ function IAEFrom(props) {
         }
         catch (err) {
             // If no token is present logout
-            if(err.message.includes('403'))
+            if (err.message.includes('403'))
                 dispatch(logOut())
             else {
                 // Hide the loading screen
@@ -129,12 +130,12 @@ function IAEFrom(props) {
         // If the user has inputed a custom period
         else {
             // If the user has enterd both dates
-            if(startPeriod !== '' && endPeriod !== '' ) {
+            if (startPeriod !== '' && endPeriod !== '') {
                 // If these dates have no errors
-                if(isInvalidStart !== true && isInvalidFinish !== true)  {
+                if (isInvalidStart !== true && isInvalidFinish !== true) {
                     // Validate that the start date is smaller than the end date
                     // If the start date is less than the end date
-                    if(compareAsc(parse(startPeriod, 'dd/MM/yyyy', new Date()), parse(endPeriod, 'dd/MM/yyyy', new Date())) !== 1) {
+                    if (compareAsc(parse(startPeriod, 'dd/MM/yyyy', new Date()), parse(endPeriod, 'dd/MM/yyyy', new Date())) !== 1) {
                         getData(startPeriod, endPeriod)
                     }
                     else {
@@ -166,7 +167,14 @@ function IAEFrom(props) {
 
         return date
     }
-    
+
+
+    // Sets date in YYYY/MM/DD format for accurate querying
+    function transformDate(date) {
+        const pieces = date.split('/')
+        return `${pieces[2]}/${pieces[1]}/${pieces[0]}`
+    }
+
     return (
         <Container className="iae-form">
             <Form.Group as={Row} className="graph-type-selector">
@@ -198,7 +206,7 @@ function IAEFrom(props) {
                         custom
                         value={period}
                         onChange={handleChange}
-                        disabled={type==="default"}
+                        disabled={type === "default"}
                     >
                         <option value="default" disabled>Choose Period</option>
                         <option value="week">Last 7 days</option>
@@ -222,7 +230,7 @@ function IAEFrom(props) {
                         value={startPeriod}
                         onChange={handleChange}
                         isInvalid={isInvalidStart}
-                        disabled={type==="default"}
+                        disabled={type === "default"}
                     />
                 </Col>
                 <Col>
@@ -234,7 +242,7 @@ function IAEFrom(props) {
                         value={endPeriod}
                         onChange={handleChange}
                         isInvalid={isInvalidFinish}
-                        disabled={type==="default"}
+                        disabled={type === "default"}
                     />
                 </Col>
             </Form.Group>

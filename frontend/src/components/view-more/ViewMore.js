@@ -31,7 +31,7 @@ const Button = React.lazy(() => import('react-bootstrap/esm/Button'))
 const InputGroup = React.lazy(() => import('react-bootstrap/esm/InputGroup'))
 const FormControl = React.lazy(() => import('react-bootstrap/esm/FormControl'))
 
-function ViewMore({ match })  {
+function ViewMore({ match }) {
 
     const dispatch = useDispatch()
 
@@ -40,7 +40,7 @@ function ViewMore({ match })  {
 
     const [date, setDate] = useState(new Date())
     const [displayedDate, setDisplayDate] = useState(new Date().toLocaleDateString('en-GB'))
-    
+
     const [transactions, setTransactions] = useState([])
 
     const [displayError, setError] = useState(false)
@@ -53,14 +53,14 @@ function ViewMore({ match })  {
 
     useEffect(() => {
         let _isMounted = true
-        
-        _isMounted && setIsLoading(true)
-        
-        async function getTransactions(username, date) {
-            try {    
-                let res = await axios.post('/transactions/list', { username, date, portfolio: match.params.pid}, { headers: { Authorization: `Bearer ${jwt}`}})
 
-                if(res.status === 200 && res.data.result.length > 0) {
+        _isMounted && setIsLoading(true)
+
+        async function getTransactions(username, date) {
+            try {
+                let res = await axios.post('/transactions/list', { username, date: transformDate(date), portfolio: match.params.pid }, { headers: { Authorization: `Bearer ${jwt}` } })
+
+                if (res.status === 200 && res.data.result.length > 0) {
                     let { transactions } = res.data.result[0]
 
                     _isMounted && setTransactions(transactions)
@@ -69,9 +69,9 @@ function ViewMore({ match })  {
                     _isMounted && setTransactions([])
                 }
             }
-            catch(err) {
+            catch (err) {
                 // If no token is present logout
-                if(err.message.includes('403'))
+                if (err.message.includes('403'))
                     dispatch(logOut())
                 else {
                     _isMounted && setError(true)
@@ -95,20 +95,20 @@ function ViewMore({ match })  {
 
     function validateDate(event) {
         let regex = new RegExp(/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/)
-        
+
         setDisplayDate(event.target.value)
-        
+
         // Test if the format is right
         let match = regex.test(event.target.value)
 
-        if(match) {
+        if (match) {
             // Check if the date is right
-            let parsedDate = parse(event.target.value, 'dd/MM/yyyy', new Date()) 
+            let parsedDate = parse(event.target.value, 'dd/MM/yyyy', new Date())
 
             // Check if the date is not greater than today's date
             let res = compareAsc(new Date(), parsedDate)
 
-            if(parsedDate.toJSON !== null && res !== -1) {
+            if (parsedDate.toJSON !== null && res !== -1) {
                 setInvalid(false)
             }
             else
@@ -121,9 +121,9 @@ function ViewMore({ match })  {
     function changeDate(type) {
         let newDate
 
-        type === "decrement"? 
+        type === "decrement" ?
             newDate = new Date(date.setDate(date.getDate() - 1))
-            :            
+            :
             newDate = new Date(date.setDate(date.getDate() + 1))
 
         setDisplayDate(newDate.toLocaleDateString('en-GB'))
@@ -135,25 +135,31 @@ function ViewMore({ match })  {
     }
 
     function updateTransactions() {
-          // If the date entered by the user is not invalid
-          if(!isInvalid) {
+        // If the date entered by the user is not invalid
+        if (!isInvalid) {
             let parsedDate = parse(displayedDate, 'dd/MM/yyyy', new Date())
             // If user entered date is not the same as the current date
-            if(parsedDate.toLocaleDateString('en-GB') !== date.toLocaleDateString('en-GB'))
+            if (parsedDate.toLocaleDateString('en-GB') !== date.toLocaleDateString('en-GB'))
                 setDate(parsedDate)
         }
     }
 
     function deleteStatus(status, transaction) {
-        if(status === "success") {
+        if (status === "success") {
             let newTransactions = transactions
-            newTransactions = newTransactions.filter(trans => { return trans.trans_id !== transaction.trans_id  })
+            newTransactions = newTransactions.filter(trans => { return trans.trans_id !== transaction.trans_id })
             setTransactions(newTransactions)
         }
         else {
             setDeleteError(true)
-            setTimeout(() => { setDeleteError(false)}, 2500);
+            setTimeout(() => { setDeleteError(false) }, 2500);
         }
+    }
+
+    // Sets date in YYYY/MM/DD format for accurate querying
+    function transformDate(date) {
+        const pieces = date.split('/')
+        return `${pieces[2]}/${pieces[1]}/${pieces[0]}`
     }
 
     return (
@@ -172,7 +178,7 @@ function ViewMore({ match })  {
                         <Button variant="link" onClick={() => changeDate("decrement")} disabled={isLoading}>
                             <IconContext.Provider value={{ size: "35", style: { verticalAlign: 'middle', marginTop: "-5px" } }}>
                                 <AiFillCaretLeft />
-                            </IconContext.Provider> 
+                            </IconContext.Provider>
                         </Button>
                     </Col>
                     <Col className="date-picker" xs={6}>
@@ -193,13 +199,13 @@ function ViewMore({ match })  {
                         <Button variant="link" onClick={() => changeDate("increment")} disabled={isLoading || date.toLocaleDateString('en-GB') === new Date().toLocaleDateString('en-GB')}>
                             <IconContext.Provider value={{ size: "35", style: { verticalAlign: 'middle', marginTop: "-5px" } }}>
                                 <AiFillCaretRight />
-                            </IconContext.Provider> 
+                            </IconContext.Provider>
                         </Button>
                     </Col>
                 </Row>
                 {
-                    transactions.length > 0 && !isLoading? 
-                        transactions.map(transaction => 
+                    transactions.length > 0 && !isLoading ?
+                        transactions.map(transaction =>
                             <Row key={transaction.trans_id} className="transaction">
                                 <Col className="field-col" xs={11} lg={11}>
                                     <Row className="desc">
@@ -221,32 +227,32 @@ function ViewMore({ match })  {
                                         </Col>
                                     </Row>
                                     {
-                                        transaction.desc? 
-                                        <Row className="long-desc">
-                                            <label className="field-desc">Detailed Description:</label>
-                                            <label className="field-value">{transaction.desc}</label>
-                                        </Row>
-                                        :
-                                        null
+                                        transaction.desc ?
+                                            <Row className="long-desc">
+                                                <label className="field-desc">Detailed Description:</label>
+                                                <label className="field-value">{transaction.desc}</label>
+                                            </Row>
+                                            :
+                                            null
                                     }
                                     <Row className="amount">
                                         <label className="field-desc">Amount:</label>
-                                        <label className={`field-value ${transaction.trans_type === "expense"? "expense" : "profit" }`}>
-                                            <NumberFormat 
-                                                value={ transaction.amount.$numberDecimal }
-                                                displayType={'text'} 
-                                                thousandSeparator={true} 
-                                                prefix={ transaction.currency + ' ' } 
-                                            /> 
+                                        <label className={`field-value ${transaction.trans_type === "expense" ? "expense" : "profit"}`}>
+                                            <NumberFormat
+                                                value={transaction.amount.$numberDecimal}
+                                                displayType={'text'}
+                                                thousandSeparator={true}
+                                                prefix={transaction.currency + ' '}
+                                            />
                                         </label>
-                                    </Row>       
+                                    </Row>
                                 </Col>
                                 <Col className="btn-col" xs={1} lg={1}>
                                     <Row className="btn-row">
                                         <Button className="btn" variant="link" onClick={() => { setDelete(true); setDeleteTransaction(transaction) }}>
                                             <IconContext.Provider value={{ size: "25", style: { color: "#D32A17", verticalAlign: 'middle' } }}>
                                                 <AiFillDelete />
-                                            </IconContext.Provider> 
+                                            </IconContext.Provider>
                                         </Button>
                                     </Row>
                                 </Col>
@@ -254,16 +260,16 @@ function ViewMore({ match })  {
                         ) : null
                 }
                 {
-                    transactions.length === 0 && !isLoading?
-                    <div className="no-transactions">
-                            <label className="title-label">There seem to be no transactions for the selected date.</label><br/>
+                    transactions.length === 0 && !isLoading ?
+                        <div className="no-transactions">
+                            <label className="title-label">There seem to be no transactions for the selected date.</label><br />
                             <label className="sub-label">Please choose a different date.</label>
-                    </div> : null 
+                        </div> : null
                 }
-                { isLoading? <Loading/> : null}
+                {isLoading ? <Loading /> : null}
             </Container>
-            <DeleteModal 
-                show={showDeleteModal} 
+            <DeleteModal
+                show={showDeleteModal}
                 transaction={deleteTransaction}
                 date={date}
                 username={username}

@@ -130,7 +130,7 @@ class TransactionsDAO {
           await users.updateOne({ username }, { $inc: { "categories.$[cat].count": 1, "categories.$[cat].amnt_spent": transaction.amount }, $set: { "categories.$[cat].last_spent": date } }, { arrayFilters: [{ "cat.cat_id": transaction.type }] }, { session })
         }
         else {
-          await users.updateOne({ username }, { $inc: { "sources.$[src].count": 1, "sources.$[src].amount_earned": transaction.amount }, $set: { "sources.$[src].last_spent": date } }, { arrayFilters: [{ "src.source_id": transaction.source }] }, { session })
+          await users.updateOne({ username }, { $inc: { "sources.$[src].count": 1, "sources.$[src].amount_earned": transaction.amount }, $set: { "sources.$[src].last_earned": date } }, { arrayFilters: [{ "src.source_id": transaction.source }] }, { session })
         }
 
       }, transactionOptions)

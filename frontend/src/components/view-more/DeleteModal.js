@@ -22,24 +22,30 @@ function DeleteModal(props) {
 
     const dispatch = useDispatch()
     const jwt = useSelector((state) => state.user.jwt)
-    
+
     async function deleteTransaction(username, date, transaction) {
 
         transaction.amount = transaction.amount.$numberDecimal
 
         try {
-            await axios.post('/transactions/delete-transaction', { username, date, transaction }, { headers: { Authorization: `Bearer ${jwt}`}})
+            await axios.post('/transactions/delete-transaction', { username, date: transformDate(date), transaction }, { headers: { Authorization: `Bearer ${jwt}` } })
             props.deleteStatus("success", transaction)
         }
-        catch(err) {
+        catch (err) {
             // If no token is present logout
-            if(err.message.includes('403'))
+            if (err.message.includes('403'))
                 dispatch(logOut())
             else
                 props.deleteStatus("error")
         }
 
         props.onClose()
+    }
+
+    // Sets date in YYYY/MM/DD format for accurate querying
+    function transformDate(date) {
+        const pieces = date.split('/')
+        return `${pieces[2]}/${pieces[1]}/${pieces[0]}`
     }
 
     return (
@@ -60,30 +66,30 @@ function DeleteModal(props) {
                     </Row>
                     <Row>
                         <Col>
-                        <label className="title">Time:</label>
-                        <label className="value">{props.transaction.time}</label> 
+                            <label className="title">Time:</label>
+                            <label className="value">{props.transaction.time}</label>
                         </Col>
                         <Col>
-                        <label className="title">Type:</label>
-                        <label className="value" style={{textTransform: "capitalize"}}>{props.transaction.trans_type}</label> 
+                            <label className="title">Type:</label>
+                            <label className="value" style={{ textTransform: "capitalize" }}>{props.transaction.trans_type}</label>
                         </Col>
                     </Row>
                     <Row>
                         <label className="title">Amount:</label>
                         <label className="value">
-                            <NumberFormat 
+                            <NumberFormat
                                 value={props.transaction.amount?.$numberDecimal}
-                                displayType={'text'} 
-                                thousandSeparator={true} 
-                                prefix={' ' + props.transaction.currency + ' ' } 
-                            />  
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                prefix={' ' + props.transaction.currency + ' '}
+                            />
                         </label>
                     </Row>
                 </Container>
             </Modal.Body>
-            <Modal.Footer className="center-btns"> 
-                    <Button variant="secondary" onClick={props.onClose}>Cancel</Button>
-                    <Button variant="danger" onClick={() => deleteTransaction(props.username, props.date.toLocaleDateString('en-GB'), props.transaction)}>Delete</Button>
+            <Modal.Footer className="center-btns">
+                <Button variant="secondary" onClick={props.onClose}>Cancel</Button>
+                <Button variant="danger" onClick={() => deleteTransaction(props.username, props.date.toLocaleDateString('en-GB'), props.transaction)}>Delete</Button>
             </Modal.Footer>
         </Modal>
     )
